@@ -31,8 +31,8 @@ jobs:
       - name: make date dir and archieve the post files
         run: |
           pwd
+          ls -al
           dir_name=`date --date= +%Y/%m/%d`
-          ls -al $dir_name
           mkdir -p $dir_name
           pwd
           ls -al $dir_name
