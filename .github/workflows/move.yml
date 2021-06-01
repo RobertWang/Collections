@@ -28,9 +28,14 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: make date dir and archieve the post files
         run: |
+          pwd
           dir_name=`date --date= +%Y/%m/%d`
+          ls -al $dir_name
           mkdir -p $dir_name
+          pwd
+          ls -al $dir_name
           mv md/* $dir_name/
-          git config -l
+          ls -al $dir_name
+          git push -f
