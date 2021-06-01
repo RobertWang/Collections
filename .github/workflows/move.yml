@@ -33,7 +33,7 @@ jobs:
           git config --global user.name "RobertWang"
           git config --global user.email "cnwangyl@gmail.com"
           echo "当前目录 : "
-          echo pwd
+          pwd
           echo "目录下的文件 : "
           ls -al
           echo "创建日期归档目录: "
@@ -49,5 +49,5 @@ jobs:
           ls -al $dir_name/
           echo "重新提交回 Github "
           git add .
-          git commit -am '${dir_name} 每日归档'
+          git commit -am "$dir_name 每日归档"
           git push -f
