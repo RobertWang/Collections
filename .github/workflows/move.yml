@@ -31,6 +31,7 @@ jobs:
       - name: make date dir and archieve the post files
         run: |
           pwd
+          git branch -av
           ls -al
           dir_name=`date --date= +%Y/%m/%d`
           mkdir -p $dir_name
@@ -38,4 +39,6 @@ jobs:
           ls -al $dir_name
           mv md/* $dir_name/
           ls -al $dir_name
+          git add .
+          git commit -am '${dir_name} 每日归档'
           git push -f
