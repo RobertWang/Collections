@@ -1,0 +1,144 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&mid=2666554052&idx=3&sn=03702c2f76b61d26decfb3235f5005e1&chksm=80dca66fb7ab2f79ec6a8e5b5ed8d652a0c3d11289d2d8945f893223d618c911038c969366fe&mpshare=1&scene=1&srcid=0429rYAQotmKHRLZUzZgYL1S&sharer_sharetime=1619670738009&sharer_shareid=7fece245937ac96f04f0fb8e1311fff1#rd)
+
+  
+【导读】随着 go module 越来越易用，项目结构如何组织？什么样的项目结构可以赋能开发？本文做了详细介绍。  
+
+Go 应用的标准项目结构是一个有点争议的话题。一些人坚持认为，每个人的每个项目都应该遵循大家都推荐的 golang-standards/project-layout（https://github.com/golang-standards/project-layout）布局结构。
+
+然而随着 Go Modules 作为处理依赖关系的标准被引入，这种结构开始面临挑战。如果采用传统的结构，你会发现你的结构中的一些文件夹将无法访问诸如`internal`或`pkg`之类的文件夹，你将不得不用比较绕的方案才能在这种项目结构下编程。
+
+在这篇文章中，我将介绍在新的 go modules 体系下项目结构的较好实践。
+
+> 注意，在组织应用项目结构时，没有 "一劳永逸" 的方法。随着应用程序的发展，项目结构化方法也必须随之改变。
+
+小型应用程序 - 扁平结构
+=============
+
+每个项目都是从小开始长大。能长到多大，取决于项目的成功程度或开发者愿意为它贡献多少时间。
+
+```
+application/
+ - main.go
+ - main_test.go
+ - utils.go
+ - utils_test.go
+ - ...
+
+
+```
+
+强烈建议从扁平化的文件夹结构开始。作为开发者，通过保持项目结构的简单性可以专注于尽快将最高价值的功能交付给你的目标受众，而不需要复杂结构的认知开销。
+
+我经常看到开发人员在项目的早期阶段、在任何真正有价值的东西被交付之前，就花费很多的时间来安排和重新整理他们的代码结构，这会让开发者和目标受众之间的反馈时间变长。
+
+收益
+--
+
+这种扁平化的文件夹结构在开发的时候是非常理想的。
+
+*   微服务 -- 以分布式方式部署的微小应用，这些应用是为了做一件事，而且只做一件事。
+    
+*   小型工具和库 -- 命令行工具或小型库，专注于做好少数任务。
+    
+
+这种结构的例子
+-------
+
+*   tidwall/gjson
+    
+
+这个项目几乎完美地诠释了一个项目如何在极简的结构下获得成功。他们从一开始就把所有的东西都保持得非常扁平化，没有把事情搞得太复杂，同时专注于为使用项目的人提供真正的价值。
+
+*   go-yaml/yaml
+    
+
+另一个非常酷的项目，其特点是完全扁平的项目结构。
+
+中 / 大型应用 -- 模块化
+===============
+
+随着项目规模和复杂度的增长，你会很快发现扁平结构不能满足编程需求了，这时应该开始考虑将代码库模块化。
+
+以一个网站的 Rest API 接口项目为例，这些接口里有登陆注册的接口、还有 CURUD 处理用户内容的接口。
+
+这时应该开始考虑将我们的应用程序按照语义拆分成各功能组，将这些组件之间共享的任何核心逻辑集中到项目中的共享包中。
+
+```
+rest-api/
+- main.go
+- user/
+- - user.go
+- - login.go
+- - registration.go
+- articles/
+- - articles.go
+- utils/
+- - common_utils.go
+
+
+```
+
+这种结构的例子
+-------
+
+*   google/go-cloud
+    
+
+是一个采用这种结构的项目的优秀例子。他们将项目分解成 IAAS 云提供商的每个包，每个包都包含了与该特定云提供商相关的所有代码。
+
+*   hashicorp/consul
+    
+
+这是另一个选择采用模块化方法的大型项目的好例子。
+
+*   ipfs/go-ipfs
+    
+
+IPFS 是一个非常酷的点对点文件系统，用 Go 编写，基于 Git 和 BitTorrent 等系统。他们在开发系统时也选择了模块化的方法。
+
+*   gohugoio/hugo
+    
+
+这个框架很赞，是我博客的网站后台框架！
+
+成熟项目
+====
+
+当然我们还是能看到坚持之前说的 “最佳” 项目结构的项目，但这在很大程度上是这些应用程序开发时的副产品。
+
+像 Hashicorp 的 Terraform 或 Google 的 Kubernetes 这样的大型应用，往往会保留旧式结构，在 $GOPATH 至上的时候，这种结构非常好用。你会看到，它们仍然具有`internal`和`pkg`文件夹的特点。这些文件夹封装了项目的一些内部工作。
+
+*   hashicorp/terraform
+    
+*   Kubernetes/kubernetes
+    
+
+这种结构运作得非常好，帮助开发者为社区贡献了极高的价值。然而我认为，随着 Go modules 开始用得越来越普遍，我们将看到这些应用程序从更传统的结构迁移到一个更新的结构。
+
+项目拆分
+====
+
+到了一定程度后，将项目中某些有意义的部分完全剥离出来，变成有自己生命周期的独立仓库也是有意义的。
+
+搞独立项目有一系列缺点，比如在管理整个项目的更新时会增加开销。但这也意味着你的项目将更容易吸引那些想要贡献的项目新人。
+
+总结
+==
+
+希望这篇文章能对你的开发工作有所帮助，给你启动新项目带来一些思路!
+
+这些都是我自己基于在日常工作中开发服务的经验。在使用这些结构时，你自己的开发过程可能会有所不同。
+
+- EOF -
+
+推荐阅读  点击标题可跳转
+
+1、[GO+PHP, 让全宇宙最好的两种语言合体的神器 RoadRunner](http://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&mid=2666552971&idx=3&sn=debacb8bdfb83ddf31c3191b066af9cb&chksm=80dc9a20b7ab1336da60dc85a5314953c169e68b0c409aad5ba706abf50ef6a627c8ed4d1b24&scene=21#wechat_redirect)
+
+2、[揭晓 Go 语言真实现状！](http://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&mid=2666552454&idx=3&sn=4d0fe06a0cb011e717ed8787f1968c42&chksm=80dc982db7ab113b95433fec8b1f4cca3d58636a6657362135eae60e982f9eef260b042f1d0c&scene=21#wechat_redirect)
+
+3、[使用 Go 构建 Kubernetes 应用](http://mp.weixin.qq.com/s?__biz=MzAxODI5ODMwOA==&mid=2666551110&idx=3&sn=ef9b6910535c15744b960400e7b566cc&chksm=80dc93edb7ab1afb0c19f1a5e176479730a786f76a668c7c2d76f609217bdea33707b54674ff&scene=21#wechat_redirect)
+
+看完本文有收获？请分享给更多人  
+
+公众号
