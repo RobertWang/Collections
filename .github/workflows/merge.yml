@@ -25,7 +25,7 @@ jobs:
           git config --global user.email "cnwangyl@gmail.com"
           dir_name=`date --date= +%Y/%m/%d`
           mkdir -p $dir_name
-          mv -f md/* $dir_name/
+          mv md/* $dir_name/
           git add .
           git commit -am "$dir_name 每日归档"
           git push -f
