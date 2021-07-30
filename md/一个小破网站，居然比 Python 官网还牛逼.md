@@ -136,3 +136,14 @@ rpm 包无非就分两种：
 **与 Python 官方网站提供的标准库示例不一样（赶紧切点题，不然有人说我标题党了）**，这个网站 ，**不仅涵盖了 Python 的内置库，只要你能说得上名的 Python 库**（当然你自己测试上传到 pypi 的那种库肯定不能算是吧）**应该都在这个网站上找到你对应的代码示例**。
 
 ![](https://mmbiz.qpic.cn/mmbiz_png/QB6G4ZoE185AuRII3ncniaicCRnyLoE5oMmic2I9pn9hOG4WRH6SQ2AZia3rY9qB36ickeLV1ibyRYeF0sO6k9Vvfiaww/640?wx_fmt=png)
+
+- [program creek](https://www.programcreek.com/python/) <<
+- [Search Python code examples from over 1.000.000 projects](https://python.hotexamples.com/)
+- [python for beginners](https://www.pythonforbeginners.com/code-snippets-source-code/python-code-examples/)
+- [Python Code Examples Python代码示例](https://www.apexyun.com/43bfe6169f9800e4d1f0bafb6fb1288b/)
+- [python club](http://www.pythonclub.org/code/start)
+- [freeCode Camp](https://www.freecodecamp.org/news/python-code-examples-sample-script-coding-tutorial-for-beginners/)
+- [programiz](https://www.programiz.com/python-programming/examples)
+- [geeks for geeks](https://www.geeksforgeeks.org/python-programming-examples/)
+- [python examples](https://pythonexamples.org/python-basic-examples/)
+- [tutorial gateway](https://www.tutorialgateway.org/python-programming-examples/)
