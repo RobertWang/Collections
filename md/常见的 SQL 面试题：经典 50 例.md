@@ -1272,5 +1272,3 @@ group by 学号;
 
 ![](https://mmbiz.qpic.cn/mmbiz/eQPyBffYbufibvcFmhYd2CLMBHnQ5APkPPYb3oYe8f1NS6lXOyU7MTPkS7ullkpkTjAxf5Rq2uS780qYqUfj9dg/640?wx_fmt=other)
 
-![](https://mmbiz.qpic.cn/mmbiz/cZV2hRpuAPiaJQXWGyC9wrUzIicibgXayrgibTYarT3A1yzttbtaO0JlV21wMqroGYT3QtPq2C7HMYsvicSB2p7dTBg/640?wx_fmt=gif)
-
