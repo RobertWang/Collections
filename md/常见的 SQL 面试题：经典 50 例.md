@@ -1274,20 +1274,3 @@ group by 学号;
 
 ![](https://mmbiz.qpic.cn/mmbiz/cZV2hRpuAPiaJQXWGyC9wrUzIicibgXayrgibTYarT3A1yzttbtaO0JlV21wMqroGYT3QtPq2C7HMYsvicSB2p7dTBg/640?wx_fmt=gif)
 
-公众号
-
-![](https://mmbiz.qpic.cn/mmbiz_png/TR2XGABn6MrD5pujZNgucue4Pdmiakibj6cPH9ibxxiaRkq9frMespSA2gcPTHd1R6cRXibHGw1lhmMzaOKavATiapRQ/640?wx_fmt=png)
-
-点分享
-
-![](https://mmbiz.qpic.cn/mmbiz_png/TR2XGABn6MrD5pujZNgucue4Pdmiakibj6LWFcw09HibvTejWQjFx7A0Vha8FClQBPZn7OK0SwchCictWRx8oyGictg/640?wx_fmt=png)
-
-点收藏
-
-![](https://mmbiz.qpic.cn/mmbiz_png/TR2XGABn6MrD5pujZNgucue4Pdmiakibj6tTxuaam8O7VkDsOC2xBt2gGaoxo00sT5ykFudiaVlDr9FBfNWrWpOJw/640?wx_fmt=png)
-
-点点赞
-
-![](https://mmbiz.qpic.cn/mmbiz_png/TR2XGABn6MrD5pujZNgucue4Pdmiakibj6YC8RV4ia9H8obpSnUfHic8yyDn1cYfMqVUXlibk7JDDpNtFCg47cMXoUw/640?wx_fmt=png)
-
-点在看
