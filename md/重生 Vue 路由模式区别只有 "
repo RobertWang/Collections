@@ -1,0 +1,724 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [juejin.cn](https://juejin.cn/post/7004738881778090014)
+
+请用`History模式`的实现原理去模拟`hash`模式, 把 `URL` 中的 `#` 后面的内容作为路由地址，可以通过 `hashchange` 事件监听路由地址的变化;
+
+本文将会为你`具象化`的介绍这两种模式, 让你不再是死记硬背这两种模式的区别, 让别人提到`"汉堡"`, 你就会想到 "🍔", 提到`"薯条"`, 就可以联想到 "🍟";
+
+相关知识点
+-----
+
+*   `Vue Router`基础不回顾
+*   `Hash模式`和`History模式`介绍
+*   `Hash模式`和`History模式`原理模拟
+*   用`history模式`的原理去模拟`hash模式`(原生及 vue 版)
+*   完成题目: 用`history模式`的原理去模拟`hash模式`, 可以使用`hashchange` 事件监听路由地址的变化
+*   部分源码简单比较
+
+Vue Router 基础不回顾
+----------------
+
+对, 你没看错标题, 就是不回顾, 为了`简洁`, 太长你们不想看, 我懂
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1ca1b68afed2435e906af163dfd03ff8~tplv-k3u1fbpfcp-watermark.awebp)
+
+Hash 模式和 History 模式介绍
+---------------------
+
+### hash 与 history 区别初印象
+
+![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7368d2d046e345e4ad2f6d9c46847bd9~tplv-k3u1fbpfcp-watermark.awebp)
+
+要是你在现在第一时间想到的区别跟这个初印象一样, 那您对这两种模式的理解并不深入, 面试可能这个部分会失分, 以下我们将更为`深入的去了解`:
+
+### Hash 模式
+
+*   URL 中`#`后面的内容作为路径地址
+    
+*   监听`hashchange`事件
+    
+*   根据当前路由地址找到对应组件重新渲染
+    
+
+### history 模式:
+
+*   通过`history.pushState()`方法改变地址栏
+    
+*   监听`popstate`事件
+    
+*   根据当前路由地址找到对应组件重新渲染
+    
+*   `通过history.pushState,通过history.replaceState`: 不会触发 popstate
+    
+
+相信大家都很熟悉这个差别, 但是你有没有想过? 通过`history.pushState`改变地址栏
+
+与监听`popstate`事件并不是`history的专利`,`hash模式`也能使用
+
+![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9d23169f67ec4850bdb8984cfa097920~tplv-k3u1fbpfcp-watermark.awebp)
+
+为了搞清楚这个问题, 真正去理解两者的区别, 我们先要搞明白以下这些问题:
+
+`hash模式`:
+
+*   什么是`锚点("#")`, 它有什么特性, 怎么理解这个东西
+*   `hashchange`有什么作用?
+
+`history模式`:
+
+*   `history.pushState`用什么作用? 这里会放在跟锚点一起说 (它们有相似的特性)
+*   `popstate`有什么作用?
+
+### 1. [什么是锚点 "#":](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FLearn%2FCommon_questions%2FWhat_is_a_URL "https://developer.mozilla.org/zh-CN/docs/Learn/Common_questions/What_is_a_URL") [可以点击标题查看 MDN 解释]
+
+> [www.example.com:80/path/to/myf…](https://link.juejin.cn?target=http%3A%2F%2Fwww.example.com%3A80%2Fpath%2Fto%2Fmyfile.htmlkey1%3Dvalue1%26key2%3Dvalue2%23SomewhereInTheDocument "http://www.example.com:80/path/to/myfile.htmlkey1=value1&key2=value2#SomewhereInTheDocument")
+
+![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/623cd1acf64f4044bb9a26f49370ac6c~tplv-k3u1fbpfcp-watermark.awebp)
+
+> `#SomewhereInTheDocument` 是资源本身的另一部分的锚点. 锚点表示资源中的一种 “书签”，给浏览器显示位于该“加书签” 位置的内容的方向。例如，在 HTML 文档上，浏览器将滚动到定义锚点的位置; 在视频或音频文档上，浏览器将尝试转到锚代表的时间。值得注意的是，`＃后面的部分（也称为片段标识符）从来没有发送到请求的服务器`。
+
+> 你可能想到一个 URL 类似普通信件的地址：协议代表你要使用的邮政服务，域名是城市或者城镇，端口则像邮政编码；路径代表着你的信件所有递送的大楼；参数则提供额外的信息，如大楼所在单元；`最后，锚点表示信件的收件人`。
+
+在 HTML 文档上浏览器将滚动到定义锚点的位置:
+
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1d5cadfd3ca54055ab5cefff7d49ddb7~tplv-k3u1fbpfcp-watermark.awebp)
+
+总结:
+
+*   使用锚点, 就不会请求服务器
+*   页面不刷新`(这很重要)`
+
+### 2.[history.pushState():](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FHistory%2FpushState "https://developer.mozilla.org/zh-CN/docs/Web/API/History/pushState") [可以点击标题查看 MDN 解释]
+
+> 从某种程度来说, 调用 `pushState()` 和 `window.location = "#foo"`基本上一样, 他们都会在当前的 document 中创建和激活一个新的历史记录。但是 `pushState()` 有以下优势：
+> 
+> *   新的 URL 可以是任何和当前 URL 同源的 URL。但是设置 [`window.location`](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FWindow%2Flocation "https://developer.mozilla.org/zh-CN/docs/Web/API/Window/location") 只会在你只设置锚的时候才会使当前的 URL。
+> *   非强制修改 URL。相反，设置 `window.location = "#foo";` 仅仅会在锚的值不是 #foo 情况下创建一条新的历史记录。
+> *   可以在新的历史记录中关联任何数据。`window.location = "#foo"`形式的操作，你只可以将所需数据写入锚的字符串中。
+
+注意： `pushState()` 不会造成 `hashchange (en-US)` 事件调用, 即使新的 URL 和之前的 URL 只是锚的数据不同。
+
+总结:
+
+*   页面不刷新`(这很重要)`
+*   当我们`手动输入url`或者`刷新页面`使用的 url 是不带`'#'(锚点)`的还是会请求服务器, 当指定路径寻找不到文件 / 目录就会 404
+
+> `http://168.238.7.88:8000/jerry/id` 如果后端缺少对`/jerry/id` 的路由处理，将返回 404 错误。
+
+### 3.[HashChange](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FHashChangeEvent "https://developer.mozilla.org/zh-CN/docs/Web/API/HashChangeEvent"):[可以点击标题查看 MDN 解释]
+
+> `HashChangeEvent` 接口表示一个变化事件，当 URL 中的片段标识符发生改变时，会触发此事件。片段标识符指 URL 中 `#` 号和它以后的部分。
+
+总结:
+
+*   `只要#和它以后的部分改变`就会触发这个事件
+*   不论什么方式, 只要`改变`
+
+### 4.[popstate](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FAPI%2FWindow%2Fpopstate_event "https://developer.mozilla.org/zh-CN/docs/Web/API/Window/popstate_event")[可以点击标题查看 MDN 解释]
+
+> 当活动历史记录条目更改时，将触发`popstate`事件。如果被激活的历史记录条目是通过对`history.pushState（）`的调用创建的，或者受到对`history.replaceState（）`的调用的影响，`popstate`事件的 state 属性包含历史条目的状态对象的副本。
+
+> 需要注意的是调用`history.pushState()`或`history.replaceState()`不会触发`popstate`事件。只有在做出浏览器动作时，才会触发该事件，如用户点击浏览器的回退按钮（或者在 Javascript 代码中调用`history.back()`或者`history.forward()`方法）
+
+总结:
+
+*   popstate 事件只有`history.go`,`history.back`,`history.forword`或者做出`浏览器动作`才会触发
+*   `history.pushState`,`history.replaceState`: 不会触发 popstate
+
+![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f97bc24761f044f990ccbfff805d38f4~tplv-k3u1fbpfcp-watermark.awebp)
+
+别关网页, 看我😘
+
+`Hash模式`和`History模式`原理模拟
+------------------------
+
+### 模拟演示准备: light-server(简易服务器)
+
+```
+// 安装
+// yarn 全局安装
+yarn global add light-server
+// npm 全局安装
+npm -g install light-server
+复制代码
+```
+
+### Hash 模式
+
+新建一个 hash.html 文件
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<a href="#/">home</a>
+<a href="#/about">about</a>
+<a href="#/404">404</a>
+
+
+<!-- 渲染路由对应的组件 -->
+<div id="routerView"></div>
+</body>
+<script>
+let routerView = document.querySelector('#routerView')
+
+let router = {
+  '#/': 'homeComponent',
+  '#/about': 'aboutComponent',
+  '#/404': '404Component'
+}
+
+// 渲染对应的路由组件
+function render() {
+  let hash = location.hash;
+  routerView.innerHTML = router[hash]
+}
+
+// 页面锚点发送变化
+window.addEventListener('hashchange', () => {
+  render()
+})
+
+// 页面加载
+window.addEventListener('DOMContentLoaded', () => {
+  
+  // 当不存在'#'时重定向到首页#/
+  location.hash || (location.hash = "/")
+  // 渲染组件
+  render()
+})
+</script>
+</html>
+复制代码
+```
+
+在目录下运行:
+
+```
+light-server -s . --port 3000 
+复制代码
+```
+
+然后打开要你命 3000,[http://localhost:3000/hash.html](https://link.juejin.cn?target=http%3A%2F%2Flocalhost%3A3000%2Fhash.html "http://localhost:3000/hash.html") 查看效果
+
+简单说一下这个`hash原理模拟`做了些什么:
+
+*   `render函数`负责渲染锚点对应路由组件
+*   `hashchange`负责监听锚点的`变化`, 这里的`变化`是重点, 记住不论是什么情况的变化, 只要有锚点页面都不会刷新, 那么有几种方式可以改变 url 的呢?
+    *   通过`a标签`(如 vue 中的 router-link), 上述案例你只看到通过 a 标签更改, 但是下面的几种方式也是可以触发`hashchange`的
+    *   `router类封装`的方法 (如 router.push)
+    *   `手动`输入改变地址栏 url
+    *   浏览器前进后退或者利用`history.back,history.go`
+*   `DOMContentLoaded`当页面没有锚点 ('#') 时, 把页面重定向到首页, 并且渲染首页对应的路由组件
+
+### History 模式
+
+新建一个 history.html
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<a href="/">home</a>
+<a href="/about">about</a>
+<a href="/404">404</a>
+
+
+<!-- 渲染路由对应的组件 -->
+<div id="routerView"></div>
+</body>
+<script>
+let routerView = document.querySelector('#routerView')
+
+let router = {
+  '/': 'homeComponent',
+  '/about': 'aboutComponent',
+  '/404': '404Component'
+}
+
+// 绑定事件
+function listeners() {
+  let aDoms = document.getElementsByTagName('a')
+  Array.from(aDoms).forEach(el => el.addEventListener('click', function (e) {
+      e.preventDefault()
+      history.pushState(null, '', el.getAttribute('href'))
+      render()
+    })
+  )
+}
+
+// 渲染对应的路由组件
+function render() {
+  let pathname = location.pathname;
+  routerView.innerHTML = router[pathname]
+}
+
+// 页面锚点发送变化
+window.addEventListener('popstate', () => {
+  render()
+})
+
+// 页面加载
+window.addEventListener('DOMContentLoaded', () => {
+  listeners()
+// 渲染组件
+  render()
+})
+</script>
+</html>
+复制代码
+```
+
+在目录下运行:
+
+```
+light-server -s . --historyindex '/history.html' --port 3000 //模拟真实服务器找到该资源重定向到index.html(初始页面)  
+复制代码
+```
+
+相当于 nginx 配置:
+
+```
+try_files $uri $uri/ /index.html
+复制代码
+```
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/addacfbe0cdd45da9b26243b39b299a5~tplv-k3u1fbpfcp-watermark.awebp)
+
+然后打开要你命 3000,[http://localhost:3000](https://link.juejin.cn?target=http%3A%2F%2Flocalhost%3A3000 "http://localhost:3000") 查看效果
+
+简单说一下这个`history原理模拟`做了些什么:
+
+*   `render函数`负责渲染`pathname`对应路由组件
+*   `listeners`负责给每一个`a标签`绑定一个`click事件`, 该事件:
+    *   利用`pushstate`把路由地址的`pathname`修改为对应 a 标签的 href 值
+    *   `render`渲染对应的路由
+    *   `e.preventDefault()`阻止默认操作 (阻止 a 标签来实现跳转)
+*   `popstate`在使用浏览器前进后, 退时触发`render`
+*   `DOMContentLoaded`页面加载时负责给`a标签`注册事件并且渲染首页对应的路由组件
+
+注意:
+
+*   `e.preventDefault()`这个默认操作很重要, 不阻止默认就会重新向服务器发送请求, 使页面刷新
+*   `pushstate`无论带不带锚点, 都会加入历史记录
+
+### 总结
+
+*   两种模式都需要做一个初始化事件: 渲染初始路由
+*   hash 模式的核心是`hashchange`, 监听该事件, 当哈希值发生改变触发相应的回调:`render`路由渲染 (因为不论是手动更改 url 地址还是浏览器前进后退还是内部封装的方法 push,router-link 跳转, 只要带有锚点 "#" 改变都会触发`hashchange`)
+*   history 模式的核心是`pushstate`以及`popstate`, 当手动更改路由就会重定向到 index.html 再次触发初始化事件, 当使用 router-link 跳转或内部封装的 push 方法都要用`pushstate`去更改 url 地址并且手动触发`render`路由渲染,`popstate`则监听浏览器前进后退, 然后触发`render`
+
+### 精简总结
+
+*   hash(核心`hashchange`):
+    *   初始化 render
+    *   所有跳转都是 hashchange->render
+        *   手动改变 url(hashchange->render)
+        *   router-link 跳转, push 跳转 (hashchange->render)
+        *   浏览器前进后退 (hashchange->render)
+*   history(核心`pushstate,popstate`):
+    *   初始化 render
+    *   跳转情况:
+        *   手动改变 url(触发重定向 -> 初始化 render)
+        *   router-link 跳转, push 跳转 (pushstate 更改 url, 添加历史记录, 调用 render)
+        *   浏览器前进后退 (popstate->render)
+
+![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0148f0f06e054c3aabd49f5f51279305~tplv-k3u1fbpfcp-watermark.awebp)
+
+看到这里这里我知道你看懂了, 给个反应, 点赞评论 over,over...
+
+用`history模式`的原理去模拟`hash模式`(原生及 vue 版)
+-------------------------------------
+
+理解了核心, 了解了流程, 那就开始模拟吧
+
+### 原生版:
+
+historyToHash.html:
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<a href="/">home</a>
+<a href="/about">about</a>
+<a href="/404">404</a>
+
+
+<!-- 渲染路由对应的组件 -->
+<div id="routerView"></div>
+</body>
+<script>
+let routerView = document.querySelector('#routerView')
+
+let router = {
+  '/': 'homeComponent',
+  '/about': 'aboutComponent',
+  '/404': '404Component'
+}
+
+function listeners() {
+  let aDoms = document.getElementsByTagName('a')
+  Array.from(aDoms).forEach(el => el.addEventListener('click', function (e) {
+      history.pushState(null, '', `#${el.getAttribute('href')}`)
+      render()
+    })
+  )
+}
+
+//渲染对应的路由组件
+function render() {
+
+  let hash = location.hash.substr(1);
+  routerView.innerHTML = router[hash]
+}
+
+//页面锚点发送变化
+window.addEventListener('popstate', () => {
+  render()
+})
+
+
+//页面加载
+window.addEventListener('DOMContentLoaded', () => {
+  //当输入url不带#的给网页加#
+  location.hash || (location.hash = "/")
+  listeners()
+  //渲染组件
+  render()
+})
+</script>
+</html>
+复制代码
+```
+
+在目录下运行:
+
+```
+light-server -s . --historyindex '/historyToHash.html' --port 3000 //模拟真实服务器找到该资源重定向到index.html(初始页面) 
+复制代码
+```
+
+然后打开要你命 3000,[http://localhost:3000](https://link.juejin.cn?target=http%3A%2F%2Flocalhost%3A3000 "http://localhost:3000") 查看效果
+
+### vue 版:
+
+新建一个 historyToHashRouter.js 文件, 装载模拟的 VueRouter 类
+
+```
+let _Vue = null
+export default class VueRouter {
+  static install(Vue) {
+    // 1 判断当前插件是否被安装
+    if (VueRouter.install.installed) {
+      return
+    }
+    VueRouter.install.installed = true
+    // 2 把Vue的构造函数记录在全局
+    _Vue = Vue
+    // 3 把创建Vue的实例传入的router对象注入到Vue实例
+    // _Vue.prototype.$router = this.$options.router
+    _Vue.mixin({
+      beforeCreate() {
+        if (this.$options.router) {
+          _Vue.prototype.$router = this.$options.router
+        }
+      }
+    })
+  }
+
+  constructor(options) {
+    this.options = options
+    this.routeMap = {}
+    // observable 把数据改为响应式
+    this.data = _Vue.observable({
+      current: ''
+    })
+    this.init()
+  }
+
+  init() {
+    this.createRouteMap()
+    this.initComponent(_Vue) // 初始化router-link,router-view
+    this.initEvent() // 相当于原声版的初始事件
+  }
+
+  createRouteMap() {
+    // 遍历所有的路由规则 吧路由规则解析成键值对的形式存储到routeMap中
+    this.options.routes.forEach(route => {
+      this.routeMap[route.path] = route.component
+    })
+  }
+
+  initComponent(Vue) {
+    Vue.component('router-link', {
+      props: {
+        to: String
+      },
+      render(h) {
+        return h('a', {
+          on: {
+            click: this.clickhander
+          }
+        }, [this.$slots.default])
+      },
+      methods: {
+        clickhander(e) {
+          // 历史模式
+          history.pushState(null, '', `/#${this.to}`)
+          this.$router.data.current = this.to // 相当于原生版的render
+        }
+      }
+      // template:"<a :href='to'><slot></slot><>"
+    })
+    const self = this
+    Vue.component('router-view', {
+      render(h) {
+        // self.data.current
+        const cm = self.routeMap[self.data.current]
+        return h(cm)
+      }
+    })
+  }
+
+
+  initEvent() {
+    // 历史模式
+    // 当输入url不带#的给网页加#
+    location.hash || (location.hash = "/")
+    this.data.current = location.hash.substr(1) // 相当于原生版的render
+    window.addEventListener('popstate', () => { // 监听浏览器前进后退
+      this.data.current = location.hash.substr(1) // 相当于原生版的render
+    })
+  }
+}
+复制代码
+```
+
+完成题目: 用`history模式`的原理去模拟`hash模式`, 可以使用`hashchange` 事件监听路由地址的变化
+--------------------------------------------------------------
+
+终于, 来到这里, 我也看懂了题目了, 整:
+
+```
+let _Vue = null
+export default class VueRouter {
+  static install(Vue) {
+    // 1 判断当前插件是否被安装
+    if (VueRouter.install.installed) {
+      return
+    }
+    VueRouter.install.installed = true
+    // 2 把Vue的构造函数记录在全局
+    _Vue = Vue
+    // 3 把创建Vue的实例传入的router对象注入到Vue实例
+    // _Vue.prototype.$router = this.$options.router
+    _Vue.mixin({
+      beforeCreate() {
+        if (this.$options.router) {
+          _Vue.prototype.$router = this.$options.router
+        }
+      }
+    })
+  }
+
+  constructor(options) {
+    this.options = options
+    this.routeMap = {}
+    // observable
+    this.data = _Vue.observable({
+      current: ''
+    })
+    this.init()
+  }
+
+  init() {
+    this.createRouteMap()
+    this.initComponent(_Vue)
+    this.initEvent()
+  }
+
+  createRouteMap() {
+    // 遍历所有的路由规则 吧路由规则解析成键值对的形式存储到routeMap中
+    this.options.routes.forEach(route => {
+      this.routeMap[route.path] = route.component
+    })
+  }
+
+  initComponent(Vue) {
+    Vue.component('router-link', {
+      props: {
+        to: String
+      },
+      render(h) {
+        return h('a', {
+          on: {
+            click: this.clickhander
+          }
+        }, [this.$slots.default])
+      },
+      methods: {
+        clickhander(e) {
+        // 历史模式
+        history.pushState(null, '', `/#${this.to}`)
+        this.$router.data.current = this.to // 相当于render,pushState不会触发hashchange
+        }
+      }
+      // template:"<a :href='to'><slot></slot><>"
+    })
+    const self = this
+    Vue.component('router-view', {
+      render(h) {
+        // self.data.current
+        const cm = self.routeMap[self.data.current]
+        return h(cm)
+      }
+    })
+  }
+
+
+  initEvent() {
+    // hashchange
+    //当输入url不带#的给网页加#
+    location.hash || (location.hash = "/")
+    this.data.current = window.location.hash.substr(1) || '/'
+    window.addEventListener('hashchange', () => {
+      this.data.current = window.location.hash.substr(1) || '/'
+    })
+  }
+}
+复制代码
+```
+
+*   这里在 router-link 跳转还是使用了`pushstate`
+*   但是`popstate`没有使用, 因为`hashchange`同样也可以监听到浏览器的前进后退 (只要 url 带有锚点 "#")
+
+### 看到这里, 你或许会有一个疑问, 既然使用 history 模式模拟 hash 模式是可行的, 为什么题目又提出可以使用 hashchange 呢?
+
+我的个人猜想:
+
+*   因为 dev-server 做不到页面重定向的效果, 真正的 history 需要配置 nginx 重定向
+*   因此使用 hashchange 来模拟这种效果
+
+部分源码简单比较
+--------
+
+一提到源码, 你们就这样, 别慌, 我们这次只是简单看看, 粗略粗略看一下 (vue-router 版本 3.1.6):
+
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5769289dbe124be4a1afa3f53e6f4308~tplv-k3u1fbpfcp-watermark.awebp)
+
+不知道你们还记得本文开头提到过的:
+
+> 但是你有没有想过? 通过`history.pushState`改变地址栏与监听`popstate`事件并不是`history的专利`,`hash模式`也能使用
+
+```
+// index.js
+export default class VueRouter {
+
+    ...
+  constructor (options: RouterOptions = {}) {
+    ...
+
+    switch (mode) {
+      case 'history': // 历史模式
+        this.history = new HTML5History(this, options.base)
+        break
+      case 'hash':   // 哈希模式
+        this.history = new HashHistory(this, options.base, this.fallback)
+        break
+      case 'abstract':
+        this.history = new AbstractHistory(this, options.base)
+        break
+      default:
+        if (process.env.NODE_ENV !== 'production') {
+          assert(false, `invalid mode: ${mode}`)
+        }
+    }
+  }
+}
+复制代码
+```
+
+### HashHistory
+
+有没有一点疑惑? 这个`pushState`, 有点东西? 哈希模式难道也用历史模式的东西?
+
+```
+// hash.js
+function pushHash (path) {
+  if (supportsPushState) {
+    pushState(getUrl(path))
+  } else {
+    window.location.hash = path
+  }
+}
+
+export class HashHistory extends History {
+    ...
+    push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
+      const { current: fromRoute } = this
+      this.transitionTo(
+        location,
+        route => {
+          pushHash(route.fullPath)
+          handleScroll(this.router, route, fromRoute, false)
+          onComplete && onComplete(route)
+        },
+        onAbort
+      )
+    }
+    setupListeners () {
+      ...    
+      // 你疑惑了吗?,也用popstate
+      const eventType = supportsPushState ? 'popstate' : 'hashchange'
+      window.addEventListener(
+        eventType,
+        handleRoutingEvent
+      )
+      this.listeners.push(() => {
+        window.removeEventListener(eventType, handleRoutingEvent)
+      })
+    }
+}    
+复制代码
+```
+
+### HTML5History
+
+```
+// html5.js
+export class HTML5History extends History {
+    ...
+    push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
+      const { current: fromRoute } = this
+      this.transitionTo(location, route => {
+        pushState(cleanPath(this.base + route.fullPath))
+        handleScroll(this.router, route, fromRoute, false)
+        onComplete && onComplete(route)
+      }, onAbort)
+    }
+    
+    setupListeners () {
+      ...    
+     window.addEventListener('popstate', handleRoutingEvent)
+     this.listeners.push(() => {
+       window.removeEventListener('popstate', handleRoutingEvent)
+     })
+    }
+}    
+复制代码
+```
+
+他们使用的`pushState`方法都是一样的;
+
+### 总结
+
+相信聪明的你已经从中发现了端倪:
+
+*   哈希模式也使用了历史模式的原理, 并且做了`向下兼容`: 当浏览器不支持 history 的时候可以使用 hash
+*   在某种程度上它们还真的只是只有 #的区别
+*   面试官要是这么问你, 你要是回答只有`"#"`的区别请你一定一定要先`说明它们的核心`, 说你的`理解`, 再说`源码`, 别真憨憨说只有`"#"`, 然后不作任何解释
+
+最后
+--
+
+看懂了请给我点个👍, 这是对我莫大的支持, 没看懂可以先点赞然后评论`"作者回家等通知"`, 要是本文有描述不清楚或者错误的地方请评论, 我会立即回应更改, 感谢大家☺️
