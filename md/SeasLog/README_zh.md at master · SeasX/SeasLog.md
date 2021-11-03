@@ -1,0 +1,1043 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [github.com](https://github.com/SeasX/SeasLog/blob/master/README_zh.md)
+
+[](#seaslog)SeasLog
+===================
+
+[![](https://camo.githubusercontent.com/65c100786855272146d7b83ff9eef1100f868c8c9cb99546e3516e2cfb4ec789/68747470733a2f2f7472617669732d63692e6f72672f53656173582f536561734c6f672e7376673f6272616e63683d6d6173746572)](https://travis-ci.org/SeasX/SeasLog) [![](https://camo.githubusercontent.com/0519ae68a1e07a26ae292aaab4357e93d304b792141b239a2e5f2dc407e06a1a/68747470733a2f2f63692e6170707665796f722e636f6d2f6170692f70726f6a656374732f7374617475732f786b663879376d736b376b736b6f6e323f7376673d74727565)](https://ci.appveyor.com/project/Neeke/seaslog)
+
+An effective,fast,stable log extension for PHP
+
+@author Chitao.Gao [[neeke@php.net](mailto:neeke@php.net)]
+
+@交流群 312910117
+
+[PHP 手册](http://php.net/SeasLog)
+
+[English Document](https://github.com/SeasX/SeasLog/blob/master/README.md)
+
+[日志规范](https://github.com/SeasX/SeasLog/blob/master/Specification/README_zh.md)
+
+[日志收集](https://github.com/SeasX/SeasLog/blob/master/Specification/SeasLog_Rsyslog_ELK_zh.md)
+
+> * * *
+
+*   **[简介](#%E7%AE%80%E4%BB%8B)**
+    *   **[为什么使用 SeasLog](#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8seaslog)**
+    *   **[目前提供了什么](#%E7%9B%AE%E5%89%8D%E6%8F%90%E4%BE%9B%E4%BA%86%E4%BB%80%E4%B9%88)**
+    *   **[目标是怎样的](#%E7%9B%AE%E6%A0%87%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84)**
+*   **[安装](#%E5%AE%89%E8%A3%85)**
+    *   **[编译安装 SeasLog](#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85-seaslog)**
+    *   **[seaslog.ini 的配置](#seaslogini%E7%9A%84%E9%85%8D%E7%BD%AE)**
+    *   **[自定义日志模板](#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E6%A8%A1%E6%9D%BF)**
+        *   [日志模板说明](#%E6%97%A5%E5%BF%97%E6%A8%A1%E6%9D%BF%E8%AF%B4%E6%98%8E)
+        *   [预设变量表](#%E9%A2%84%E8%AE%BE%E5%8F%98%E9%87%8F%E8%A1%A8)
+*   **[使用](#%E4%BD%BF%E7%94%A8)**
+    *   **[常量与函数](#%E5%B8%B8%E9%87%8F%E4%B8%8E%E5%87%BD%E6%95%B0)**
+        *   [常量列表](#%E5%B8%B8%E9%87%8F%E5%88%97%E8%A1%A8)
+        *   [函数列表](#%E5%87%BD%E6%95%B0%E5%88%97%E8%A1%A8)
+    *   **[PHP Re 结果](#php-re-%E7%BB%93%E6%9E%9C)**
+    *   **[SeasLog Logger 的使用](#seaslog-logger%E7%9A%84%E4%BD%BF%E7%94%A8)**
+        *   [获取与设置 basePath](#%E8%8E%B7%E5%8F%96%E4%B8%8E%E8%AE%BE%E7%BD%AEbasepath)
+        *   [设置 logger 与获取 lastLogger](#%E8%AE%BE%E7%BD%AElogger%E4%B8%8E%E8%8E%B7%E5%8F%96lastlogger)
+        *   [快速写入 log](#%E9%80%9F%E5%86%99%E5%85%A5log)
+        *   [使用 TCP 或 UDP 发送时的数据格式](#%E4%BD%BF%E7%94%A8tcp%E6%88%96udp%E5%8F%91%E9%80%81%E6%97%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F)
+        *   [手动清除 LoggerStream 缓存](#%E6%89%8B%E5%8A%A8%E6%B8%85%E9%99%A4loggerstream%E7%BC%93%E5%AD%98)
+    *   **[SeasLog Analyzer 的使用](#seaslog-analyzer%E7%9A%84%E4%BD%BF%E7%94%A8)**
+        *   [快速统计某类型 log 的 count 值](#%E5%BF%AB%E9%80%9F%E7%BB%9F%E8%AE%A1%E6%9F%90%E7%B1%BB%E5%9E%8Blog%E7%9A%84count%E5%80%BC)
+        *   [获取某类型 log 列表](#%E8%8E%B7%E5%8F%96%E6%9F%90%E7%B1%BB%E5%9E%8Blog%E5%88%97%E8%A1%A8)
+    *   **[使用 SeasLog 进行健康预警](#%E4%BD%BF%E7%94%A8seaslog%E8%BF%9B%E8%A1%8C%E5%81%A5%E5%BA%B7%E9%A2%84%E8%AD%A6)**
+        *   [预警的配置](#%E9%A2%84%E8%AD%A6%E7%9A%84%E9%85%8D%E7%BD%AE)
+        *   [crontab 配置](#crontab%E9%85%8D%E7%BD%AE)
+    *   **[目前已知使用 SeasLog 的企业](#%E7%9B%AE%E5%89%8D%E5%B7%B2%E7%9F%A5%E4%BD%BF%E7%94%A8SeasLog%E7%9A%84%E4%BC%81%E4%B8%9A)**
+        *   [企业名单](#%E4%BC%81%E4%B8%9A%E5%90%8D%E5%8D%95)
+        *   [接受捐赠](#%E6%8E%A5%E5%8F%97%E6%8D%90%E8%B5%A0)
+
+> * * *
+
+[](#简介)简介
+---------
+
+### [](#为什么使用seaslog)为什么使用 SeasLog
+
+log 日志，通常是系统或软件、应用的运行记录。通过 log 的分析，可以方便用户了解系统或软件、应用的运行情况；如果你的应用 log 足够丰富，也可以分析以往用户的操作行为、类型喜好、地域分布或其他更多信息；如果一个应用的 log 同时也分了多个级别，那么可以很轻易地分析得到该应用的健康状况，及时发现问题并快速定位、解决问题，补救损失。
+
+php 内置 error_log、syslog 函数功能强大且性能极好，但由于各种缺陷 (error_log 无错误级别、无固定格式，syslog 不分模块、与系统日志混合)，灵活度降低了很多，不能满足应用需求。
+
+好消息是，有不少第三方的 log 类库弥补了上述缺陷，如 log4php、plog、Analog 等 (当然也有很多应用在项目中自己开发的 log 类)。其中以 [log4php](http://logging.apache.org/log4php/) 最为著名，设计精良、格式完美、文档完善、功能强大。推荐。
+
+不过 log4php 在性能方面表现非常差, 下图是 SeasLog 与 log4php 的 ab 并发性能测试 (测试环境: Ubuntu12.04 单机, CPU I3, 内存 16G, 硬盘 SATA 7200): [![](https://raw.githubusercontent.com/SeasX/SeasLog/master/tests/SeasLogVSlog4php.png)](https://raw.githubusercontent.com/SeasX/SeasLog/master/tests/SeasLogVSlog4php.png)
+
+那么有没有一种 log 类库满足以下需求呢：
+
+*   分模块、分级别
+*   配置简单 (最好是勿须配置)
+*   日志格式清晰易读
+*   应用简单、性能很棒
+
+`SeasLog` 正是应此需求而生。
+
+### [](#目前提供了什么)目前提供了什么
+
+*   在 PHP 项目中便捷、规范地记录 log
+*   可配置的默认 log 目录与模块
+*   指定 log 目录与获取当前配置
+*   初步的分析预警框架
+*   高效的日志缓冲、便捷的缓冲 debug
+*   遵循 [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) 日志接口规范
+*   自动记录错误信息
+*   自动记录异常信息
+*   连接 TCP 端口，以 RFC5424 格式发送日志
+*   连接 UDP 端口，以 RFC5424 格式发送日志
+*   支持 RequestId 区分请求
+*   支持日志模板自定义
+
+### [](#目标是怎样的)目标是怎样的
+
+*   便捷、规范的 log 记录
+*   高效的海量 log 分析
+*   可配置、多途径的 log 预警
+
+[](#安装)安装
+---------
+
+### [](#编译安装-seaslog)编译安装 SeasLog
+
+```
+$ /path/to/phpize
+$ ./configure --with-php-config=/path/to/php-config
+$ make && make install
+```
+
+### [](#pecl安装seaslog)PECL 安装 SeasLog
+
+```
+$ pecl install seaslog
+```
+
+### [](#windows环境中使用seaslog)Windows 环境中使用 SeasLog
+
+到 PECL/SeasLog 主页找到对应的 dll 进行安装 [PECL/SeasLog Windows Dll](http://pecl.php.net/package/SeasLog/1.8.4/windows)
+
+### [](#seaslogini的配置)seaslog.ini 的配置
+
+```
+[SeasLog]
+;configuration for php SeasLog module
+extension = seaslog.so
+
+;默认log根目录
+seaslog.default_basepath = "/var/log/www"
+
+;默认log文件前缀 如 "app-" 默认空字符串
+seaslog.default_file_prefix = ""
+
+;默认logger目录
+seaslog.default_logger = "default"
+
+;日期格式配置 默认"Y-m-d H:i:s"
+seaslog.default_datetime_format = "Y-m-d H:i:s"
+
+;日志格式模板 默认"%T | %L | %P | %Q | %t | %M"
+seaslog.default_template = "%T | %L | %P | %Q | %t | %M"
+
+;是否以目录区分Logger 1是(默认) 0否
+seaslog.disting_folder = 1
+
+;是否以type分文件 1是 0否(默认)
+seaslog.disting_type = 0
+
+;是否每小时划分一个文件 1是 0否(默认)
+seaslog.disting_by_hour = 0
+
+;是否启用buffer 1是 0否(默认)
+seaslog.use_buffer = 0
+
+;buffer中缓冲数量 默认0(不使用buffer_size)
+seaslog.buffer_size = 100
+
+;cli运行时关闭buffer
+;1是 0否(默认)
+seaslog.buffer_disabled_in_cli = 0
+
+;记录日志级别，数字越大，根据级别记的日志越多。
+;0-EMERGENCY 1-ALERT 2-CRITICAL 3-ERROR 4-WARNING 5-NOTICE 6-INFO 7-DEBUG 8-ALL
+;默认8(所有日志)
+;
+;   注意, 该配置项自1.7.0版本开始有变动。
+;   在1.7.0版本之前, 该值数字越小，根据级别记的日志越多: 
+;   0-all 1-debug 2-info 3-notice 4-warning 5-error 6-critical 7-alert 8-emergency
+;   1.7.0 之前的版本，该值默认为0(所有日志);
+seaslog.level = 8
+
+;日志函数调用回溯层级
+;影响预定义变量 %F 中的行数
+;默认0
+seaslog.recall_depth = 0
+
+;自动记录notice 默认0(关闭)
+seaslog.trace_notice = 0
+
+;自动记录warning 默认0(关闭)
+seaslog.trace_warning = 0
+
+;自动记录错误 默认1(开启)
+seaslog.trace_error = 1
+
+;自动记录异常信息 默认0(关闭)
+seaslog.trace_exception = 0
+
+;日志存储介质 1File 2TCP 3UDP (默认为1)
+seaslog.appender = 1
+
+;写入重试次数
+;默认0(不重试)
+seaslog.appender_retry = 0
+
+;接收ip 默认127.0.0.1 (当使用TCP或UDP时必填)
+seaslog.remote_host = "127.0.0.1"
+
+;接收端口 默认514 (当使用TCP或UDP时必填)
+seaslog.remote_port = 514
+
+;接收端口的超时时间 默认1秒
+seaslog.remote_timeout = 1
+
+;过滤日志中的回车和换行符 (默认为0)
+seaslog.trim_wrap = 0
+
+;是否开启抛出SeasLog自身异常  1开启(默认) 0关闭
+seaslog.throw_exception = 1
+
+;是否开启忽略SeasLog自身warning  1开启(默认) 0关闭
+seaslog.ignore_warning = 1
+
+;是否开启性能追踪 1开启 0关闭(默认)
+seaslog.trace_performance = 0
+
+;性能追踪时的千分比采样率
+;默认10，即百分之一
+seaslog.trace_performance_sample_rate = 10
+
+;性能追踪时的开始层级 默认从第1层开始
+seaslog.trace_performance_start_depth = 1
+
+;性能追踪时深度层级 默认5层
+seaslog.trace_performance_max_depth = 5
+
+;性能追踪时每层的函数最大数 按wall_time降序排列top 默认top5
+seaslog.trace_performance_max_functions_per_depth = 5
+
+;性能追踪时当前请求执行时间的记录阈值 只有当请求执行时间大于该值时，才记录性能日志 默认1000ms
+seaslog.trace_performance_min_wall_time = 1000
+
+;性能追踪时每个方法执行时间的记录阈值 只有当方法执行时间大于该值时，才参与计算 默认10ms
+seaslog.trace_performance_min_function_wall_time = 10
+```
+
+> `seaslog.disting_folder = 1` 开启以目录分文件，即 logger 以目录区分。当关闭时，logger 以下划线拼接时间, 如 default_20180211.log。
+
+> `seaslog.disting_type = 1` 开启以 type 分文件，即 log 文件区分 info\warn\erro
+
+> `seaslog.disting_by_hour = 1` 开启每小时划分一个文件
+
+> `seaslog.use_buffer = 1` 开启 buffer。默认关闭。当开启此项时，日志预存于内存，当请求结束时 (或异常退出时) 一次写入文件。
+
+> `seaslog.buffer_size = 100` 设置缓冲数量为 100. 默认为 0, 即无缓冲数量限制. 当 buffer_size 大于 0 时, 缓冲量达到该值则写一次文件.
+
+> `seaslog.buffer_disabled_in_cli = 1` 开启 CLI 运行时禁用缓存。默认关闭。当开启此项时，CLI 运行时将忽略 seaslog.use_buffer 设定，日志写入文件。
+
+> `seaslog.level = 8` 记录的日志级别. 默认为 8, 即所有日志均记录。
+
+> `seaslog.level = 0` 记录 EMERGENCY。
+
+> `seaslog.level = 1` 记录 EMERGENCY、ALERT。
+
+> `seaslog.level = 2` 记录 EMERGENCY、ALERT、CRITICAL。
+
+> `seaslog.level = 3` 记录 EMERGENCY、ALERT、CRITICAL、ERROR。
+
+> `seaslog.level = 4` 记录 EMERGENCY、ALERT、CRITICAL、ERROR、WARNING。
+
+> `seaslog.level = 5` 记录 EMERGENCY、ALERT、CRITICAL、ERROR、WARNING、NOTICE。
+
+> `seaslog.level = 6` 记录 EMERGENCY、ALERT、CRITICAL、ERROR、WARNING、NOTICE、INFO。
+
+> `seaslog.level = 7` 记录 EMERGENCY、ALERT、CRITICAL、ERROR、WARNING、NOTICE、INFO、DEBUG。
+
+> `seaslog.throw_exception = 1` 开启抛出 SeasLog 抛出自身的异常。当出现录权限或接收服务器端口不通等情况时，抛出异常；关闭时不抛出异常。
+
+> `seaslog.ignore_warning = 1` 开启忽略 SeasLog 自身的警告。当出现目录权限或接收服务器端口不通等情况时，将进行忽略；关闭时，将抛出警告。
+
+> `seaslog.trace_performance = 1` 开启性能追踪功能。性能日志如:
+
+```
+2019-01-30 11:46:53 | INFO | 91390 | 5c518ea46e010 | 1548848813.299 | {"main()":{"wt":8848,"mu":20712},"1":[{"cm":"Class0::Method0","ct":2,"wt":2007,"mu":192},{"cm":"Class1::Method1","ct":1,"wt":1002,"mu":192},{"cm":"Class2::Method2","ct":1,"wt":1001,"mu":192},{"cm":"Class3::Method3","ct":1,"wt":1000,"mu":192},{"cm":"Class4::Method4","ct":1,"wt":1000,"mu":192}],"2":[{"cm":"Class5::Method5","ct":1,"wt":1000,"mu":192}],"3":[{"cm":"Class5::Recursion","ct":1,"wt":1000,"mu":3248}],"4":[{"cm":"Class5::Recursion","ct":1,"wt":1000,"mu":2952}],"5":[{"cm":"Class5::Recursion","ct":1,"wt":1000,"mu":2656}]}
+
+cm => function_name (类名::方法名)
+wt => wall_time (ms)
+mu => memory_usage (byte)
+ct => call_times (方法调用计数)
+```
+
+### [](#自定义日志模板)自定义日志模板
+
+很多朋友在使用过程中提到自定义日志模板的需求，于是`SeasLog`自 1.7.2 版本开始，拥有了这个能力，允许用户自定义日志的模板， 同时在模板中可以使用`SeasLog`预置的诸多预设变量，参照[预设变量表](#%E9%A2%84%E8%AE%BE%E5%8F%98%E9%87%8F%E8%A1%A8)。
+
+#### [](#日志模板说明)日志模板说明
+
+*   模板默认为：`seaslog.default_template = "%T | %L | %P | %Q | %t | %M"`
+*   意味着，默认的格式为`{dateTime} | {level} | {pid} | {uniqid} | {timeStamp} | {logInfo}`
+*   如果自定义的格式为：`seaslog.default_template = "[%T]:%L %P %Q %t %M"`
+*   那么，日志格式将被自定义为：`[{dateTime}]:{level} {pid} {uniqid} {timeStamp} {logInfo}`
+
+#### [](#预设变量表)预设变量表
+
+`SeasLog`提供了下列预设变量，可以直接使用在日志模板中，将在日志最终生成时替换成对应值。
+
+*   `%L` - Level 日志级别。
+*   `%M` - Message 日志信息。
+*   `%T` - DateTime 如`2017-08-16 19:15:02`，受`seaslog.default_datetime_format`影响。
+*   `%t` - Timestamp 如`1502882102.862`，精确到毫秒数。
+*   `%Q` - RequestId 区分单次请求，如没有调用`SeasLog::setRequestId($string)`方法，则在初始化请求时，采用内置的`static char *get_uniqid()`方法生成的惟一值。
+*   `%H` - HostName 主机名。
+*   `%P` - ProcessId 进程 ID。
+*   `%D` - Domain:Port 域名: 口号，如`www.cloudwise.com:8080`; Cli 模式下为`cli`。
+*   `%R` - Request URI 请求 URI，如`/app/user/signin`; Cli 模式下为入口文件，如`CliIndex.php`。
+*   `%m` - Request Method 请求类型，如`GET`; Cli 模式下为执行命令，如`/bin/bash`。
+*   `%I` - Client IP 来源客户端 IP; Cli 模式下为`local`。取值优先级为：HTTP_X_REAL_IP > HTTP_X_FORWARDED_FOR > REMOTE_ADDR
+*   `%F` - FileName:LineNo 文件名: 行号，如`UserService.php:118`。
+*   `%U` - MemoryUsage 当前内容使用量，单位 byte。调用`zend_memory_usage`。
+*   `%u` - PeakMemoryUsage 当前内容使用峰值量，单位 byte。调用`zend_memory_peak_usage`。
+*   `%C` - Class::Action 类名:: 方法名，如`UserService::getUserInfo`。不在类中使用时，记录函数名。
+*   `%B` - BasePath 路径, 如`/var/log/www`。受`seaslog.default_basepath`和`setBasePath`影响。
+
+[](#使用)使用
+---------
+
+### [](#常量与函数)常量与函数
+
+#### [](#常量列表)常量列表
+
+`SeasLog 共将日志分成8个级别`
+
+##### [](#seaslog_debug)SEASLOG_DEBUG
+
+*   "DEBUG" - debug 信息、细粒度信息事件
+
+##### [](#seaslog_info)SEASLOG_INFO
+
+*   "INFO" - 重要事件、强调应用程序的运行过程
+
+##### [](#seaslog_notice)SEASLOG_NOTICE
+
+*   "NOTICE" - 一般重要性事件、执行过程中较 INFO 级别更为重要的信息
+
+##### [](#seaslog_warning)SEASLOG_WARNING
+
+*   "WARNING" - 出现了非错误性的异常信息、潜在异常信息、需要关注并且需要修复
+
+##### [](#seaslog_error)SEASLOG_ERROR
+
+*   "ERROR" - 运行时出现的错误、不必要立即进行修复、不影响整个逻辑的运行、需要记录并做检测
+
+##### [](#seaslog_critical)SEASLOG_CRITICAL
+
+*   "CRITICAL" - 紧急情况、需要立刻进行修复、程序组件不可用
+
+##### [](#seaslog_alert)SEASLOG_ALERT
+
+*   "ALERT" - 必须立即采取行动的紧急事件、需要立即通知相关人员紧急修复
+
+##### [](#seaslog_emergency)SEASLOG_EMERGENCY
+
+*   "EMERGENCY" - 系统不可用
+
+```
+var_dump(SEASLOG_DEBUG,SEASLOG_INFO,SEASLOG_NOTICE);
+/*
+string('DEBUG') debug级别
+string('INFO')  info级别
+string('NOTICE') notice级别
+*/
+```
+
+#### [](#函数列表)函数列表
+
+`SeasLog` 提供了这样一组函数，可以方便地获取与设置根目录、模块目录、快速写入与统计 log。 相信从下述伪代码的注释中，您可以快速获取函数信息，具体使用将紧接其后：
+
+```
+<?php
+/**
+ * @author neeke@php.net
+ * Date: 14-1-27 下午4:47
+ */
+define('SEASLOG_ALL', 'ALL');
+define('SEASLOG_DEBUG', 'DEBUG');
+define('SEASLOG_INFO', 'INFO');
+define('SEASLOG_NOTICE', 'NOTICE');
+define('SEASLOG_WARNING', 'WARNING');
+define('SEASLOG_ERROR', 'ERROR');
+define('SEASLOG_CRITICAL', 'CRITICAL');
+define('SEASLOG_ALERT', 'ALERT');
+define('SEASLOG_EMERGENCY', 'EMERGENCY');
+define('SEASLOG_DETAIL_ORDER_ASC', 1);
+define('SEASLOG_DETAIL_ORDER_DESC', 2);
+define('SEASLOG_CLOSE_LOGGER_STREAM_MOD_ALL', 1);
+define('SEASLOG_CLOSE_LOGGER_STREAM_MOD_ASSIGN', 2);
+define('SEASLOG_REQUEST_VARIABLE_DOMAIN_PORT', 1);
+define('SEASLOG_REQUEST_VARIABLE_REQUEST_URI', 2);
+define('SEASLOG_REQUEST_VARIABLE_REQUEST_METHOD', 3);
+define('SEASLOG_REQUEST_VARIABLE_CLIENT_IP', 4);
+
+class SeasLog
+{
+    public function __construct()
+    {
+        #SeasLog init
+    }
+
+    public function __destruct()
+    {
+        #SeasLog distroy
+    }
+
+    /**
+     * 设置basePath
+     *
+     * @param $basePath
+     *
+     * @return bool
+     */
+    static public function setBasePath($basePath)
+    {
+        return true;
+    }
+
+    /**
+     * 获取basePath
+     *
+     * @return string
+     */
+    static public function getBasePath()
+    {
+        return 'the base_path';
+    }
+
+    /**
+     * 设置本次请求标识
+     *
+     * @param string
+     *
+     * @return bool
+     */
+    static public function setRequestID($request_id)
+    {
+        return true;
+    }
+
+    /**
+     * 获取本次请求标识
+     * @return string
+     */
+    static public function getRequestID()
+    {
+        return uniqid();
+    }
+
+    /**
+     * 设置模块目录
+     *
+     * @param $module
+     *
+     * @return bool
+     */
+    static public function setLogger($module)
+    {
+        return true;
+    }
+
+    /**
+     * 手动清除logger的stream流
+     *
+     * @param $model
+     * @param $logger
+     *
+     * @return bool
+     */
+    static public function closeLoggerStream($model = SEASLOG_CLOSE_LOGGER_STREAM_MOD_ALL, $logger)
+    {
+        return true;
+    }
+
+    /**
+     * 获取最后一次设置的模块目录
+     * @return string
+     */
+    static public function getLastLogger()
+    {
+        return 'the lastLogger';
+    }
+
+    /**
+     * 设置DatetimeFormat配置
+     *
+     * @param $format
+     *
+     * @return bool
+     */
+    static public function setDatetimeFormat($format)
+    {
+        return true;
+    }
+
+    /**
+     * 返回当前DatetimeFormat配置格式
+     * @return string
+     */
+    static public function getDatetimeFormat()
+    {
+        return 'the datetimeFormat';
+    }
+
+    /**
+     * 设置请求变量
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return bool
+     */
+    static public function setRequestVariable($key, $value)
+    {
+        return true;
+    }
+
+    /**
+     * 获取请求变量
+     *
+     * @param $key
+     *
+     * @return string
+     */
+    static public function getRequestVariable($key)
+    {
+        return '';
+    }
+
+    /**
+     * 统计所有类型（或单个类型）行数
+     *
+     * @param string $level
+     * @param string $log_path
+     * @param null   $key_word
+     *
+     * @return array | long
+     */
+    static public function analyzerCount($level = 'all', $log_path = '*', $key_word = null)
+    {
+        return array();
+    }
+
+    /**
+     * 以数组形式，快速取出某类型log的各行详情
+     *
+     * @param        $level
+     * @param string $log_path
+     * @param null   $key_word
+     * @param int    $start
+     * @param int    $limit
+     * @param        $order
+     *
+     * @return array
+     */
+    static public function analyzerDetail($level = SEASLOG_INFO, $log_path = '*', $key_word = null, $start = 1, $limit = 20, $order = SEASLOG_DETAIL_ORDER_ASC)
+    {
+        return array();
+    }
+
+    /**
+     * 获得当前日志buffer中的内容
+     *
+     * @return array
+     */
+    static public function getBuffer()
+    {
+        return array();
+    }
+    
+    /**
+     * 获取是否开启buffer
+     *
+     * @return bool
+     */
+    static public function getBufferEnabled()
+    {
+        return true;
+    }
+    
+    /**
+    * 获取当前buffer count
+    *
+    * @return int
+    */
+    static public function getBufferCount()
+    {
+        return 0;
+    }
+
+    /**
+     * 将buffer中的日志立刻刷到硬盘
+     *
+     * @return bool
+     */
+    static public function flushBuffer()
+    {
+        return true;
+    }
+
+    /**
+     * 记录debug日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function debug($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_DEBUG
+    }
+
+    /**
+     * 记录info日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function info($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_INFO
+    }
+
+    /**
+     * 记录notice日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function notice($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_NOTICE
+    }
+
+    /**
+     * 记录warning日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function warning($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_WARNING
+    }
+
+    /**
+     * 记录error日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function error($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_ERROR
+    }
+
+    /**
+     * 记录critical日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function critical($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_CRITICAL
+    }
+
+    /**
+     * 记录alert日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function alert($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_ALERT
+    }
+
+    /**
+     * 记录emergency日志
+     *
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function emergency($message, array $context = array(), $module = '')
+    {
+        #$level = SEASLOG_EMERGENCY
+    }
+
+    /**
+     * 通用日志方法
+     *
+     * @param              $level
+     * @param string|array $message
+     * @param array        $context
+     * @param string       $module
+     */
+    static public function log($level, $message, array $context = array(), $module = '')
+    {
+
+    }
+}
+```
+
+### [](#php-re-结果)PHP Re 结果
+
+[SeasLog_PHP_Re_Result](https://github.com/SeasX/SeasLog/blob/master/Specification/SeasLog_PHP_Re_Result.md)
+
+### [](#seaslog-logger的使用)SeasLog Logger 的使用
+
+#### [](#获取与设置basepath)获取与设置 basePath
+
+```
+$basePath_1 = SeasLog::getBasePath();
+
+SeasLog::setBasePath('/log/base_test');
+$basePath_2 = SeasLog::getBasePath();
+
+var_dump($basePath_1,$basePath_2);
+
+/*
+string(19) "/log/seaslog-ciogao"
+string(14) "/log/base_test"
+*/
+```
+
+> 直接使用 `SeasLog::getBasePath()`，将获取 php.ini(seaslog.ini) 中设置的 `seaslog.default_basepath` 的值。
+
+> 使用 `SeasLog::setBasePath()` 函数，将改变 `SeasLog::getBasePath()` 的取值。
+
+#### [](#设置logger与获取lastlogger)设置 logger 与获取 lastLogger
+
+```
+$lastLogger_1 = SeasLog::getLastLogger();
+
+SeasLog::setLogger('testModule/app1');
+$lastLogger_2 = SeasLog::getLastLogger();
+
+var_dump($lastLogger_1,$lastLogger_2);
+/*
+string(7) "default"
+string(15) "testModule/app1"
+*/
+```
+
+> 与 basePath 相类似的，
+
+> 直接使用 `SeasLog::getLastLogger()`，将获取 php.ini(seaslog.ini) 中设置的 `seaslog.default_logger` 的值。
+
+> 使用 `SeasLog::setLogger()` 函数，将改变 `SeasLog::getLastLogger()` 的取值。
+
+#### [](#快速写入log)快速写入 log
+
+上面已经设置过了 basePath 与 logger，于是 log 记录的目录已经产生了，
+
+> log 记录目录 = basePath / logger / {fileName}.log log 文件名，以 `年月日` 分文件，如今天是 2014 年 02 月 18 日期，那么 `{fileName}` = `20140218`;
+
+还记得 `php.ini` 中设置的 `seaslog.disting_type` 吗？
+
+默认的 `seaslog.disting_type = 0`，如果今天我使用了 `SeasLog` ，那么将产生最终的 log 文件：
+
+*   LogFile = basePath / logger / 20140218.log
+
+如果 `seaslog.disting_type = 1`，则最终的 log 文件将是这样的三个文件
+
+*   infoLogFile = basePath / logger / 20140218.INFO.log
+    
+*   warnLogFile = basePath / logger / 20140218.WARNING.log
+    
+*   erroLogFile = basePath / logger / 20140218.ERROR.log
+    
+
+用于记录日志的函数原型有两个：
+
+*   SeasLog::log($level, $messages[, $context, $logger])
+    
+*   SeasLog::$level($messages[, $context, $logger])
+    
+
+> $level - 参见上文所列的 8 个级别
+
+> $messages - 可以使用`string`或`array`两种类型, `array`仅接受一维数组
+
+> $context - 仅接受一维数组，用于替换 $messages 中 log 的占位符
+
+> $logger - 可以临时为当前操作指定一个 logger，而不改变 getLastLogger 方法的取值
+
+```
+SeasLog::log(SEASLOG_ERROR,'this is a error test by ::log');
+
+SeasLog::debug('this is a {userName} debug',array('{userName}' => 'neeke'));
+
+SeasLog::info('this is a info log');
+
+SeasLog::notice('this is a notice log');
+
+SeasLog::warning('your {website} was down,please {action} it ASAP!',array('{website}' => 'github.com','{action}' => 'rboot'));
+
+SeasLog::error('a error log');
+
+SeasLog::critical('some thing was critical');
+
+SeasLog::alert('yes this is a {messageName}',array('{messageName}' => 'alertMSG'));
+
+SeasLog::emergency('Just now, the house next door was completely burnt out! {note}',array('{note}' => 'it`s a joke'));
+
+$aMessages = array('test log from array abc {website}','test log from array def {action}');
+$aContent = array('website' => 'github.com','action' => 'rboot'));
+SeasLog::debug($aMessages,$aContent);
+/*
+这些函数同时也接受第3个参数为logger的设置项
+注意，当last_logger == 'default'时等同于:
+SeasLog::setLogger('test/new/path');
+SeasLog::error('test error 3');
+如果已经在前文使用过SeasLog::setLogger()函数，第3个参数的log只在此处临时使用，不影响下文。
+*/
+```
+
+> log 格式受`seaslog.default_template`影响。 seaslog.default_template 默认模板为 seaslog.default_template = "%T | %L | %P | %Q | %t | %M" 那么在默认情况下，日志格式为： `{dateTime} | {level} | {pid} | {uniqid} | {timeStamp} | {logInfo}` 关于自定义模板，及 SeasLog 中的预置值，可参阅 [自定义日志模板](#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E6%A8%A1%E6%9D%BF)
+
+```
+2014-07-27 08:53:52 | ERROR | 23625 | 599159975a9ff | 1406422432.786 | this is a error test by log
+2014-07-27 08:53:52 | DEBUG | 23625 | 599159975a9ff | 1406422432.786 | this is a neeke debug
+2014-07-27 08:53:52 | INFO | 23625 | 599159975a9ff | 1406422432.787 | this is a info log
+2014-07-27 08:53:52 | NOTICE | 23625 | 599159975a9ff | 1406422432.787 | this is a notice log
+2014-07-27 08:53:52 | WARNING | 23625 | 599159975a9ff | 1406422432.787 | your github.com was down,please rboot it ASAP!
+2014-07-27 08:53:52 | ERROR | 23625 | 599159975a9ff | 1406422432.787 | a error log
+2014-07-27 08:53:52 | CRITICAL | 23625 | 599159975a9ff | 1406422432.787 | some thing was critical
+2014-07-27 08:53:52 | EMERGENCY | 23625 | 599159975a9ff | 1406422432.787 | Just now, the house next door was completely burnt out! it is a joke
+2014-07-27 08:53:52 | DEBUG | 23625 | 599159975a9ff | 1406422432.787 | test log from array abc github.com
+2014-07-27 08:53:52 | DEBUG | 23625 | 599159975a9ff | 1406422432.787 | test log from array def rboot
+```
+
+#### [](#使用tcp或udp发送时的数据格式)使用 TCP 或 UDP 发送时的数据格式
+
+当`seaslog.appender`配置为 `2（TCP）` 或 `3（UDP）` 时，日志将推送至 remote_host:remote_port 的 TCP 或 UDP 端口
+
+> SeasLog 发送至远端时，遵循规范 [RFC5424](http://www.faqs.org/rfcs/rfc5424.html) log 格式统一为：`<PRI>1 {timeStampWithRFC3339} {HostName} {loggerName}[{pid}]: {logInfo}` 上述`{logInfo}` 受配置 `seaslog.default_template`影响。
+
+```
+发送出去的格式如：
+<15>1 2017-08-27T01:24:59+08:00 vagrant-ubuntu-trusty test/logger[27171]: 2016-06-25 00:59:43 | DEBUG | 21423 | 599157af4e937 | 1466787583.322 | this is a neeke debug
+<14>1 2017-08-27T01:24:59+08:00 vagrant-ubuntu-trusty test/logger[27171]: 2016-06-25 00:59:43 | INFO | 21423 | 599157af4e937 | 1466787583.323 | this is a info log
+<13>1 2017-08-27T01:24:59+08:00 vagrant-ubuntu-trusty test/logger[27171]: 2016-06-25 00:59:43 | NOTICE | 21423 | 599157af4e937 | 1466787583.324 | this is a notice log
+```
+
+#### [](#手动清除loggerstream缓存)手动清除 LoggerStream 缓存
+
+`SeasLog`会将日志 Logger 开启的 Stream 句柄进行缓存，以节省创建流时引起的开销。句柄将在请求结束时自动释放。 如果在 CLI 模式下，进程退出时也会自动释放。或者你可以使用下面的函数进行手动释放 (手动释放函数需要更新 SeasLog 1.8.6 或更新版本)。
+
+> 手动关闭所有的 Logger Stream 句柄：
+
+```
+SeasLog::closeLoggerStream();
+
+或
+
+SeasLog::closeLoggerStream(SEASLOG_CLOSE_LOGGER_STREAM_MOD_ALL);
+```
+
+> 手动关闭指定的 Logger Stream 句柄：
+
+```
+SeasLog::closeLoggerStream(SEASLOG_CLOSE_LOGGER_STREAM_MOD_ASSIGN, 'logger_name');
+```
+
+### [](#seaslog-analyzer的使用)SeasLog Analyzer 的使用
+
+#### [](#快速统计某类型log的count值)快速统计某类型 log 的 count 值
+
+`SeasLog`在扩展中使用管道调用 shell 命令 `grep -wc`快速地取得 count 值，并返回值 (array || int) 给 PHP。
+
+```
+$countResult_1 = SeasLog::analyzerCount();
+$countResult_2 = SeasLog::analyzerCount(SEASLOG_WARNING);
+$countResult_3 = SeasLog::analyzerCount(SEASLOG_ERROR,date('Ymd',time()));
+
+var_dump($countResult_1,$countResult_2,$countResult_3);
+/*
+array(8) {
+  ["DEBUG"]=>
+  int(3)
+  ["INFO"]=>
+  int(3)
+  ["NOTICE"]=>
+  int(3)
+  ["WARNING"]=>
+  int(3)
+  ["ERROR"]=>
+  int(6)
+  ["CRITICAL"]=>
+  int(3)
+  ["ALERT"]=>
+  int(3)
+  ["EMERGENCY"]=>
+  int(3)
+}
+
+
+int(7)
+
+int(1)
+
+*/
+```
+
+#### [](#获取某类型log列表)获取某类型 log 列表
+
+`SeasLog`在扩展中使用管道调用 shell 命令 `grep -w`快速地取得列表，并返回 array 给 PHP。
+
+```
+$detailErrorArray_inAll   = SeasLog::analyzerDetail(SEASLOG_ERROR);
+$detailErrorArray_today   = SeasLog::analyzerDetail(SEASLOG_ERROR,date('Ymd',time()));
+
+var_dump($detailErrorArray_inAll,$detailErrorArray_today);
+
+/*
+SeasLog::analyzerDetail(SEASLOG_ERROR) == SeasLog::analyzerDetail(SEASLOG_ERROR,'*');
+取当前模块下所有level为 SEASLOG_ERROR 的信息列表:
+array(6) {
+ [0] =>
+  string(66) "2014-02-24 00:14:02 | ERROR | 8568 | 599157af4e937 | 1393172042.717 | test error 3 "
+  [1] =>
+  string(66) "2014-02-24 00:14:04 | ERROR | 8594 | 5991576584446 | 1393172044.104 | test error 3 "
+  [2] =>
+  string(66) "2014-02-24 00:14:04 | ERROR | 8620 | 1502697015147 | 1393172044.862 | test error 3 "
+  [3] =>
+  string(66) "2014-02-24 00:14:05 | ERROR | 8646 | 599159975a9ff | 1393172045.989 | test error 3 "
+  [4] =>
+  string(66) "2014-02-24 00:14:07 | ERROR | 8672 | 599159986ec28 | 1393172047.882 | test error 3 "
+  [5] =>
+  string(66) "2014-02-24 00:14:08 | ERROR | 8698 | 5991599981cec | 1393172048.736 | test error 3 "
+}
+
+SeasLog::analyzerDetail(SEASLOG_ERROR,date('Ymd',time()));
+只取得当前模块下，当前一天内,level为SEASLOG_ERROR 的信息列表:
+array(2) {
+  [0] =>
+  string(66) "2014-02-24 00:14:02 | ERROR | 8568 | 599157af4e937 | 1393172042.717 | test error 3 "
+  [1] =>
+  string(66) "2014-02-24 00:14:04 | ERROR | 8594 | 5991576584446 | 1393172044.104 | test error 3 "
+}
+
+同理，取当月
+$detailErrorArray_mouth = SeasLog::analyzerDetail(SEASLOG_ERROR,date('Ym',time()));
+
+*/
+```
+
+### [](#使用seaslog进行健康预警)使用 SeasLog 进行健康预警
+
+#### [](#预警的配置)预警的配置
+
+```
+[base]
+wait_analyz_log_path = /log/base_test
+
+[fork]
+;是否开启多线程 1开启 0关闭
+fork_open = 1
+
+;线程个数
+fork_count = 3
+
+[warning]
+email[smtp_host] = smtp.163.com
+email[smtp_port] = 25
+; 是否开启加密协议 tsl ssl, 留空为不开启
+email[smtp_secure] =
+; 邮件发送类型 smtp, sendmail, mail
+; smtp: PHP实现的smtp协议
+; sendmail: 需配置php.ini中sendmail_path
+; mail: 使用PHP内置mail()函数
+email[smtp_mailer] = smtp
+email[subject_pre] = 预警邮件 -
+email[smtp_user] = seaslogdemo@163.com
+email[smtp_pwd] = seaslog#demo
+email[mail_from] = seaslogdemo@163.com
+email[mail_to] = gaochitao@weiboyi.com
+email[mail_cc] = ciogao@gmail.com
+email[mail_bcc] =
+
+[analyz]
+; enum
+; SEASLOG_DEBUG      "DEBUG"
+; SEASLOG_INFO       "INFO"
+; SEASLOG_NOTICE     "NOTICE"
+; SEASLOG_WARNING    "WARNING"
+; SEASLOG_ERROR      "ERROR"
+; SEASLOG_CRITICAL   "CRITICAL"
+; SEASLOG_ALERT      "ALERT"
+; SEASLOG_EMERGENCY  "EMERGENCY"
+
+; 可以实现分别监控不同模块下特定级别的日志发送给不同的邮箱
+; test1 监控任务表示
+; 统计test模块SEASLOG_ERROR等级的日志数量，如果数量大于3则发送报警邮件到gaochitao@weiboyi.com
+
+test1[module] = test
+test1[level] = SEASLOG_ERROR
+test1[bar] = 3
+test1[mail_to] = neeke@php.net
+
+test2[module] = 222
+test2[level] = SEASLOG_WARNING
+test2[mail_to] = neeke@php.net,ciogao@gmail.com
+
+test3[module] = 333
+test3[level] = SEASLOG_CRITICAL
+
+test4[module] = 444
+test4[level] = SEASLOG_EMERGENCY
+
+test5[module] = 555
+test5[level] = SEASLOG_DEBUG
+```
+
+#### [](#crontab配置)crontab 配置
+
+```
+;每天凌晨3点执行
+0 3 * * * /path/to/php /path/to/SeasLog/Analyzer/SeasLogAnalyzer.php
+```
+
+[](#目前已知使用seaslog的企业)目前已知使用 SeasLog 的企业
+---------------------------------------
+
+### [](#企业名单)企业名单
+
+*   云智慧 [www.cloudwise.com](http://www.cloudwise.com)
+*   高德 (部分项目)
+*   腾讯 (部分项目)
+*   Formax [www.jrq.com](http://www.jrq.com)
+*   重庆易宠科技 (中国最大的独立宠物平台) [www.epet.com](http://www.epet.com)
+*   微财富 [www.weicaifu.com](http://www.weicaifu.com)
+*   美丽说 (部分项目) [www.meilishuo.com](http://www.meilishuo.com)
+*   百度 Crab 平台 crab.baidu.com
+*   爱宠医生 (中国最大的互联网宠物医疗平台) [www.5ichong.com](http://www.5ichong.com)
+*   爱奇艺秀场 (美女直播平台) x.pps.tv
+*   更多..
