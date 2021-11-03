@@ -1,0 +1,86 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [www.zachleat.com](https://www.zachleat.com/web/vector-raster-split/)
+
+> A post by Zach Leatherman (zachleat)
+
+This week I ran into an interesting class of problem that—in hindsight—could use a much better workflow. Does it exist?
+
+![](https://www.zachleat.com/web/img/posts/vector-raster-split/preview.png)
+
+It has to do with the hero image on the right side of the home page on [jamstackconf.com](http://jamstackconf.com/). We work using Figma on the marketing team at Netlify and my first attempt at exporting this image was fraught with peril.
+
+Attempt 1: SVG [#](#attempt-1:-svg)
+-----------------------------------
+
+*   `10.1 MB` Original Export from Figma as SVG
+*   `9.9 MB` SVG optimized with [SVGOMG](https://jakearchibald.github.io/svgomg/)
+
+Now I know that these sizes are the uncompressed file sizes (before GZIP/Brotli) but I think we can both agree that even an optimized 9.9 MB is a bridge too far for even the starchiest of compression algorithms _(Update: 9.9 MB gzipped to 7.36 MB)_. There are just too many embedded raster images inside of this SVG to yield good results from SVGOMG alone. Let’s swap to raster and see how far we can go.
+
+Attempt 2: PNG [#](#attempt-2:-png)
+-----------------------------------
+
+`1.2 MB` Original Export from Figma as PNG![](https://www.zachleat.com/web/img/posts/vector-raster-split/full.png)
+
+So y’all know me well enough that I won’t be putting a 1.2 MB hero image in that prime area of viewport real estate. Let’s try some basic optimizations. The important thing to note here is that we need to preserve the image’s transparency. If the background color changes, I don’t want to have to reoptimize this image. That rules out a conversion to JPEG.
+
+### ImageOptim [#](#imageoptim)
+
+`831 KB` PNG optimized with ImageOptim![](https://www.zachleat.com/web/img/posts/vector-raster-split/full-imageoptim.png)
+
+I was impressed with the ~400 KB savings here from a single drag-and-drop onto ImageOptim but 831 is still too high.
+
+### [Squoosh](https://squoosh.app/) [#](#squoosh)
+
+`376 KB` PNG optimized with Squoosh (Reduced palette to 256 colors)![](https://www.zachleat.com/web/img/posts/vector-raster-split/full-squoosh.png)
+
+Now we’re cooking with gas. That Reduced Palette option offered a huge savings! I did play around with the AVIF format settings on Squoosh a bit but wasn’t able to beat the PNG file size. _(Update August 27: take note of the new Attempt 4: AVIF section below)_
+
+Attempt 3: WebP [#](#attempt-3:-webp)
+-------------------------------------
+
+`152 KB` WebP optimized with Squoosh (Lossless, Reduced palette to 256 colors, demo offers PNG fallback)![](https://www.zachleat.com/web/img/posts/vector-raster-split/full-squoosh.png)
+
+Wow, this is a really nice file size savings! And we’ll use `<picture>` here to progressively enhance our PNG to WebP. Many might consider this to be “good enough” but the entire point of this blog post is the last trick _(*waves jazz hands*)_.
+
+Attempt 4: AVIF [#](#attempt-4:-avif)
+-------------------------------------
+
+_Update August 27:_ [Jake Archibald offered some good advice](https://twitter.com/jaffathecake/status/1431145499160109056) to try the AVIF format again (in Lossy mode) without reducing the color palette. I think it was a good prompt! The reduced palette options (while offering large file size improvement) did take a toll on the image. My informal goal here was to get as much quality out of the AVIF format with a similar file size to the WebP reduced palette version.
+
+Read Jake’s excellent blog post: [AVIF has landed](https://jakearchibald.com/2020/avif-has-landed/).
+
+Squoosh settings: Lossless (off), Quality: 45, Subsample Chroma (off), Effort: 6
+
+`168 KB` AVIF optimized with Squoosh (Full palette, demo offers WebP and PNG fallback)![](https://www.zachleat.com/web/img/posts/vector-raster-split/full-squoosh.png)
+
+The Winner: Two Separate Layers: SVG + AVIF/WebP/PNG [#](#the-winner:-two-separate-layers:-svg-+-avifwebppng)
+-------------------------------------------------------------------------------------------------------------
+
+If we separate the stuff that vectors are good at (gradients, lines, etc.) and put that into an SVG and put the rest into the raster format, we can achieve even more savings! Now I did take a bit of the easy way out here—I didn’t put as much into the vector layer as I could have. And you may want to preserve more of the image in the foreground for things like “printing” (as if anyone still did that).
+
+![](https://www.zachleat.com/web/img/posts/vector-raster-split/subset-svgomg.svg)
+
+![](https://www.zachleat.com/web/img/posts/vector-raster-split/subset-squoosh.png)
+
+Using the raster layer as the foreground image and the supplementary vector image as a CSS `background-image`, we can combine the two! You may even be able to dump the optimized raster back into the SVG as a Data URI embedded in an `<image>` if you want to get real fancy—I didn’t go down that road.
+
+`74 KB` + `4.2 KB` Optimized SVG plus AVIF/WebP/PNG![](https://www.zachleat.com/web/img/posts/vector-raster-split/subset-squoosh.png)
+
+Final Results [#](#final-results)
+---------------------------------
+
+From 10.06 MB to 78 KB—a savings of 9.9 MB. Not too bad.
+
+<table><thead><tr><th>Method</th><th>Size</th><th>Savings</th></tr></thead><tbody><tr><td>Original SVG</td><td>10.06 MB</td><td></td></tr><tr><td>SVG optimized with SVGOMG</td><td>9.92 MB</td><td><em>-0.14 MB</em></td></tr><tr><td>PNG</td><td>1.16 MB</td><td><em>-8.76 MB</em></td></tr><tr><td>PNG optimized with ImageOptim</td><td>831 KB</td><td><em>-329 KB</em></td></tr><tr><td>PNG optimized with Squoosh (Reduced palette)</td><td>376 KB</td><td><em>-455 KB</em></td></tr><tr><td>WebP optimized with Squoosh (Reduced palette)</td><td>152 KB</td><td><em>-224 KB</em></td></tr><tr><td>AVIF optimized with Squoosh (Full palette)</td><td>168 KB</td><td><em>+16 KB</em></td></tr><tr><td>Two Layers: SVG (SVGOMG), AVIF/WebP/PNG (Squoosh)</td><td>78 KB</td><td><em>-90KB</em></td></tr></tbody></table>
+
+Savings are in comparison to the previous attempt.
+
+_Disclaimer: ~If you check the above sizes to the currently implemented version on [jamstackconf.com](http://jamstackconf.com/) the raster image layer may be larger than expected! I still need to merge a PR to ship some final optimizations!~ The PR has shipped!_
+
+Previous
+
+[Every Fire Needs a Sparkline](https://www.zachleat.com/web/sparklines/)
+
+Next
+
+[Fire SVG animations (SMIL) when the SVG is visible](https://www.zachleat.com/web/svg-animate/)
