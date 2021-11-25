@@ -1,6 +1,5 @@
-> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s/t0ce5WESP4twECP_LPVI9Q)
 
-> Elasticsearch 线上实战 Mapping 相关问题解读 \ x26gt;\x26gt;
+> Elasticsearch 线上实战 Mapping 相关问题解读
 
 1、实战线上问题
 --------
@@ -14,13 +13,9 @@ Mapping 新创建后，还可以更新吗?
 **问题 2**:
 
 *   群友 A：有人知道怎么在 kibana 里面给索引新增，删除字段吗？
-    
 *   群友 B: 不就是改 mapping 吗
-    
 *   群友 A：怎么改？
-    
 *   群友 B：写 dsl 啊…
-    
 *   群友 A：只能加不能删吧？
     
 
@@ -29,13 +24,11 @@ Mapping 新创建后，还可以更新吗?
 各位同学们 现在有个业务需求帮忙看一下？
 
 需求: 将 A 索引中一个为 String 的字段修改为 boolean。
-
 例: sdry:"1" -> sdry:true。
 
 **问题 4：**
 
 join 类型怎么修改 join，append 一个新的 child？
-
 业务需要 append join children，官方也说可以 append，但是又没给方案，我尝试都失败了。
 
 **四个问题**都可以归结为 Mapping 更新问题，我们一起梳理实践一把。
@@ -325,21 +318,6 @@ Runtime field 运行时类型也能很好的解决本文提出的动态扩展字
 
 [Elasticsearch 运行时类型 Runtime fields 深入详解](http://mp.weixin.qq.com/s?__biz=MzI2NDY1MTA3OQ==&mid=2247487524&idx=1&sn=af826b6b6c6bf4458b6f8ede1927e32d&chksm=eaa8380cdddfb11a06740b4ee604fcf942990e388e54570038f3185b8af66766bd6f7b320099&scene=21#wechat_redirect)  
 
-推荐
---
+---
 
-1[、重磅 | 死磕 Elasticsearch 方法论认知清单（2021 年国庆更新版）](http://mp.weixin.qq.com/s?__biz=MzI2NDY1MTA3OQ==&mid=2247487494&idx=1&sn=731687e8a09d2da56fa844c4e494ab62&chksm=eaa8382edddfb138627d276b4f60f4245d457a8a5f787daf65a0c0be95231f67b55d871b907f&scene=21#wechat_redirect)
-
-[2](http://mp.weixin.qq.com/s?__biz=MzI2NDY1MTA3OQ==&mid=2247487494&idx=1&sn=731687e8a09d2da56fa844c4e494ab62&chksm=eaa8382edddfb138627d276b4f60f4245d457a8a5f787daf65a0c0be95231f67b55d871b907f&scene=21#wechat_redirect)[、](http://mp.weixin.qq.com/s?__biz=MzI2NDY1MTA3OQ==&mid=2247487072&idx=1&sn=13694eb4b907ae5cffa7ac37bb1ed248&chksm=eaa82648dddfaf5edb55fcc5ea74021367b81f03a22d9fb5655409adcb3e400e6da19f945ed3&scene=21#wechat_redirect)[Elasticsearch 7.X 进阶实战私训课](http://mp.weixin.qq.com/s?__biz=MzI2NDY1MTA3OQ==&mid=2247487072&idx=1&sn=13694eb4b907ae5cffa7ac37bb1ed248&chksm=eaa82648dddfaf5edb55fcc5ea74021367b81f03a22d9fb5655409adcb3e400e6da19f945ed3&scene=21#wechat_redirect)（口碑不错）
-
-![](https://mmbiz.qpic.cn/mmbiz_png/mjl8GCpsL9ZoCQGlxWp4G56gqia6ANT1Z9WB22YUEZ2Xib9YBZ90fLUQLyudxgjENibxzn9wCtBx3sQeE5CJnRE1Q/640?wx_fmt=png)
-
-更短时间更快习得更多干货！  
-
-已带领 72 位球友通过 Elastic 官方认证！
-
-中国仅通过百余人
-
-![](https://mmbiz.qpic.cn/mmbiz_gif/mjl8GCpsL9aP1cRicwD8ibiaWicGzrrI5hFt9BVtE6mkbaIePyxJ1ic0SicaUEzTI3mhrgjNvLvJprDmf8Sqk9EphbRw/640?wx_fmt=gif)
-
-比同事抢先一步学习进阶干货！
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s/t0ce5WESP4twECP_LPVI9Q)
