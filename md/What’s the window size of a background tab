@@ -1,0 +1,35 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [shkspr.mobi](https://shkspr.mobi/blog/2021/09/whats-the-window-size-of-a-background-tab/)
+
+> Whenever I open Twitter in a new tab on my phone, the page layout looks weird for a few seconds. It s......
+
+Whenever I open Twitter in a new tab on my phone, the page layout looks weird for a few seconds. It starts out looking like the desktop view and then, after a few seconds, it snaps back to the mobile view.
+
+What's causing this?
+
+Try opening [this link to a window size detector](https://www.rapidtables.com/web/tools/window-size.html) in a background tab. Then visit that tab.
+
+On Chrome, this is what I see.
+
+![](https://shkspr.mobi/blog/wp-content/uploads/2021/09/zero-size.png.webp)
+
+If I hit the refresh button on that tab, the Outer window size snaps back:
+
+![](https://shkspr.mobi/blog/wp-content/uploads/2021/09/full-size.png.webp)
+
+What's going on?
+
+According to the specification:
+
+> [The `outerWidth` attribute must return the width of the client window. If there is no client window this attribute must return zero.](https://drafts.csswg.org/cssom-view/#dom-window-outerwidth)
+
+This is where I get confused. The _inner_ width & height are the amount of space the the browser has to display web content - so ignores the browser bar, menu bars, window decorations etc. The _outer_ width & height are the total amount of space the browser window has.
+
+How can a browser window have no outer size, but simultaneously have an inner size???!?!
+
+There _is_ a client window. The tab may be rendering away in the background - but its parent still has a non-zero size.
+
+There has been a [bug report open on Chrome about this since **2017**](https://bugs.chromium.org/p/chromium/issues/detail?id=719296).
+
+Firefox takes a different approach. On desktop, both outer and inner are reported correctly for background tabs. On mobile, both outer and inner dimensions are set to zero. This may change as it is a [potential fingerprinting target](https://bugzilla.mozilla.org/show_bug.cgi?id=1579584).
+
+So, web developers, please don't rely on `window.innerHeight` and `window.outerHeight` - users may be opening your site in the background, which causes the browser to lie to you.
