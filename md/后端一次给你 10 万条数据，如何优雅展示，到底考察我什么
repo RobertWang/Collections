@@ -1,0 +1,302 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [juejin.cn](https://juejin.cn/post/7031923575044964389)
+
+没有安装`nodemon`的同学可以先全局安装`npm i nodemon -g`
+
+```
+// server.js
+
+const http = require('http')
+const port = 8000;
+
+http.createServer(function (req, res) {
+  // 开启Cors
+  res.writeHead(200, {
+    //设置允许跨域的域名，也可设置*允许所有域名
+    'Access-Control-Allow-Origin': '*',
+    //跨域允许的请求方法，也可设置*允许所有方法
+    "Access-Control-Allow-Methods": "DELETE,PUT,POST,GET,OPTIONS",
+    //允许的header类型
+    'Access-Control-Allow-Headers': 'Content-Type'
+  })
+  let list = []
+  let num = 0
+
+  // 生成10万条数据的list
+  for (let i = 0; i < 1000000; i++) {
+    num++
+    list.push({
+      src: 'https://p3-passport.byteacctimg.com/img/user-avatar/d71c38d1682c543b33f8d716b3b734ca~300x300.image',
+      text: `我是${num}号嘉宾林三心`,
+      tid: num
+    })
+  }
+  res.end(JSON.stringify(list));
+}).listen(port, function () {
+  console.log('server is listening on port ' + port);
+})
+复制代码
+```
+
+### 前端页面
+
+先新建一个`index.html`
+
+```
+// index.html
+
+// 样式
+<style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #container {
+      height: 100vh;
+      overflow: auto;
+    }
+    .sunshine {
+      display: flex;
+      padding: 10px;
+    }
+    img {
+      width: 150px;
+      height: 150px;
+    }
+  </style>
+
+// html部分
+<body>
+  <div id="container">
+  </div>
+  <script src="./index.js"></script>
+</body>
+复制代码
+```
+
+然后新建一个`index.js`文件，封装一个`AJAX`函数，用来请求这`10w`条数据
+
+```
+// index.js
+
+// 请求函数
+const getList = () => {
+    return new Promise((resolve, reject) => {
+        //步骤一:创建异步对象
+        var ajax = new XMLHttpRequest();
+        //步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数
+        ajax.open('get', 'http://127.0.0.1:8000');
+        //步骤三:发送请求
+        ajax.send();
+        //步骤四:注册事件 onreadystatechange 状态改变就会调用
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState == 4 && ajax.status == 200) {
+                //步骤五 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+                resolve(JSON.parse(ajax.responseText))
+            }
+        }
+    })
+}
+
+// 获取container对象
+const container = document.getElementById('container')
+复制代码
+```
+
+直接渲染
+----
+
+最直接的方式就是直接渲染出来，但是这样的做法肯定是不可取的，因为一次性渲染出`10w`个节点，是非常耗时间的，咱们可以来看一下耗时，差不多要消耗`12秒`，非常消耗时间
+
+![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9396a045360744e7b73dd626a1456bcd~tplv-k3u1fbpfcp-watermark.awebp?)
+
+```
+const renderList = async () => {
+    console.time('列表时间')
+    const list = await getList()
+    list.forEach(item => {
+        const div = document.createElement('div')
+        div.className = 'sunshine'
+        div.innerHTML = `<img src="${item.src}" /><span>${item.text}</span>`
+        container.appendChild(div)
+    })
+    console.timeEnd('列表时间')
+}
+renderList()
+复制代码
+```
+
+setTimeout 分页渲染
+---------------
+
+这个方法就是，把`10w`按照每页数量`limit`分成总共`Math.ceil(total / limit)`页，然后利用`setTimeout`，每次渲染 1 页数据，这样的话，渲染出首页数据的时间大大缩减了
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/faeac54d664a40ab97ac75325e0984ff~tplv-k3u1fbpfcp-watermark.awebp?)
+
+```
+const renderList = async () => {
+    console.time('列表时间')
+    const list = await getList()
+    console.log(list)
+    const total = list.length
+    const page = 0
+    const limit = 200
+    const totalPage = Math.ceil(total / limit)
+
+    const render = (page) => {
+        if (page >= totalPage) return
+        setTimeout(() => {
+            for (let i = page * limit; i < page * limit + limit; i++) {
+                const item = list[i]
+                const div = document.createElement('div')
+                div.className = 'sunshine'
+                div.innerHTML = `<img src="${item.src}" /><span>${item.text}</span>`
+                container.appendChild(div)
+            }
+            render(page + 1)
+        }, 0)
+    }
+    render(page)
+    console.timeEnd('列表时间')
+}
+复制代码
+```
+
+requestAnimationFrame
+---------------------
+
+使用`requestAnimationFrame`代替`setTimeout`，减少了`重排`的次数，极大提高了性能，建议大家在渲染方面多使用`requestAnimationFrame`
+
+```
+const renderList = async () => {
+    console.time('列表时间')
+    const list = await getList()
+    console.log(list)
+    const total = list.length
+    const page = 0
+    const limit = 200
+    const totalPage = Math.ceil(total / limit)
+
+    const render = (page) => {
+        if (page >= totalPage) return
+        // 使用requestAnimationFrame代替setTimeout
+        requestAnimationFrame(() => {
+            for (let i = page * limit; i < page * limit + limit; i++) {
+                const item = list[i]
+                const div = document.createElement('div')
+                div.className = 'sunshine'
+                div.innerHTML = `<img src="${item.src}" /><span>${item.text}</span>`
+                container.appendChild(div)
+            }
+            render(page + 1)
+        }, 0)
+    }
+    render(page)
+    console.timeEnd('列表时间')
+}
+复制代码
+```
+
+文档碎片 + requestAnimationFrame
+----------------------------
+
+`文档碎片`的好处
+
+*   1、之前都是每次创建一个`div`标签就`appendChild`一次，但是有了`文档碎片`可以先把 1 页的`div`标签先放进`文档碎片`中，然后一次性`appendChild`到`container`中，这样减少了`appendChild`的次数，极大提高了性能
+*   2、页面只会渲染`文档碎片`包裹着的元素，而不会渲染`文档碎片`
+
+```
+const renderList = async () => {
+    console.time('列表时间')
+    const list = await getList()
+    console.log(list)
+    const total = list.length
+    const page = 0
+    const limit = 200
+    const totalPage = Math.ceil(total / limit)
+
+    const render = (page) => {
+        if (page >= totalPage) return
+        requestAnimationFrame(() => {
+            // 创建一个文档碎片
+            const fragment = document.createDocumentFragment()
+            for (let i = page * limit; i < page * limit + limit; i++) {
+                const item = list[i]
+                const div = document.createElement('div')
+                div.className = 'sunshine'
+                div.innerHTML = `<img src="${item.src}" /><span>${item.text}</span>`
+                // 先塞进文档碎片
+                fragment.appendChild(div)
+            }
+            // 一次性appendChild
+            container.appendChild(fragment)
+            render(page + 1)
+        }, 0)
+    }
+    render(page)
+    console.timeEnd('列表时间')
+}
+复制代码
+```
+
+懒加载
+---
+
+为了比较通俗的讲解，咱们启动一个`vue`前端项目，后端服务还是开着
+
+其实实现原理很简单，咱们通过一张图来展示，就是在列表尾部放一个空节点`blank`，然后先渲染第 1 页数据，向上滚动，等到`blank`出现在视图中，就说明到底了，这时候再加载第二页，往后以此类推。
+
+至于怎么判断`blank`出现在视图上，可以使用`getBoundingClientRect`方法获取`top`属性
+
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/af9e2974b1d84d3c852c0e7f606794cd~tplv-k3u1fbpfcp-watermark.awebp?)
+
+```
+<script setup lang="ts">
+import { onMounted, ref, computed } from 'vue'
+const getList = () => {
+  // 跟上面一样的代码
+}
+
+const container = ref<HTMLElement>() // container节点
+const blank = ref<HTMLElement>() // blank节点
+const list = ref<any>([]) // 列表
+const page = ref(1) // 当前页数
+const limit = 200 // 一页展示
+// 最大页数
+const maxPage = computed(() => Math.ceil(list.value.length / limit))
+// 真实展示的列表
+const showList = computed(() => list.value.slice(0, page.value * limit))
+const handleScroll = () => {
+  // 当前页数与最大页数的比较
+  if (page.value > maxPage.value) return
+  const clientHeight = container.value?.clientHeight
+  const blankTop = blank.value?.getBoundingClientRect().top
+  if (clientHeight === blankTop) {
+    // blank出现在视图，则当前页数加1
+    page.value++
+  }
+}
+
+onMounted(async () => {
+  const res = await getList()
+  list.value = res
+})
+</script>
+
+<template>
+  <div class="container" @scroll="handleScroll" ref="container">
+    <div class="sunshine" v-for="(item) in showList" :key="item.tid">
+      <img :src="item.src" />
+      <span>{{ item.text }}</span>
+    </div>
+    <div ref="blank"></div>
+  </div>
+</template>
+复制代码
+```
+
+虚拟列表
+----
+
+虚拟列表需要讲解的比较多，在这里我分享一下我的一篇`虚拟列表`的文章，哈哈我自认为讲的不错吧哈哈哈哈哈哈
+
+[结合 “康熙选秀”，给大家讲讲 “虚拟列表”](https://juejin.cn/post/6966179727329460232 "https://juejin.cn/post/6966179727329460232")
