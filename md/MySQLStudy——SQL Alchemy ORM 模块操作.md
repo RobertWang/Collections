@@ -5,14 +5,13 @@
 
 我一共建立了 2 张表用于演示 SQL Alchemy
 
-               users                                                                               usertype
-
-![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAACbklEQVRoQ+2aMU4dMRCGZw6RC1CSSyQdLZJtKQ2REgoiRIpQkCYClCYpkgIESQFIpIlkW+IIcIC0gUNwiEFGz+hlmbG9b1nesvGW++zxfP7H4/H6IYzkwZFwQAUZmpJVkSeniFJKA8ASIi7MyfkrRPxjrT1JjZ8MLaXUDiJuzwngn2GJaNd7vyP5IoIYY94Q0fEQIKIPRGS8947zSQTRWh8CwLuBgZx479+2BTkHgBdDAgGAC+fcywoyIFWqInWN9BSONbTmFVp/AeA5o+rjKRJ2XwBYRsRXM4ZXgAg2LAPzOCDTJYQx5pSIVlrC3EI45y611osMTHuQUPUiYpiVooerg7TWRwDAlhSM0TuI+BsD0x4kGCuFSRVzSqkfiLiWmY17EALMbCAlMCmI6IwxZo+INgQYEYKBuW5da00PKikjhNNiiPGm01rrbwDwofGehQjjNcv1SZgddALhlJEgwgJFxDNr7acmjFLqCyJuTd6LEGFttpmkYC91Hrk3s1GZFERMmUT01Xv/sQljjPlMRMsxO6WULwnb2D8FEs4j680wScjO5f3vzrlNJszESWq2LYXJgTzjZm56MCHf3zVBxH1r7ftU1splxxKYHEgoUUpTo+grEf303rPH5hxENJqDKQEJtko2q9zGeeycWy3JhpKhWT8+NM/sufIhBwKI+Mta+7pkfxKMtd8Qtdbcx4dUQZcFCQ2I6DcAnLUpf6YMPxhIDDOuxC4C6djoQUE6+tKpewWZ1wlRkq0qUhXptKTlzv93aI3jWmE0Fz2TeujpX73F9TaKy9CeMk8vZusfBnqZ1g5GqyIdJq+XrqNR5AahKr9CCcxGSwAAAABJRU5ErkJggg==)![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAACbklEQVRoQ+2aMU4dMRCGZw6RC1CSSyQdLZJtKQ2REgoiRIpQkCYClCYpkgIESQFIpIlkW+IIcIC0gUNwiEFGz+hlmbG9b1nesvGW++zxfP7H4/H6IYzkwZFwQAUZmpJVkSeniFJKA8ASIi7MyfkrRPxjrT1JjZ8MLaXUDiJuzwngn2GJaNd7vyP5IoIYY94Q0fEQIKIPRGS8947zSQTRWh8CwLuBgZx479+2BTkHgBdDAgGAC+fcywoyIFWqInWN9BSONbTmFVp/AeA5o+rjKRJ2XwBYRsRXM4ZXgAg2LAPzOCDTJYQx5pSIVlrC3EI45y611osMTHuQUPUiYpiVooerg7TWRwDAlhSM0TuI+BsD0x4kGCuFSRVzSqkfiLiWmY17EALMbCAlMCmI6IwxZo+INgQYEYKBuW5da00PKikjhNNiiPGm01rrbwDwofGehQjjNcv1SZgddALhlJEgwgJFxDNr7acmjFLqCyJuTd6LEGFttpmkYC91Hrk3s1GZFERMmUT01Xv/sQljjPlMRMsxO6WULwnb2D8FEs4j680wScjO5f3vzrlNJszESWq2LYXJgTzjZm56MCHf3zVBxH1r7ftU1splxxKYHEgoUUpTo+grEf303rPH5hxENJqDKQEJtko2q9zGeeycWy3JhpKhWT8+NM/sufIhBwKI+Mta+7pkfxKMtd8Qtdbcx4dUQZcFCQ2I6DcAnLUpf6YMPxhIDDOuxC4C6djoQUE6+tKpewWZ1wlRkq0qUhXptKTlzv93aI3jWmE0Fz2TeujpX73F9TaKy9CeMk8vZusfBnqZ1g5GqyIdJq+XrqNR5AahKr9CCcxGSwAAAABJRU5ErkJggg==)
+users
+usertype
 
 导包语句
 ====
 
-```
+```python
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Index, UniqueConstraint
@@ -25,7 +24,7 @@ from sqlalchemy import and_,or_,any_,func
 初始化语句
 =====
 
-```
+```python
 # 创建  引擎  连接mysql
 # 这个 db1一开始必须先手动创建完毕  max_overflow是最大sql连接数
 #                                           | 密码写在这个冒号后面，我的密码为空所以不填
@@ -38,7 +37,7 @@ Base = declarative_base()
 定义两张表对应的两个类
 ===========
 
-```
+```python
 # 定义数据表 UserType类
 class UserType(Base):
     __tablename__ = 'usertype'
@@ -66,10 +65,10 @@ class Users(Base):
 
 ```
 
- 自定义方法
+自定义方法
 ======
 
-```
+```python
 def drop_db():
     # 删除所有表
     Base.metadata.drop_all(engine)
@@ -82,7 +81,7 @@ def create_db():
 Session 创建
 ==========
 
-```
+```python
 # 会话工厂函数 生成Session类 绑定引擎
 Session = sessionmaker(bind=engine)
 # 生成session对象
@@ -93,7 +92,7 @@ session = Session()
 添加数据
 ====
 
-```
+```python
 # 增加数据 实例化 添加一条
 obj = UserType(name='普通用户哈哈哈')
 session.add(obj)
@@ -122,7 +121,7 @@ session.close()
 查询
 ==
 
-```
+```python
 # query 查询 session.query 不带任何修饰 直接返回 SQL语句
 res = session.query(UserType)
 print(res)
@@ -156,7 +155,7 @@ print(res.id, res.name)
 
 ```
 
-```
+```python
 # where 条件 filter过滤器
 # -----------查询name字段是VIP的条目-------1个条件---------
 res = session.query(UserType).filter(UserType.name=='VIP')
@@ -179,7 +178,7 @@ for row in res:
 删除
 ==
 
-```
+```python
 # 删除
 session.query(UserType).filter(UserType.id>=5).delete()
 # 这里不要添加all() 否则返回的会是一个列表没有delete属性
@@ -192,7 +191,7 @@ session.commit()
 修改
 ==
 
-```
+```python
 # 修改
 session.query(UserType).filter(UserType.id>=1).update({"name":'普通用户'})
 session.query(UserType).filter(UserType.id.in_([1,2,3,4])).update({"name":'haha用户'},synchronize_session=False)
@@ -210,7 +209,7 @@ session.close()
 分组
 --
 
-```
+```python
 ##############################################################################################
 res = session.query(UserType.id,
                     func.max(UserType.id),
@@ -237,7 +236,7 @@ print(ret)
 分页
 --
 
-```
+```python
 # 分页
 ret = session.query(Users)[1:3]
 for row in ret:
@@ -250,7 +249,7 @@ for row in ret:
 排序
 --
 
-```
+```python
 ret = session.query(Users).order_by(Users.name.desc()).all()
 print(ret)
 # [<__main__.Users object at 0x000002428E8F5A20>,
@@ -290,7 +289,7 @@ for row in ret:
 between ... and ...
 -------------------
 
-```
+```python
 # between ... and ...
 res = session.query(UserType).filter(UserType.id.between(1,5)).all()
 print(res)
@@ -328,7 +327,7 @@ print('--------------------------------')
 in 与 not in
 -----------
 
-```
+```python
 # in
 res = session.query(UserType).filter(UserType.id.in_([1,2,4])).all()
 for row in res:
@@ -346,7 +345,7 @@ for row in res2:
 连表查询
 ----
 
-```
+```python
 # 连表查询
 ###1. 查询某一个用户的用户类型
 ### 第一种方法(左连接查询):
