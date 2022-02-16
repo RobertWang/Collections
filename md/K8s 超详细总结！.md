@@ -1,5 +1,43 @@
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s?__biz=MzU0OTE4MzYzMw==&mid=2247535812&idx=2&sn=9c59b9df3dcbb083b58e2ad0c9941c0a&chksm=fbb1c53accc64c2c854fc511cb0ac8ec315db2a195e3fe19d7be419a64c2e393ce3b755146c8&mpshare=1&scene=1&srcid=0216U0Jvfk3ZwylIHSNlLQZ5&sharer_sharetime=1644999024679&sharer_shareid=7fece245937ac96f04f0fb8e1311fff1#rd)
 
+
+一个目标：容器操作；两地三中心；四层服务发现；五种Pod共享资源；六个CNI常用插件；七层负载均衡；八种隔离维度；九个网络模型原则；十类IP地址；百级产品线；千级物理机；万级容器；相如无亿，K8s有亿：亿级日服务人次。
+
+###
+
+****一个目标：容器操作****
+=============
+
+* * *
+
+Kubernetes（k8s）是自动化容器操作的开源平台。这些容器操作包括：部署、调度和节点集群间扩展。
+
+具体功能：
+
+- 自动化容器部署和复制。
+- 实时弹性收缩容器规模。
+- 容器编排成组，并提供容器间的负载均衡。
+
+调度：容器在哪个机器上运行。
+
+组成：
+
+- kubectl:客户端命令行工具，作为整个系统的操作入口。
+- kube-apiserver:以REST API服务形式提供接口，作为整个系统的控制入口。
+- kube-controller-manager:执行整个系统的后台任务，包括节点状态状况、Pod个数、Pods和Service的关联等。
+- kube-scheduler:负责节点资源管理，接收来自kube-apiserver创建Pods任务，并分配到某个节点。
+- etcd:负责节点间的服务发现和配置共享。
+- kube-proxy:运行在每个计算节点上，负责Pod网络代理。定时从etcd获取到service信息来做相应的策略。
+- kubelet:运行在每个计算节点上，作为agent，接收分配该节点的Pods任务及管理容器，周期性获取容器状态，反馈给kube-apiserver。
+- DNS：一个可选的DNS服务，用于为每个Service对象创建DNS记录，这样所有的Pod就可以通过DNS访问服务了。
+
+下面是K8s的架构拓扑图：
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/nDMNE6lrvW6yrNmVQbMHOibDLUDe3PYibThGL8oJU73FOoSre9qddI11n5sCMyqqlB855GQRr741BKsGA9SM4xCw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
+
+###   
+
 ****两地三中心****
 =============
 
