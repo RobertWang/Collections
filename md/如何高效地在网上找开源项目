@@ -1,0 +1,89 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s?__biz=MzIzMzMzOTI3Nw==&mid=2247505856&idx=2&sn=c65358d12725223f6f0196f35f123f4b&chksm=e885b722dff23e34602564a7ebec3075a08851a1be839ae15ec3b83dbd6ace577b53fe0dc8e4&mpshare=1&scene=1&srcid=0317e6iI6yFNrFK0K1C1Klxa&sharer_sharetime=1647504715843&sharer_shareid=7fece245937ac96f04f0fb8e1311fff1#rd)
+
+学习编程，最高效的还是找个项目，在实际的项目开发中提升自己的编程技能，积累实战经验。如果手边没有项目可做，那就去找开源项目，找开源项目，认准一个网站就够了，那就是 github.com。
+
+本文分享如何在 github 上高效的找到自己想要的开源项目。  
+
+首先随便打开一个项目，看下一个项目主页包含哪些信息，我已经做了标注：
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/EnE7vpEWFnqczozAgb20nvmXib84NgYFaVe6mCnNaACvgticxFLZUeG5PF6X9SJn4I91jBYBN6yH1KIehHKlI2vQ/640?wx_fmt=jpeg)
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/EnE7vpEWFnqczozAgb20nvmXib84NgYFaIlib91wajibmUGnRa3QQicGLUuS6KyRXPvqHtkgBYicicPhCNic51WG7cJ4Q/640?wx_fmt=jpeg)
+
+上图可以看到，一个项目含有的基本信息，这些信息都可以通过搜索框来来匹配，从而更快的找到目标项目。通常星数，观看数，更新日期，表示了一个项目的火热程度。比如说我想搜索 readme 中含有 “web development” 关键字，主要编程语言为 ”Python“，星数大于 3000 的项目，就可以这样搜索：
+
+```
+"web development" in:readme language:python stars:>3000
+```
+
+搜索结果就只有 14 个，大大减轻了自己筛选的负担，结果如下：
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/EnE7vpEWFnqczozAgb20nvmXib84NgYFaBFr4Rs4rwZykFmBEA1hfKZbc4ibTvz5t9lyTc5IB5vPciafnH3aBPaMw/640?wx_fmt=jpeg)
+
+下面列举下 GitHub 相关的搜索技巧：
+
+### 1、通过 in 关键字搜索
+
+关键字 in 可以搜索出 GitHub 上的资源名称 name、说明 description 和 readme 文件中的内容。description 就是 About 那一块的信息。
+
+比如说 `python in:name,description,readme` 其中，逗号分割表示或的意思，意思就是三者中只要有一个有 python 就行。
+
+### 2、通过 stars、fork 数量搜索
+
+搜索 GitHub 时用 star 数量和 fork 数量判断这个项目是否优秀的标准之一，我们可以使用 大小，小于，范围等方式过滤：
+
+`python in:name stars:>1000 forks:>500` 就表示星数大于 1000 且 forks 数大于 500，名字中含有 python 的项目。
+
+如果要指定范围，可以这样：
+
+`python in:name stars:5000..10000` 表示星数在 5000 到 10000 之间，名字中有 python 的项目。
+
+### 3、按创建、更新时间搜索
+
+按创建、更新时间搜索可以把版本老旧的资源筛选出去，比如说:
+
+*   按创建时间：`created:>=YYYY-MM-DD`
+    
+*   按更新时间：`pushed:>=YYYY-MM-DD`
+    
+
+比如说搜索 2021 年之后创建的 Python 项目：`python in:name created:>=2021-01-01 pushed:>=2021-01-01`
+
+### 4、按文件、路径内容搜索
+
+在 GitHub 还可以按文件内容和文件路径搜索，不过有一定的限制，首先必须登录，此外项目的文件不能太多，文件不能太大，在需要搜索 fork 资源 时，只能搜索到 star 数量比父级资源多的 fork 资源，并需要加上 fork:true 查询，搜索结果最多可显示同一文件的两个分段，但文件内可能有更多结果，不能使用通配符。
+
+语法格式：
+
+*   按文件内容 `关键字 in:file`
+    
+*   按文件路径 `关键字 in:path`
+    
+
+比如：`python in:file,path`
+
+### 5、按文件名、大小、扩展名搜索
+
+语法格式如下：
+
+*   按文件名搜索：`关键字 filename:FILENAME`
+    
+*   按文件大小搜索：`关键字 size:>=大小`
+    
+*   按扩展名搜索：`关键字 extension:EXTENSION`
+    
+
+举个例子：`python filename:aaa size:>10 extension:py`
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/EnE7vpEWFnqczozAgb20nvmXib84NgYFasxKibMzGibBAYn8mnkBia3unKGMBiaicL7SvLicVWV9HGFjpf6snmnXEseCQ/640?wx_fmt=jpeg)
+
+### 6、按编程语言来搜索
+
+语法格式：`关键字 language:LANGUAGE`
+
+比如：`python language:javascript` 表示搜索 javascrip 语言中关于 python 的项目。
+
+最后的话
+----
+
+本文分享了高效搜索 GitHub 的 6 个技巧，你有没有学会呢？如果有帮助的话，还请帮助点赞、在看、转发，感谢你的支持。
