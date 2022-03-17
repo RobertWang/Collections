@@ -1,0 +1,163 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s?__biz=MzAxNDI5NzEzNg==&mid=2651169461&idx=1&sn=4e88151de7f08d1ac38b762f18b9caba&chksm=806473eab713fafcc6b857601c664c21bccb72d1db1dbcf1c9f7f47541ef19c1a87d32d9d6b0&scene=21#wechat_redirect)
+
+大家在使用 C++ 代码时或多或少都会使用到模板，使用模板时应该都是把定义放在了头文件中，因为放在源文件中定义会编译失败。
+
+那问题来了，模板中的函数定义一定要写在头文件中吗？
+
+先说结论：不一定要放在头文件中，定义也可以放在源文件中，但操作起来还是有点麻烦的。
+
+继续往下看看
+
+先看一段正常的模板代码：
+
+```
+// template.h
+#include <iostream>
+
+template <typename T>
+struct TemplateTest {
+    T value;
+    void func();
+};
+
+template <typename T>
+void TemplateTest<T>::func() {
+    std::cout << typeid(T).name() << std::endl;
+}
+
+// test_template.cc
+#include "template.h"
+
+int main() {
+    TemplateTest<int> test;
+    test.func();
+    return 0;
+}
+```
+
+这段代码没啥毛病，因为实现放在了头文件中，也会正常输出。
+
+如果我把函数定义放在源文件中呢，会怎么样？
+
+```
+// template.h
+#include <iostream>
+
+template <typename T>
+struct TemplateTest {
+    T value;
+    void func();
+};
+
+// template.cc
+template <typename T>
+void TemplateTest<T>::func() {
+    std::cout << typeid(T).name() << std::endl;
+}
+
+// test_template.cc
+#include "template.h"
+
+int main() {
+    TemplateTest<int> test;
+    test.func();
+    return 0;
+}
+```
+
+嗯，不出意外，编译报错了，报了个没有某个函数实现的 error：
+
+```
+/tmp/ccPghOjU.o: In function `main':
+test_template.cc:(.text+0x1f): undefined reference to `TemplateTest<int>::func()'
+collect2: error: ld returned 1 exit status
+```
+
+为什么没有此函数定义？
+
+先补充个基础知识，模板的本质。本质其实就是类型泛化，可以用一个 T 代替多种类型，对于上面的模板，假如有此种使用：
+
+```
+TemplateTest<int> test;
+```
+
+那模板最终可能变成这样：
+
+```
+struct TemplateTest_int {
+    int value;
+    void func() {
+        std::cout << typeid(int).name() << std::endl;
+    }
+};
+```
+
+如果有这两种使用：
+
+```
+TemplateTest<int> test;
+TemplateTest<float> test;
+```
+
+那模板最终可能会变成这样：
+
+```
+struct TemplateTest_int {
+    int value;
+    void func() {
+        std::cout << typeid(int).name() << std::endl;
+    }
+};
+
+struct TemplateTest_float {
+    float value;
+    void func() {
+        std::cout << typeid(float).name() << std::endl;
+    }
+};
+```
+
+模板最终会展开成什么样，取决于用户是怎么使用它的。
+
+那回到上面的问题，为什么把定义放在源文件中，编译就失败了呢，因为每个源文件的编译都是独立的，尽管在 test_template.cc 进行了 TemplateTesttest 的使用，但是在 template.cc 中却感知不到，所以也就没法定义相关的实现。
+
+思路来了，只需要让 template.cc 中感知到 T 有 int 类型的情况，那编译应该就没问题。这里有个语法，叫模板实例化，像这样：
+
+```
+template struct TemplateTest<int>;
+```
+
+把这行代码放在 template.cc 中：
+
+```
+// template.cc
+#include "template.h"
+
+template <typename T>
+void TemplateTest<T>::func() {
+    std::cout << typeid(T).name() << std::endl;
+}
+
+template struct TemplateTest<int>;
+```
+
+整个代码的编译就没得问题了，通过这种方式即可以实现模板函数声明与实现的分离。
+
+这也印证了上面的结论。
+
+这里我再抛出**几个问题**，大家可以讨论讨论：
+
+*   模板的使用是否会导致代码段体积增大？怎么解决？
+    
+*   模板的函数定义放在了头文件中，好多个源文件都 include 此头文件，是否会导致函数的 multi definition 类型的链接报错？实际使用中貌似没有报错，为什么？大家有想过吗？
+    
+
+- EOF -
+
+推荐阅读  点击标题可跳转
+
+1、[爱了爱了，这篇寄存器讲的有点意思](http://mp.weixin.qq.com/s?__biz=MzAxNDI5NzEzNg==&mid=2651169419&idx=1&sn=e3ba7e357774ae57728cffa46a5926d7&chksm=806473d4b713fac232275f17c5a33d4cd17343a1ebb75a610e156a8d19f3158c70be3ec77763&scene=21#wechat_redirect)
+
+2、[四万字长文，这是我见过最好的模板元编程文章！](http://mp.weixin.qq.com/s?__biz=MzAxNDI5NzEzNg==&mid=2651168705&idx=1&sn=26d2020b92e6f702d0037850ddf0be8b&chksm=80644e9eb713c78839c1fef9a9593f9d8125cb1e94b42222ab2625b836acee2a22478bcf6fd9&scene=21#wechat_redirect)
+
+3、[C++ 为什么要弄出虚表这个东西？](http://mp.weixin.qq.com/s?__biz=MzAxNDI5NzEzNg==&mid=2651168609&idx=1&sn=edd9257dd189d7b2c549ba5903e332b7&chksm=80644e3eb713c728015176c34ac40242611327cfd3b571f6e4fd89c8e8a6bc819c98b7e19848&scene=21#wechat_redirect)
