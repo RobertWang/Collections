@@ -1,0 +1,43 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s/bDJ0lGC7NGMyYoz_3eW87w)
+
+1 简介
+====
+
+最近在逛`github`的时候偶然发现一款特别的`jupyter`插件`stickyland`，通过它我们可以在`jupyter`中以一种非常特别的交互操作方式✨，对我们的的代码单元格进行组织和展示，今天的文章我就来带大家认识这款好玩又实用的`jupyter`插件。
+
+![](https://mmbiz.qpic.cn/mmbiz_png/g64sbb6FfmcAN9rIEZL1UFteoveFCtdM2HFSOMJqddZPrB1bpBWnhEw0WGEkELFyaPkTDVP3HC2fJh20ZiabHFg/640?wx_fmt=png)
+
+2 利用 stickyland 玩转 jupyter lab
+==============================
+
+`stickyland`是一款专为`jupyter lab`设计的插件，依托于`jupyter lab`中单元格可直接进行拖拽的特点，设计了一系列新颖自由的单元格组织方式。
+
+使用`pip install stickyland`完成安装后，启动你的`jupyter lab`，在你打开的`ipynb`文件界面会发现顶端操作区多了下图所示的图标：
+
+![](https://mmbiz.qpic.cn/mmbiz_png/g64sbb6FfmcAN9rIEZL1UFteoveFCtdMvaXgMwDh79e1pa723UbKbPkwMuL15xAAsELoibZ4icqTI5YIhPtCvmzQ/640?wx_fmt=png)
+
+点击即可唤出`stickyland`的标签页面板：
+
+![](https://mmbiz.qpic.cn/mmbiz_png/g64sbb6FfmcAN9rIEZL1UFteoveFCtdMFJGiaU7g8pGlDP4DvkGdpdoUaialXL8Tjb38hFWgPM20l9WJfjfabVzQ/640?wx_fmt=png)
+
+你可以将已有的单元格按照`jupyter lab`的方式拖拽到`stickyland`的面板中：
+
+![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAACbklEQVRoQ+2aMU4dMRCGZw6RC1CSSyQdLZJtKQ2REgoiRIpQkCYClCYpkgIESQFIpIlkW+IIcIC0gUNwiEFGz+hlmbG9b1nesvGW++zxfP7H4/H6IYzkwZFwQAUZmpJVkSeniFJKA8ASIi7MyfkrRPxjrT1JjZ8MLaXUDiJuzwngn2GJaNd7vyP5IoIYY94Q0fEQIKIPRGS8947zSQTRWh8CwLuBgZx479+2BTkHgBdDAgGAC+fcywoyIFWqInWN9BSONbTmFVp/AeA5o+rjKRJ2XwBYRsRXM4ZXgAg2LAPzOCDTJYQx5pSIVlrC3EI45y611osMTHuQUPUiYpiVooerg7TWRwDAlhSM0TuI+BsD0x4kGCuFSRVzSqkfiLiWmY17EALMbCAlMCmI6IwxZo+INgQYEYKBuW5da00PKikjhNNiiPGm01rrbwDwofGehQjjNcv1SZgddALhlJEgwgJFxDNr7acmjFLqCyJuTd6LEGFttpmkYC91Hrk3s1GZFERMmUT01Xv/sQljjPlMRMsxO6WULwnb2D8FEs4j680wScjO5f3vzrlNJszESWq2LYXJgTzjZm56MCHf3zVBxH1r7ftU1splxxKYHEgoUUpTo+grEf303rPH5hxENJqDKQEJtko2q9zGeeycWy3JhpKhWT8+NM/sufIhBwKI+Mta+7pkfxKMtd8Qtdbcx4dUQZcFCQ2I6DcAnLUpf6YMPxhIDDOuxC4C6djoQUE6+tKpewWZ1wlRkq0qUhXptKTlzv93aI3jWmE0Fz2TeujpX73F9TaKy9CeMk8vZusfBnqZ1g5GqyIdJq+XrqNR5AahKr9CCcxGSwAAAABJRU5ErkJggg==)
+
+已拖拽到`stickyland`面板中的单元格还可以进一步通过点击其标签页上的小飞机图标变成自由悬浮层，点击其原本所属标签页中的`summon`可以将放出去的单元格 “召唤” 回来：
+
+![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAACbklEQVRoQ+2aMU4dMRCGZw6RC1CSSyQdLZJtKQ2REgoiRIpQkCYClCYpkgIESQFIpIlkW+IIcIC0gUNwiEFGz+hlmbG9b1nesvGW++zxfP7H4/H6IYzkwZFwQAUZmpJVkSeniFJKA8ASIi7MyfkrRPxjrT1JjZ8MLaXUDiJuzwngn2GJaNd7vyP5IoIYY94Q0fEQIKIPRGS8947zSQTRWh8CwLuBgZx479+2BTkHgBdDAgGAC+fcywoyIFWqInWN9BSONbTmFVp/AeA5o+rjKRJ2XwBYRsRXM4ZXgAg2LAPzOCDTJYQx5pSIVlrC3EI45y611osMTHuQUPUiYpiVooerg7TWRwDAlhSM0TuI+BsD0x4kGCuFSRVzSqkfiLiWmY17EALMbCAlMCmI6IwxZo+INgQYEYKBuW5da00PKikjhNNiiPGm01rrbwDwofGehQjjNcv1SZgddALhlJEgwgJFxDNr7acmjFLqCyJuTd6LEGFttpmkYC91Hrk3s1GZFERMmUT01Xv/sQljjPlMRMsxO6WULwnb2D8FEs4j680wScjO5f3vzrlNJszESWq2LYXJgTzjZm56MCHf3zVBxH1r7ftU1splxxKYHEgoUUpTo+grEf303rPH5hxENJqDKQEJtko2q9zGeeycWy3JhpKhWT8+NM/sufIhBwKI+Mta+7pkfxKMtd8Qtdbcx4dUQZcFCQ2I6DcAnLUpf6YMPxhIDDOuxC4C6djoQUE6+tKpewWZ1wlRkq0qUhXptKTlzv93aI3jWmE0Fz2TeujpX73F9TaKy9CeMk8vZusfBnqZ1g5GqyIdJq+XrqNR5AahKr9CCcxGSwAAAABJRU5ErkJggg==)
+
+而被拖入`stickyland`面板的单元格并没有从原始`ipynb`中被移除，而是依旧在原本的位置，只不过在被拖入时自动折叠了，因此当关闭`stickyland`中的单元格时会自动回到原处：
+
+![](https://mmbiz.qpic.cn/mmbiz_gif/g64sbb6FfmcAN9rIEZL1UFteoveFCtdMYiaOC9DY7hnhxgf2pjibMjViccibhwfpdvYI1P8ia7KdlubibPqeoichzDRmA/640?wx_fmt=gif)
+
+你可以利用这些特性，拼出一个图文数据并茂的临时仪表盘出来：
+
+![](https://mmbiz.qpic.cn/mmbiz_png/g64sbb6FfmcAN9rIEZL1UFteoveFCtdMV5rwlkxPBlTiaLI4Dceo1JfFaNEoMgQWd95KxI94G3LEDmvrSv0mFMA/640?wx_fmt=png)
+
+更多相关的内容，你可以前往`stickyland`的官方仓库了解更多：`https://github.com/xiaohk/stickyland`
+
+* * *
+
+以上就是本文的全部内容，欢迎在评论区与我进行讨论~
