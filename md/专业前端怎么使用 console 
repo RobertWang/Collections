@@ -1,0 +1,113 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s?__biz=MzAxODE2MjM1MA==&mid=2651601418&idx=1&sn=382949cc8a42f3ec34010d502522ffac&chksm=8022edcbb75564dd3ec5d2cc438c7f96996172e4843e25ec0fc6191b5bc8a03c389f23291da9&mpshare=1&scene=1&srcid=0403abeVGu7xI0glBrMwmlTw&sharer_sharetime=1648982211474&sharer_shareid=8a467675e94cd5b11b6640b7770d6cc6#rd)
+
+学习前端开发时，几乎最先学习的就是`console.log()`。  
+
+毕竟多数人的第一行代码都是：`console.log('Hello World');`
+
+`console`对象提供了对于浏览器调试控制台的访问，可以从任何全局对象中访问到 console 对象。
+
+灵活运用`console`对象所提供的方法，可以让开发变得更简单。
+
+最常见的控制台方法：
+----------
+
+```
+console.log()– 打印内容的通用方法。console.info()– 打印资讯类说明信息。console.debug()– 在控制台打印一条 "debug" 级别的消息。console.warn()– 打印一个警告信息。console.error()– 打印一条错误信息。
+```
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfSJbzAiaUDjwGDyohkgkMgxGFPFCElaMhusTH0HmPicULjro1Hnc68jIw/640?wx_fmt=jpeg)
+
+console.log() 写 css
+-------------------
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfkic9O55jSiaY5Jh7OGxUU1Ivp4IYudAmoA7u8OEq3NTa88ecaMpXpic0Q/640?wx_fmt=jpeg)
+
+console.log() 使用参数
+------------------
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfd8X7Oibxjt6ryQ6Gg6QnElSGtVafibmJgRfM7XU9nZ3OkY05ee4hrjwg/640?wx_fmt=jpeg)
+
+console.clear();
+----------------
+
+用于清除控制台信息。
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfXKpFl3snyIGTkqibg6WiaTefY7JpJ0RS8fHeBrGLkb8YTTbIibBGozjnQ/640?wx_fmt=jpeg)
+
+console.count(label);
+---------------------
+
+输出`count()`被调用的次数，可以使用一个参数`label`。演示如下：
+
+```
+var user = "";function greet() {  console.count(user);  return "hi " + user;}user = "bob";greet();user = "alice";greet();greet();console.count("alice");
+```
+
+输出
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfHxoVkOoVGUfJWwOiaaZEf6bXVTawqic75hsJVqJ50LOkHyOu7h4icTxCQ/640?wx_fmt=jpeg)
+
+console.dir()
+-------------
+
+使用`console.dir()`可以打印对象的属性，在控制台中逐级查看对象的详细信息。
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfVHfahYkQJkCRJjZwb2ln7NSD1mA8tZxLQqzYbfAlfoJzFZqdUp4VeQ/640?wx_fmt=jpeg)
+
+console.memory
+--------------
+
+`console.memory`是一个属性，而不是方法，使用 memory 属性用来检查内存信息。
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfum4aDibMs5GP7uwT67fU8n5AiaicPFC4ssMlbeybt9wJnic00gNe5fq0RA/640?wx_fmt=jpeg)
+
+console.time() 和 console.timeEnd()
+----------------------------------
+
+*   `console.time()`– 使用输入参数的名称启动计时器。在给定页面上最多可以同时运行 10,000 个计时器。
+    
+*   `console.timeEnd()`– 停止指定的计时器并记录自启动以来经过的时间（以毫秒为单位）。
+    
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfefrdR7BlALH4via17mWxYkApHocEKe0eMKHdDARCkVuyjLdseSYxlxw/640?wx_fmt=jpeg)
+
+console.assert()
+----------------
+
+如果断言为假，将错误信息写入控制台，如果为真，无显示。
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfbWv06Jh5GZBSFRMXMCia0Et7VVSQgiawjMZShdB5v2Xt5Nia1NiaGD1ynA/640?wx_fmt=jpeg)
+
+console.trace();
+----------------
+
+`console.trace()`方法将堆栈跟踪输出到控制台。
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfnrpKxPibFibfg790fIZCaWnsVSF146vO3empkA05WPCIwZUJuS4WxFXA/640?wx_fmt=jpeg)
+
+console.table();
+----------------
+
+在`console`中还可以打印表格
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAftQzkaMdwZ47yW3cRsEdkxrnDjDy58xUBaLWnKp081YuERSWdCUEzew/640?wx_fmt=jpeg)
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfzIzl2dYKvJjA0qunf40hqWUiaoA9yaiceUUIribb86MjD9N3ibrhdHnxfQ/640?wx_fmt=jpeg)
+
+打印 Html 元素
+----------
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfp6MUrQEJS4UlXpfL3LF7f9XbPPS2xicSNhibAcOJDr8HXNU3QKfmuVWw/640?wx_fmt=jpeg)
+
+console.group() 和 console.groupEnd()
+------------------------------------
+
+在控制台上创建一个新的分组，随后输出到控制台上的内容都会被添加到一个锁进，表示该内容属于当前分组，知道调用`console.groupEnd()`之后，当前分组结束。
+
+![](https://mmbiz.qpic.cn/mmbiz/pfCCZhlbMQRibmHRETfcejVUwHRxqyaAfZNano99AYHnWVoia1dw1ylVpHEwmbticmJjn385iaqL8EgJvmOJpH7DibA/640?wx_fmt=jpeg)
+
+> 作者：正经程序员
+> 
+> https://juejin.cn/post/7065856171436933156
+
+- EOF -
