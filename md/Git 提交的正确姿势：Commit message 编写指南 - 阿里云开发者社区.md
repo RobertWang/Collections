@@ -1,0 +1,292 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [developer.aliyun.com](https://developer.aliyun.com/article/441408)
+
+> Git 每次提交代码，都要写 Commit message（提交说明），否则就不允许提交。
+
+![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAMAAAAPdrEwAAAAA3NCSVQICAjb4U/gAAABfVBMVEX+9PL+8/H+8e/+8e7+8O3+7uv96ub96uf96OX95+P95uH95eH95OD95N/94t384Nv839n83df829X82dP82tT82dL819H819D708z70sr70cn70Mj70Mn7z8f7zcX7y8L6ycH6x736yL/6x776xLr6wrj6w7n6wbf6wLX6v7X5vLH5u7D5uq/5ua35tqr5tan5tKj4s6b4saX4saT4sKP4rJ74q534qZv4qJn3ppj3ppf3oZH3oJD3n4/3no72m4r2mon2mIf2l4X2lYP2k4H2koD2kX71jnz1jnv1jHn1inf1iHX1iHT1hnH1hnL1hXH0hHD0g2/0gW30gGv0gWz0fWj0fGb0emTzeGHzeGLzdmDzdl/zdV7zc1zzblbybVXyalHya1LyaVHyaVDyaE/yZ07yZUvyZk3yZUzyZEryY0nyYkjxYUfxYEXxXkTxXULxWj/xW0DxWj7xWT3xWD3xVzvxVjrwVTnwVDjwUzbwUjXwUTTwUTXwUDP///8644TmAAAAf3RSTlP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8A/+E8CQAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAOYSURBVFiFrdnpW9NAEAbw1KOiIIjghXgr3ooKFU+KUrxvUBQF7wO1cklVOvnbpWmabrIzO28D+5G8/THPPJtNduP58NgzTuV7m/G8BycHikRU/nB89ekChSO32vQwRaN/dekCGQOsG6OHKTawuiE6IYM2QlsyZgM0I0O2Tt/hZMRW6fU/eVq39aqzHwVbm4NArzdItlI3MkNE2123k76xfyW2ix6mUpdiu3rioCvzeXEFtkxXVyS1brknIl27B9PbEl1fRUu7QvsTlUuN9ESgzfW51u/soZbsjoFvsM3T8RWp1pPqDwq2zfeEpZNrXcz2GZutm6Pt35b2mte/YDZDM1XRGzNwgQkwPbFpduW/YiZalyDbolmZTpiRzCwXsXqSpLluLI/TZmbtAptJ1p2g+ZqJ8maoSwgl7DgtyfTVTLV8F1L9Mi3KRH0xexqxTVroczD+dEN2jqcdNVfss432xAPl5XEtiK2De+LBMhWC3Fg3anuwTDeD4GSpQ+lJLk4DckiP08w2rN8eLIf0K6rb7p4EtGvWMTTNhT1pnpy4df89E83VaKhmk6aZDmMidr3g6/bQmmN01JPqyLO2518E5RhNczH7qZ3u8b2d86lomttq0Bvtt4jPTd4EKido2qeUfduD5QQ9nzFppqul1PS0Kftn7PiS9yglvbDGpC/Z8VFvk3RLKTTtNunnVvpXu+cfTUk/NOS2v1b6fOWWyaWj6UCdHrfC+eqN3p+OXoym310rO+iHyxNWd5ImGmqr/OXwJCuHiypUt00TTT17WbSTgVx7FCA2R7OjKkcPMKAnKB3K9ceuXjdI12TjZUG1R4LYayVVfzs0XnE0+zJS9aDP0e5+z/ZUQ81joBx/nXTUPd8epZi1mZMTL8GybWwLMsxMZuTkq7vUk7dmaACSrQ2HYF83M1u4bZIl29skvicnzUhmhovkk5K9uWPrju/AODpZM7sl5eyrZqCNaYgtsxtppidTyv9mZH77z9jHjMs/IFk4tLDrmm2NLj7AZOmoxa67GD6usk9AWTwgYnoyemp758Ehe3YIsnyshT7nRdlxGAfaouw6QoSexdY9CNGILdesHNeqPXHJyiGzYjtl7fza2RO3rB6NO+pWZP3UXaxbk4EDfcF2zDqY5m21ZuwzBGMDMvZ57VwaGfwo2JtCRj9l9jYuwx9gexuW8c/Gka3PukZp/8i78vLueLpPTzZM+00jv/897sTz/wEQWR5PRSY8SwAAAABJRU5ErkJggg==)
+
+Git 每次提交代码，都要写 Commit message（提交说明），否则就不允许提交。
+
+```
+$ git commit -m "hello world"
+
+```
+
+上面代码的`-m`参数，就是用来指定 commit mesage 的。
+
+如果一行不够，可以只执行`git commit`，就会跳出文本编译器，让你写多行。
+
+```
+$ git commit
+
+```
+
+基本上，你写什么都行（[这里](http://www.commitlogsfromlastnight.com/)，[这里](http://blog.no-panic.at/2014/10/20/funny-initial-git-commit-messages/)和[这里](http://whatthecommit.com/)）。
+
+![](data:image/png;base64,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)
+
+但是，一般来说，commit message 应该清晰明了，说明本次提交的目的。
+
+![](https://yqfile.alicdn.com/img_34c744d046a9ee2fca47a229139fa1a3.png)
+
+目前，社区有多种 Commit message 的[写法规范](https://github.com/ajoslin/conventional-changelog/blob/master/conventions)。本文介绍 [Angular 规范](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#heading=h.greljkmo14y0)（见上图），这是目前使用最广的写法，比较合理和系统化，并且有配套的工具。
+
+一、Commit message 的作用
+--------------------
+
+格式化的 Commit message，有几个好处。
+
+**（1）提供更多的历史信息，方便快速浏览。**
+
+比如，下面的命令显示上次发布后的变动，每个 commit 占据一行。你只看行首，就知道某次 commit 的目的。
+
+```
+$ git log <last tag> HEAD --pretty=format:%s
+
+```
+
+![](https://yqfile.alicdn.com/img_510afed6f9ca46f5b9e5e824486c00ed.png)
+
+**（2）可以过滤某些 commit（比如文档改动），便于快速查找信息。**
+
+比如，下面的命令仅仅显示本次发布新增加的功能。
+
+```
+$ git log <last release> HEAD --grep feature
+
+```
+
+**（3）可以直接从 commit 生成 Change log。**
+
+Change Log 是发布新版本时，用来说明与上一个版本差异的文档，详见后文。
+
+![](https://yqfile.alicdn.com/img_a327ddda7de3baa706e3863d244e71cf.png)
+
+二、Commit message 的格式
+--------------------
+
+每次提交，Commit message 都包括三个部分：Header，Body 和 Footer。
+
+```
+<type>(<scope>): <subject>// 空一行<body>// 空一行<footer>
+
+```
+
+其中，Header 是必需的，Body 和 Footer 可以省略。
+
+不管是哪一个部分，任何一行都不得超过 72 个字符（或 100 个字符）。这是为了避免自动换行影响美观。
+
+### 2.1 Header
+
+Header 部分只有一行，包括三个字段：`type`（必需）、`scope`（可选）和`subject`（必需）。
+
+**（1）type**
+
+`type`用于说明 commit 的类别，只允许使用下面 7 个标识。
+
+*   feat：新功能（feature）
+    
+*   fix：修补 bug
+    
+*   docs：文档（documentation）
+    
+*   style： 格式（不影响代码运行的变动）
+    
+*   refactor：重构（即不是新增功能，也不是修改 bug 的代码变动）
+    
+*   test：增加测试
+    
+*   chore：构建过程或辅助工具的变动
+    
+
+如果`type`为`feat`和`fix`，则该 commit 将肯定出现在 Change log 之中。其他情况（`docs`、`chore`、`style`、`refactor`、`test`）由你决定，要不要放入 Change log，建议是不要。
+
+**（2）scope**
+
+`scope`用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。
+
+**（3）subject**
+
+`subject`是 commit 目的的简短描述，不超过 50 个字符。
+
+*   以动词开头，使用第一人称现在时，比如`change`，而不是`changed`或`changes`
+    
+*   第一个字母小写
+    
+*   结尾不加句号（`.`）
+    
+
+### 2.2 Body
+
+Body 部分是对本次 commit 的详细描述，可以分成多行。下面是一个范例。
+
+```
+More detailed explanatory text, if necessary.  Wrap it to 
+about 72 characters or so. Further paragraphs come after blank lines.- Bullet points are okay, too- Use a hanging indent
+
+```
+
+有两个注意点。
+
+（1）使用第一人称现在时，比如使用`change`而不是`changed`或`changes`。
+
+（2）应该说明代码变动的动机，以及与以前行为的对比。
+
+### 2.3 Footer
+
+Footer 部分只用于两种情况。
+
+**（1）不兼容变动**
+
+如果当前代码与上一个版本不兼容，则 Footer 部分以`BREAKING CHANGE`开头，后面是对变动的描述、以及变动理由和迁移方法。
+
+```
+BREAKING CHANGE: isolate scope bindings definition has changed.
+
+    To migrate the code follow the example below:
+
+    Before:
+
+    scope: {
+      myAttr: 'attribute',
+    }
+
+    After:
+
+    scope: {
+      myAttr: '@',
+    }
+
+    The removed `inject` wasn't generaly useful for directives so there should be no code using it.
+
+```
+
+**（2）关闭 Issue**
+
+如果当前 commit 针对某个 issue，那么可以在 Footer 部分关闭这个 issue 。
+
+```
+Closes #234
+
+```
+
+也可以一次关闭多个 issue 。
+
+```
+Closes #123, #245, #992
+
+```
+
+### 2.4 Revert
+
+还有一种特殊情况，如果当前 commit 用于撤销以前的 commit，则必须以`revert:`开头，后面跟着被撤销 Commit 的 Header。
+
+```
+revert: feat(pencil): add 'graphiteWidth' option
+
+This reverts commit 667ecc1654a317a13331b17617d973392f415f02.
+
+```
+
+Body 部分的格式是固定的，必须写成`This reverts commit &lt;hash>.`，其中的`hash`是被撤销 commit 的 SHA 标识符。
+
+如果当前 commit 与被撤销的 commit，在同一个发布（release）里面，那么它们都不会出现在 Change log 里面。如果两者在不同的发布，那么当前 commit，会出现在 Change log 的`Reverts`小标题下面。
+
+三、Commitizen
+------------
+
+[Commitizen](https://github.com/commitizen/cz-cli) 是一个撰写合格 Commit message 的工具。
+
+安装命令如下。
+
+```
+$ npm install -g commitizen
+
+```
+
+然后，在项目目录里，运行下面的命令，使其支持 Angular 的 Commit message 格式。
+
+```
+$ commitizen init cz-conventional-changelog --save --save-exact
+
+```
+
+以后，凡是用到`git commit`命令，一律改为使用`git cz`。这时，就会出现选项，用来生成符合格式的 Commit message。
+
+![](https://yqfile.alicdn.com/img_04fbff99be62da26cdc9f642901d1c27.png)
+
+四、validate-commit-msg
+---------------------
+
+[validate-commit-msg](https://github.com/kentcdodds/validate-commit-msg) 用于检查 Node 项目的 Commit message 是否符合格式。
+
+它的安装是手动的。首先，拷贝下面这个 [JS 文件](https://github.com/kentcdodds/validate-commit-msg/blob/master/index.js)，放入你的代码库。文件名可以取为`validate-commit-msg.js`。
+
+接着，把这个脚本加入 Git 的 hook。下面是在`package.json`里面使用 [ghooks](http://npm.im/ghooks)，把这个脚本加为`commit-msg`时运行。
+
+```
+  "config": {
+    "ghooks": {
+      "commit-msg": "./validate-commit-msg.js"
+    }
+  }
+
+```
+
+然后，每次`git commit`的时候，这个脚本就会自动检查 Commit message 是否合格。如果不合格，就会报错。
+
+```
+$ git add -A 
+$ git commit -m "edit markdown" INVALID COMMIT MSG: does not match "<type>(<scope>): <subject>" ! was: edit markdown
+
+```
+
+五、生成 Change log
+---------------
+
+如果你的所有 Commit 都符合 Angular 格式，那么发布新版本时， Change log 就可以用脚本自动生成（[例 1](https://github.com/ajoslin/conventional-changelog/blob/master/CHANGELOG.md)，[例 2](https://github.com/karma-runner/karma/blob/master/CHANGELOG.md)，[例 3](https://github.com/btford/grunt-conventional-changelog/blob/master/CHANGELOG.md)）。
+
+生成的文档包括以下三个部分。
+
+*   New features
+    
+*   Bug fixes
+    
+*   Breaking changes.
+    
+
+每个部分都会罗列相关的 commit ，并且有指向这些 commit 的链接。当然，生成的文档允许手动修改，所以发布前，你还可以添加其他内容。
+
+[conventional-changelog](https://github.com/ajoslin/conventional-changelog) 就是生成 Change log 的工具，运行下面的命令即可。
+
+```
+$ npm install -g conventional-changelog
+$ cd my-project
+$ conventional-changelog -p angular -i CHANGELOG.md -w
+
+```
+
+上面命令不会覆盖以前的 Change log，只会在`CHANGELOG.md`的头部加上自从上次发布以来的变动。
+
+如果你想生成所有发布的 Change log，要改为运行下面的命令。
+
+```
+$ conventional-changelog -p angular -i CHANGELOG.md -w -r 0
+
+```
+
+为了方便使用，可以将其写入`package.json`的`scripts`字段。
+
+```
+{
+  "scripts": {
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w -r 0"
+  }}
+
+```
+
+以后，直接运行下面的命令即可。
+
+```
+$ npm run changelog
+
+```
