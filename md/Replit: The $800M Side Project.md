@@ -1,0 +1,112 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [www.the5to9.xyz](https://www.the5to9.xyz/p/replit-800m-side-project)
+
+> Sharing interesting and inspiring success stories about bootstrapped founders and side projects turne......
+
+_Welcome to the **22 new subscribers** since the last post 🔥. I__f you haven't already, **[follow me on Twitter](https://flight.beehiiv.net/v2/clicks/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL2ZsaWdodC5iZWVoaWl2Lm5ldC92Mi9jbGlja3MvZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjbXdpT2lKb2RIUndjem92TDJac2FXZG9kQzVpWldWb2FXbDJMbTVsZEM5Mk1pOWpiR2xqYTNNdlpYbEthR0pIWTJsUGFVcEpWWHBKTVU1cFNYTkpibEkxWTBOSk5rbHJjRmhXUTBvNUxtVjVTakZqYlhkcFQybEtiMlJJVW5kamVtOTJUREphYzJGWFpHOWtRelZwV2xkV2IyRlhiREpNYlRWc1pFTTVNazFwT1dwaVIyeHFZVE5OZGxwWWJFdGhSMHBJV1RKc1VHRlZjRXBXV0hCS1RWVTFjRk5ZVGtwaWJFa3hXVEJPU2s1cmJISmpSbWhYVVRCdk5VeHRWalZUYWtacVlsaGtjRlF5YkV0aU1sSkpWVzVrYW1WdE9USlVSRXBoWXpKR1dGcEhPV3RSZWxad1YyeGtWMkl5UmxoaVJFcE5ZbFJXYzFwRlRUVk5hekZ3VDFkd2FWSXllSEZaVkU1T1pHeHdXV0pGZEdoU01IQkpWMVJLYzFWSFJsWmpSWEJYVjBoQ1MxUldWVEZqUms1WlZHdHdhV0pGYTNoWFZFSlBVMnMxY21KSVNtcFNiV2hZVlZSQ2RrNVZlSFJXYWxaVVlXdGFjVmxzYUd0alJsRjVZa1YwYVUxc1NrcFdWelZyWVcxV2RFOVVTbFZTUlRWVVZGUktSMWRXVm5GUmJVWllVbGQzZUZZeFVrcE9WMUpHWkROc1lWTkdTbTlXTUZwTFRteHNjbGw2Vms1V01GcFpWbXhrYzFSV1JYZGpSRTVhWVdzMVVGUlZXbTVsVjBwSVpFVndhR0pVYkhkV1J6VjNWREpHVjJOR2FGWmlXR2hvVld0YVYwMUdVblJqUm1Sb1VtMTNNVlJWVWtOVWF6RnlWMjVTVlZKdFVrdFViRlUxVTBaU1dWVnJOV2hpUjNRelZqRm9kMVZyTUhkT1NHeFhZbGhDVDFWclpFNU5SazVZWWtST2FGWXdOVXBXYlRGellWWkplV1ZJUmxoV2JXaFVXVEJrU21WVk5WaFhiV2hYVFZWYWQxWkVTbk5UTWtaelkwVldhR1ZyV2xGV2FrWldaVlprV0dFemFHaGhla1o0Vmtab2ExUldXa2RTVkVKVlRVWktWMXBGV25OV1ZrNTBUVlU1Vm1WclNUQldNVnBUVkRKS1YySklVbFpYUjNoUVZGZDRZV05zVW5SalJUVm9WbGhvUlZVeWNFdGhSbVJHVGxoa1lWSldhekZVVldSS1pWZFNTR1ZIYkdoV1YzTjVWVEZrZDFReVJuSk9WRnBhWldzMVlWbFhkSGRqVmxKSFdrWktiR0pJUWtsV01XaFRWREZLUmxKWWNGVmliWFEwV1ZaVmVHTldUbFZXYXpGWFRVWndkMVl4WkhkaU1rcEhZMFZXV0dKWWFGQldhMVp5WkRGa2NsUnJjR3BOUjNnd1dXdGtiMkV4UlhkaGVrcFZWbXhLWVZSWGN6VlNWbXcyVkdzMWFHSllUak5XUkVaT1RVZFdWazlXVmxOWFJUVkxXV3hrTkU1c2EzcGlSWEJQWVRKNE1GUXhhSE5YYXpGMFlVaGtXR0V3TlV4VU1VMHhZa1pXV0ZOVVNsQlRSVXBYVm10U1QyRnNTbGhQUkVKVVlrUnNVMVpzV2tObFJrcEhZMFY0VGsxcVZreFViVEZ5VFRGS2NWZHVaR2xOTVZreVZYcEJlR1J0VWtsaVJXeFRVakJhWVZOWGJETmhWMDVJVDFod2ExSnFiSGRYYTA1S1RtdHNjVk5ZWkU5aGJYaHpWR3RTWVdGcmVGaFRWRTVoVWtka01GUnJVbFpPUlRsRVRWZHNXbVZyY0c5VVJtUldaV3M1UlZwNlFrNVdSMmgwVjFaa1lXRnJOWEJUV0U1S1ltdEplRmRYTVRSalJtdDVVbXBDYUZaNmJERlhSRXB6WVRCc2NXSXliRnBOYkVVeFZHeFNjMkpGTlhSVFdGSmFaV3RzTmxSVlRYZE5SVGxGV25wR1RWWXdWalZYYlhCV1pFVXhXRkpZY0dGaVZYQnlWRmR3YTJKR2NFVlhXSEJLWVZoa2NGcEhNWE5sYlVaWlZXMWFhMUo2YkhsWGJHTXdZVlU1Y0ZOVVVrOVdSV3QzVkRCU2FrNVdiRFZOVnpGT1RXdGFkRlJHVWxKa01EVjBWRmhTV21KVldtOVVXR3Q0WWtad1NGUnRNVTlTUlZVeFYxZHdWMkZXYkRaYU1teE5VVEJ3ZDFkV2FGSmhWVGx4VWxSS1QyRnRjM2xVVjNCcVpWVTFWVlZZVms5V1JURTJWRVZPUzJOSFRYcFVWMnhRWVZWd01sa3lNVTlpTWtaWVZWZHNiVlZUTldaV2FtUkhWMWhzY0ZJelNsWmFSbHBYVTIxS2VFeFZTazlWYW14VVdXcFdNMDVyV21aT1ZFNUZaVmhhYW1WWGRHOVlNbXhFVFVod2JrbHBkMmxqUnpsNlpFWTVjRnBEU1RaSmFsRjNUMFJKZDAxVVpHeE1WR040VFhwRmRFNUVSVE5OZVRBMFRucGthMHhVVG10WmVteHRXbGRhYVZwRVNURlBVMGx6U1c1Q01WbHRlSEJaTWtZd1lWYzVkVmd5Ykd0SmFtOXBXVEpSTlU1VWJHeE9iVWwwV1hwSmVrMURNREJQUkdjeFRGZEZlVnBxVlhSTlYwVjZXbTFLYTAxcVpHeGFSRmw2U1dsM2FXUnRiSHBoV0ZKbVpFYzVjbHBYTkdsUGFVcHBUVlJSTTAxdFdYaFplVEZ0VFZSWk0weFVVbXBOYlVsMFdWZFpNMDU1TURSUFYwWnJUWHBhYUUxRVVUSmFWR05wVEVOS2NGbFlVV2xQYWtVeVRucEJNRTFFVlhsUFJFbDFUVlJuYzBsdGJIcGplVWsyU1cwNWVWa3lhSEJhUTBvNUxqRldVbFpzUlZOVlJsVlVkMVpLZUhobFdrZHdibkZVYVRocldsVlVWMUYxVFZCdVN5MVFRekJrT0djaUxDSndiM04wWDJsa0lqb2lNRFZpTjJZd09Ua3RNR0ZsTXkwME5XTmtMV0V3TXpNdE5ETTRNRFExWkRoa1pUVmxJaXdpY0hWaWJHbGpZWFJwYjI1ZmFXUWlPaUpqWkRrMU9XVTJZaTFqTWpNd0xUUTRPRFV0WVRKbU5TMHhZVE5tWW1ReU4yVmtOak1pTENKMmFYTnBkRjkwYjJ0bGJpSTZJbUl3T1dZNE1tRXpMVEExTnpNdE5EWXlOeTFpT0dZMkxUUmtNbUUyTVRrMlpqSTVOQ0lzSW1saGRDSTZNVFkzTWpnek1EYzBPUzQzTnpVc0ltbHpjeUk2SW05eVkyaHBaQ0o5LjZQUUlCM2dEOEJsWUVibzlMbTN0RDFwWGotZ1dXTzJZa1BVMGhZYklpdGc_dXRtX3NvdXJjZT13d3cudGhlNXRvOS54eXomdXRtX21lZGl1bT1yZWZlcnJhbCZ1dG1fY2FtcGFpZ249cmVwbGl0LXRoZS04MDBtLXNpZGUtcHJvamVjdCIsInBvc3RfaWQiOiJkZDVmM2IyNC1mZjZkLTQ3YTItOTI5Mi01Mjg5MzQ2YjYwNGYiLCJwdWJsaWNhdGlvbl9pZCI6ImNkOTU5ZTZiLWMyMzAtNDg4NS1hMmY1LTFhM2ZiZDI3ZWQ2MyIsInZpc2l0X3Rva2VuIjoiYzNmNDFlNjMtMGY0NS00YjAyLThiZTAtYmZlYWNjMmE2YjNlIiwiaWF0IjoxNjgxNDgzNzE1LjY3LCJpc3MiOiJvcmNoaWQifQ.TMtz9E3ftlGCz7fBBX0Bj1wBtDg_iQPp_aNyYduIsIU) and [LinkedIn](https://flight.beehiiv.net/v2/clicks/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL2ZsaWdodC5iZWVoaWl2Lm5ldC92Mi9jbGlja3MvZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjbXdpT2lKb2RIUndjem92TDJac2FXZG9kQzVpWldWb2FXbDJMbTVsZEM5Mk1pOWpiR2xqYTNNdlpYbEthR0pIWTJsUGFVcEpWWHBKTVU1cFNYTkpibEkxWTBOSk5rbHJjRmhXUTBvNUxtVjVTakZqYlhkcFQybEtiMlJJVW5kamVtOTJUREphYzJGWFpHOWtRelZwV2xkV2IyRlhiREpNYlRWc1pFTTVNazFwT1dwaVIyeHFZVE5OZGxwWWJFdGhSMHBJV1RKc1VHRlZjRXBXV0hCS1RWVTFjRk5ZVGtwaWJFa3hXVEJPU2s1cmJISmpSbWhYVVRCdk5VeHRWalZUYWtacVlsaGtjRlF5YkV0aU1sSkpWVzVrYW1WdE9USlVSRTVyVFRKU05VNVlUbWhXZWxaNVYyeGtVMk5IU25CT1YzQnBUV3BDTWxsV1l6QmtiR3Q1WVVkNGFXSllhREphUm1SellrVnNjR1F5YkdwU2VtdzJXa1ZaTldOR2NFUlRWRnBLWVd0c00xUnRjSE5pUlRWRlYyMXdUVll3YTNwWGExSnVaRVUxUlZaVVVsQlJla1p3VjFod1MyRkZlRmhXV0hCUVVrZGpkMVJXVW05aVZteFlWMjF3VDJGVmJIcFRWelZEVFZac2RHVklRbHBOYTFsM1dWWmpOV1JXWjNsaVIzUktZVzA1Y0ZkVVNsSk9WVFZWWWtkNFQySlZiREJYV0hCS1pXc3hSRTFFUWxCU1IyTjRWRVprUm1WV2NIRldXRkpPVmpCV05sZHRNVXRoTURGeFdrZDRZVkpHYkRaVFYyd3pZVmRTZEdKSWNHaFhSa3B0V2tWak5XTnNjRmhPUjJ4UVlWVnJNRlJzVWtwTlJUbEZXWHBXV21WVVJuUlVWRXBIWWxWNFZWVllaRTlpVlRFd1YxY3hSMkZGTVRWTlYzaGhVakExZEZSclVrWk9WbXh4Vm0xc1dtVnRaSEJVUlU1TFkwWnNXVlZYYkZCaGExVjVWRzF3Y2sxck1YRlpNMnhQVmtaR01WUnNVazVsYTNoRVUyNUNhazB3TVhCVU1teExaRzFPZEZSdE9XaFdNVVp3V214RmRXRklSbXBSYmtwcVpVZFdkbGxyZEZsVE1sSkVWakI0Um1WWFJrdE5SbVJPWlVSS1dGZEdiSFZaYmtKUFpWTXhVRmx1VFhwU1ZWcEZWRk5KYzBsdVFuWmpNMUptWVZkUmFVOXBTVEJOUkdkNVRVUkZNMXBUTUROTlZFMTRURlJSZUU1NlRYUlBSR016V2tNd2VscEhUVFZhYlZadFdXMVJlVTVVYTJsTVEwcDNaRmRLYzJGWFRtaGtSMngyWW13NWNGcERTVFpKYlU1clQxUlZOVnBVV21sTVYwMTVUWHBCZEU1RVp6Uk9VekZvVFcxWk1VeFVSbWhOTWxwcFdrUkpNMXBYVVRKTmVVbHpTVzVhY0dNeWJEQllNMUoyWVRKV2RVbHFiMmxaYWtVd1RucEtiVTFYVFhSYWFrVXlUbmt3TUZsNlNtbE1WMFp0VG5wamRFOUViR2hhUkUweVdWUkJNRTV0VlROSmFYZHBZVmRHTUVscWIzaE9hbU4zVGtSQk1VMXFaM2xNYWtVMFRFTktjR016VFdsUGFVcDJZMjFPYjJGWFVXbG1VUzR3YTFsYVNWTlBia0pCTTFnelJpMUZVMUpMT0VWdE9IaDZaMWhpVERCRk1XTlVXblpaUjE5cGVWbHZJaXdpY0c5emRGOXBaQ0k2SWpBMVlqZG1NRGs1TFRCaFpUTXRORFZqWkMxaE1ETXpMVFF6T0RBME5XUTRaR1UxWlNJc0luQjFZbXhwWTJGMGFXOXVYMmxrSWpvaVkyUTVOVGxsTm1JdFl6SXpNQzAwT0RnMUxXRXlaalV0TVdFelptSmtNamRsWkRZeklpd2lkbWx6YVhSZmRHOXJaVzRpT2lKaU1EbG1PREpoTXkwd05UY3pMVFEyTWpjdFlqaG1OaTAwWkRKaE5qRTVObVl5T1RRaUxDSnBZWFFpT2pFMk56STRNekEzTkRrdU56YzJMQ0pwYzNNaU9pSnZjbU5vYVdRaWZRLkVQTnh5RjJpQndBbXgxTmVrQ0kySVNleklmUV8xRzBoNGZjbEVKbVI5LWs_dXRtX3NvdXJjZT13d3cudGhlNXRvOS54eXomdXRtX21lZGl1bT1yZWZlcnJhbCZ1dG1fY2FtcGFpZ249cmVwbGl0LXRoZS04MDBtLXNpZGUtcHJvamVjdCIsInBvc3RfaWQiOiJkZDVmM2IyNC1mZjZkLTQ3YTItOTI5Mi01Mjg5MzQ2YjYwNGYiLCJwdWJsaWNhdGlvbl9pZCI6ImNkOTU5ZTZiLWMyMzAtNDg4NS1hMmY1LTFhM2ZiZDI3ZWQ2MyIsInZpc2l0X3Rva2VuIjoiYzNmNDFlNjMtMGY0NS00YjAyLThiZTAtYmZlYWNjMmE2YjNlIiwiaWF0IjoxNjgxNDgzNzE1LjY3MSwiaXNzIjoib3JjaGlkIn0.MAxyzVMaOlxa8XQF_s3gEa7YqRpuFSHEAqzbk7f4GGY)** [](https://flight.beehiiv.net/v2/clicks/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL2ZsaWdodC5iZWVoaWl2Lm5ldC92Mi9jbGlja3MvZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjbXdpT2lKb2RIUndjem92TDJac2FXZG9kQzVpWldWb2FXbDJMbTVsZEM5Mk1pOWpiR2xqYTNNdlpYbEthR0pIWTJsUGFVcEpWWHBKTVU1cFNYTkpibEkxWTBOSk5rbHJjRmhXUTBvNUxtVjVTakZqYlhkcFQybEtiMlJJVW5kamVtOTJUREphYzJGWFpHOWtRelZwV2xkV2IyRlhiREpNYlRWc1pFTTVNazFwT1dwaVIyeHFZVE5OZGxwWWJFdGhSMHBJV1RKc1VHRlZjRXBXV0hCS1RWVTFjRk5ZVGtwaWJFa3hXVEJPU2s1cmJISmpSbWhYVVRCdk5VeHRWalZUYWtacVlsaGtjRlF5YkV0aU1sSkpWVzVrYW1WdE9USlVSRTVyVFRKU05VNVlUbWhXZWxaNVYyeGtVMk5IU25CT1YzQnBUV3BDTWxsV1l6QmtiR3Q1WVVkNGFXSllhREphUm1SellrVnNjR1F5YkdwU2VtdzJXa1ZaTldOR2NFUlRWRnBLWVd0c00xUnRjSE5pUlRWRlYyMXdUVll3YTNwWGExSnVaRVUxUlZaVVVsQlJla1p3VjFod1MyRkZlRmhXV0hCUVVrZGpkMVJXVW05aVZteFlWMjF3VDJGVmJIcFRWelZEVFZac2RHVklRbHBOYTFsM1dWWmpOV1JXWjNsaVIzUktZVzA1Y0ZkVVNsSk9WVFZWWWtkNFQySlZiREJYV0hCS1pXc3hSRTFFUWxCU1IyTjRWRVprUm1WV2NIRldXRkpPVmpCV05sZHRNVXRoTURGeFdrZDRZVkpHYkRaVFYyd3pZVmRTZEdKSWNHaFhSa3B0V2tWak5XTnNjRmhPUjJ4UVlWVnJNRlJzVWtwTlJUbEZXWHBXV21WVVJuUlVWRXBIWWxWNFZWVllaRTlpVlRFd1YxY3hSMkZGTVRWTlYzaGhVakExZEZSclVrWk9WbXh4Vm0xc1dtVnRaSEJVUlU1TFkwWnNXVlZYYkZCaGExVjVWRzF3Y2sxck1YRlpNMnhQVmtaR01WUnNVazVOUlhoRVUyNUNhazB3TVhCVU1teExaRzFPZEZSdE9XaFdNVVp3V214RmRVNTZVbVpVTUZaUVdsaEdWR0l3ZUd0U1YyOTZXVlp2TUdGNldrTlhSMDVDWlZaQmVsTlVaRTlPTTBKU1ducFdOVm93WkZWaFZtZ3hVbE5KYzBsdVFuWmpNMUptWVZkUmFVOXBTVEJOUkdkNVRVUkZNMXBUTUROTlZFMTRURlJSZUU1NlRYUlBSR016V2tNd2VscEhUVFZhYlZadFdXMVJlVTVVYTJsTVEwcDNaRmRLYzJGWFRtaGtSMngyWW13NWNGcERTVFpKYlU1clQxUlZOVnBVV21sTVYwMTVUWHBCZEU1RVp6Uk9VekZvVFcxWk1VeFVSbWhOTWxwcFdrUkpNMXBYVVRKTmVVbHpTVzVhY0dNeWJEQllNMUoyWVRKV2RVbHFiMmxaYWtVd1RucEtiVTFYVFhSYWFrVXlUbmt3TUZsNlNtbE1WMFp0VG5wamRFOUViR2hhUkUweVdWUkJNRTV0VlROSmFYZHBZVmRHTUVscWIzaE9hbU4zVGtSQk1VMXFaM2xNYWtVMFRFTktjR016VFdsUGFVcDJZMjFPYjJGWFVXbG1VUzQwWDJSaWFWZE9UWGh5YW0xdWNYbzJVbTR5YTJkcFFrd3RlRk16WjJZdFlUWTFObWsyYWxsaWNucEZJaXdpY0c5emRGOXBaQ0k2SWpBMVlqZG1NRGs1TFRCaFpUTXRORFZqWkMxaE1ETXpMVFF6T0RBME5XUTRaR1UxWlNJc0luQjFZbXhwWTJGMGFXOXVYMmxrSWpvaVkyUTVOVGxsTm1JdFl6SXpNQzAwT0RnMUxXRXlaalV0TVdFelptSmtNamRsWkRZeklpd2lkbWx6YVhSZmRHOXJaVzRpT2lKaU1EbG1PREpoTXkwd05UY3pMVFEyTWpjdFlqaG1OaTAwWkRKaE5qRTVObVl5T1RRaUxDSnBZWFFpT2pFMk56STRNekEzTkRrdU56YzJMQ0pwYzNNaU9pSnZjbU5vYVdRaWZRLm9pY0g5ZW1RN0p2ZzQ0M2F1ZzIwazk0UjYxSjROalJXYzZ1NjIzMzkwTVU_dXRtX3NvdXJjZT13d3cudGhlNXRvOS54eXomdXRtX21lZGl1bT1yZWZlcnJhbCZ1dG1fY2FtcGFpZ249cmVwbGl0LXRoZS04MDBtLXNpZGUtcHJvamVjdCIsInBvc3RfaWQiOiJkZDVmM2IyNC1mZjZkLTQ3YTItOTI5Mi01Mjg5MzQ2YjYwNGYiLCJwdWJsaWNhdGlvbl9pZCI6ImNkOTU5ZTZiLWMyMzAtNDg4NS1hMmY1LTFhM2ZiZDI3ZWQ2MyIsInZpc2l0X3Rva2VuIjoiYzNmNDFlNjMtMGY0NS00YjAyLThiZTAtYmZlYWNjMmE2YjNlIiwiaWF0IjoxNjgxNDgzNzE1LjY3MSwiaXNzIjoib3JjaGlkIn0.TV2v7RKqyufDfkUPYjBdCLkjcB9WeppnIIYOA1YqeIk) for the stories and insights that don't make it to the newsletter._
+
+Replit is changing the way people learn how to code and build apps. It's making programming collaborative and accessible all through the web browser. Even though Replit is an $800 million dollar company today, Amjad Masad never wanted to start a company from it.
+
+Replit was open-sourced, and Amjad worked on it as a side project for 6 years while working for companies like Yahoo, Codeacademy, and Facebook.
+
+Here's how Amjad Masad turned his college side project into an $800 Million company👇
+
+**How Replit started** 
+-----------------------
+
+Amjad grew up in Amman, Jordan, and had been programming since he was a kid. He didn't own a laptop or a computer, so he would program by going to internet cafes.
+
+Internet cafes have computers you can pay for and rent by the hour, but your settings are never saved. This meant Amjad would have to set up a new programming environment each time he logged on, waiting both time and money.
+
+Around this time, Google Docs came out. A real-time writing and collaboration tool all in a web browser! (yes, this was actually a **really** big deal back then)
+
+Amjad was amazed and wanted to build something similar for coding. He teamed up with classmates Max and Haya in 2009 to build this out. 2 years later, they had a version that used Emscripten to compile multiple languages, such as Ruby and Python, using Javascript.
+
+![](https://media.beehiiv.com/cdn-cgi/image/fit=scale-down,format=auto,onerror=redirect,quality=80/uploads/asset/file/51490ade-2055-4de1-bdba-86cc41c45dcb/Screen_Shot_2023-01-04_at_1.34.10_AM.png)
+
+They open-sourced the project and launched it on HackerNews, quickly becoming one of the top posts for the day.
+
+Around the same time, Zach Sims and Ryan Bubinski were starting a coding education company.
+
+Codeacademy.
+
+They discovered the open-sourced project on Github and felt it was the perfect web-based environment to use for their startup. They even reached out to Amjad and asked him to join Codeacademy.
+
+Amjad joined Codeacademy in 2011 but knew he eventually needed to move out to Silicon Valley. Facebook was working on internet.org, a project aimed to bring internet access to less developed countries. This resonated with Amjad, and in 2013, he left Codeacademy to join Facebook.
+
+**From Side Project to Y Combinator**
+-------------------------------------
+
+Amjad always wanted a startup like Replit to exist. A place where people could learn, collaborate and build software together. So why didn't he just work on Replit full-time? Well, he never wanted to be a CEO. He dreaded entrepreneurship after seeing the pains of founders from his days in Codeacademy as a founding engineer.
+
+Don't get me wrong, he tried to pursue Replit both internally at FB and outside. A Y Combinator partner told him that Replit was a"nice toy" but to work at something else. He tried to bring in a full-time CEO and even merge with competing products but no one wanted to do this. Amjad tried to have FB take on a project similar to Replit and even emailed Mark Zuckerberg about it.
+
+Everyone rejected him.
+
+Until his co-founder and wife Haya convinced him to pursue it together full-time in 2016. They put together $20,000 to kick off Replit but struggled with funding. Their free service was growing fast and outpacing their revenue model. 
+
+Amjad and Haya needed to focus on sales.
+
+They launched their first education-based product in 2017, Classrooms (which is now Teams for Education).
+
+Classrooms allow CS teachers to publish, grade, and comment on assignments through their web browsers. It made teaching computer science easier and free for students.
+
+In a few months, they generated $150,000 in sales.
+
+Things began to click. Classrooms had built-in virality to their product. Sign one teacher, and you immediately onboard 100+ students to Replit. 
+
+By late 2017, Paul Graham and Sam Altman reached out. Replit just reached 750,000 users (and 3 YC rejections). They were finally admitted to YC W18.
+
+After graduating from YC, Amjad raised a $4.5 million seed round in late 2018 and blew to nearly 1.5 million users. 2 years later, they raised a $20M Series A. By December 2020, they reached 5 million users. Now, they've raised their latest round at an $800M valuation.
+
+> This graph of Replit's user base is very impressive, not just for its perfect exponential shape, but for the numbers. 5 million users is a lot when those users are programmers. Imagine how many users Replit's users will have.
+> 
+> [
+> 
+> — Paul Graham (@paulg)  
+> Dec 2, 2020
+> 
+> ](https://twitter.com/paulg/status/1334178824121147392)
+
+**Why was Replit successful?**
+------------------------------
+
+Make a product that's good. Post it on HackerNews, Reddit, Twitter. If you have something that is good, people will try it. It's never been easier to launch something. Launch it everywhere and be annoying about it.
+
+Amjad Masad on the Junior VC Podcast
+
+What led to the success of Replit? Was it the YC effect?
+
+At the end of the day, Replit is just an amazing product that people wanted to share, and shipped features that **incentivized** people to try.
+
+The [first launch post](https://flight.beehiiv.net/v2/clicks/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL25ld3MueWNvbWJpbmF0b3IuY29tL2l0ZW0_aWQ9MzA1NjQ5MCZ1dG1fc291cmNlPXd3dy50aGU1dG85Lnh5eiZ1dG1fbWVkaXVtPXJlZmVycmFsJnV0bV9jYW1wYWlnbj1yZXBsaXQtdGhlLTgwMG0tc2lkZS1wcm9qZWN0IiwicG9zdF9pZCI6ImRkNWYzYjI0LWZmNmQtNDdhMi05MjkyLTUyODkzNDZiNjA0ZiIsInB1YmxpY2F0aW9uX2lkIjoiY2Q5NTllNmItYzIzMC00ODg1LWEyZjUtMWEzZmJkMjdlZDYzIiwidmlzaXRfdG9rZW4iOiJjM2Y0MWU2My0wZjQ1LTRiMDItOGJlMC1iZmVhY2MyYTZiM2UiLCJpYXQiOjE2ODE0ODM3MTUuNjcxLCJpc3MiOiJvcmNoaWQifQ.YwP6h-yKSnNVf7NK9HVTO0Ei_2DoaPNC4AwL5cbzHC0) on HackerNews in 2011 is still one of Amjad's MOST upvoted posts of all time.
+
+Paul Graham discovered Replit just from browsing Hacker News. It's what began their relationship and eventually helped Amjad get into YC.
+
+Teachers loved Replit and shared it with their students.
+
+Replit built coding tutorials to encourage people around the world to start their coding adventure. 50% of Replit users are under the age of 18.
+
+Bounties incentivize people to learn and build the features the community wants. Just look at how fast the community built a way to convert Heroku projects to Replit 👇
+
+> People wonder how @Replit ships so fast.
+> 
+> Last week we launched bounties.
+> 
+> If you work in product, marketing, BizOps or any non-eng role, then you MUST learn to use bounties.
+> 
+> This will kick your team into overdrive.
+> 
+> Let me explain with a story.
+> 
+> [
+> 
+> — Jeff Burke ⠕ (@Jeff_Burke14)  
+> Nov 22, 2022
+> 
+> ](https://twitter.com/Jeff_Burke14/status/1595084890353328134)
+
+Amjad started off his programming career as a kid from Jordan with no computer and no internet.
+
+Now, he's building a platform that will help learners, educators, and developers around the world.
+
+_Thanks for reading, and I hope this helped you or you found it interesting! If you want to give some feedback, you can either respond to the poll or reply to this email._
