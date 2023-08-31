@@ -1,0 +1,1 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [juejin.cn](https://juejin.cn/post/7271147833003966520)*   官方文档：[code.visualstudio.com/docs/editor…](https://link.juejin.cn?target=https%3A%2F%2Fcode.visualstudio.com%2Fdocs%2Feditor%2Fprofiles "https://code.visualstudio.com/docs/editor/profiles")
