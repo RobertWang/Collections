@@ -1,0 +1,159 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [mp.weixin.qq.com](https://mp.weixin.qq.com/s/1x67qYpHlCYmZOkM0aTiig)
+
+> 抽象类是 Python 中一种重要的概念，它提供了一种定义接口和规范子类必须实现的方式。本文将详细介绍抽象类的使
+
+抽象类是 Python 中一种重要的概念，它提供了一种定义接口和规范子类必须实现的方式。本文将详细介绍抽象类的使用方法，并对其源码进行解析，深入理解抽象类的实现机制。
+
+**1. 抽象类的使用方法**
+---------------
+
+抽象类是一种不能直接实例化的类，用于定义接口和规范子类应该实现的方法。在 Python 中，抽象类通过`abc`模块实现。
+
+使用抽象类需要遵循以下步骤：
+
+1.  导入`abc`模块：使用抽象类前，需要导入`abc`模块。
+    
+
+```
+from abc import ABC, abstractmethod
+
+
+```
+
+2.  定义抽象类：创建一个类，并继承`ABC`类。
+    
+
+```
+class AbstractClass(ABC):
+
+
+```
+
+3.  定义抽象方法：在抽象类中定义抽象方法，并使用`@abstractmethod`装饰器。
+    
+
+```
+    @abstractmethod
+    def abstract_method(self):
+        pass
+
+
+```
+
+4.  创建子类：创建一个子类，并继承抽象类。
+    
+
+```
+class ConcreteClass(AbstractClass):
+
+
+```
+
+5.  实现抽象方法：在子类中实现抽象方法。
+    
+
+```
+    def abstract_method(self):
+        # 实现抽象方法的具体逻辑
+        pass
+
+
+```
+
+6.  使用子类：可以实例化子类，并调用抽象方法。
+    
+
+```
+obj = ConcreteClass()
+obj.abstract_method()
+
+
+```
+
+如果子类没有实现抽象方法，或者在实例化抽象类时尝试调用抽象方法，将会引发`TypeError`异常。抽象类的使用可以提高代码的可读性、可维护性和可扩展性。
+
+**2. 抽象类的源码解析**
+---------------
+
+下面我们对抽象类的源码进行解析，深入理解抽象类的实现机制。
+
+在 Python 中，抽象类的实现依赖于`abc`模块中的`ABC`类和`abstractmethod`装饰器。`ABC`类是一个元类，通过元类的机制来实现抽象类的特性。
+
+首先，我们来看一下`ABC`类的源码：
+
+```
+class ABC(metaclass=ABCMeta):
+    """Helper class that has ABCMeta as its metaclass."""
+    __slots__ = ()
+
+
+```
+
+`ABC`类是一个帮助类，它的元类是`ABCMeta`。它没有定义任何方法或属性，仅用于作为抽象类的基类。
+
+接下来，我们来看一下`abstractmethod`装饰器的源码：
+
+```
+def abstractmethod(funcobj):
+    """A decorator indicating abstract methods.
+
+    Using this declaration indicates that the method is expected to be
+    overridden in non-abstract derived classes.
+    """
+    funcobj.__isabstractmethod__ = True
+    return funcobj
+
+
+```
+
+`abstractmethod`装饰器是一个简单的装饰器函数，用于标记抽象方法。它将`__isabstractmethod__`属性设置为`True`，表示这个方法是一个抽象方法。
+
+最关键的部分是`ABCMeta`元类的实现。下面是`ABCMeta`类的源码：
+
+```
+class ABCMeta(type):
+    """Metaclass for defining Abstract Base Classes (ABCs)."""
+
+    def __new__(mcls, name, bases, namespace, **kwargs):
+        cls = super().__new__(mcls, name, bases, namespace, **kwargs)
+        abstracts = {name
+                     for name, value in namespace.items()
+                     if getattr(value, "__isabstractmethod__", False)}
+        for base in bases:
+            for name in getattr(base, "__abstractmethods__", set()):
+                value = getattr(cls, name, None)
+                if getattr(value, "__isabstractmethod__", False):
+                    abstracts.add(name)
+        cls.__abstractmethods__ = frozenset(abstracts)
+        return cls
+
+    def __instancecheck__(cls,name, bases, namespace, **kwargs):
+        """Override for isinstance(instance, cls)."""
+        if hasattr(cls, "__subclasscheck__"):
+            return cls.__subclasscheck__(cls, instance)
+        return super().__instancecheck__(cls, instance)
+
+    def __subclasscheck__(cls, subclass):
+        """Override for issubclass(subclass, cls)."""
+        if cls.__abstractmethods__:
+            return (
+                any(name in subclass.__dict__ for name in cls.__abstractmethods__)
+                and super().__subclasscheck__(subclass)
+            )
+        return super().__subclasscheck__(subclass)
+
+
+```
+
+`ABCMeta`是一个元类，在定义抽象类时会自动使用`ABCMeta`作为元类。它重写了`__new__`方法、`__instancecheck__`方法和`__subclasscheck__`方法。
+
+*   `__new__`方法：在创建类对象时被调用，用于收集抽象方法并设置`__abstractmethods__`属性。它会遍历类的命名空间中的方法，检查是否有`__isabstractmethod__`属性为`True`，如果是，则将方法名称添加到`abstracts`集合中。接着，它会遍历基类中的`__abstractmethods__`集合，检查子类是否实现了基类的抽象方法，并将未实现的抽象方法添加到`abstracts`集合中。最后，将`abstracts`集合设置为`__abstractmethods__`属性，并返回创建的类对象。
+    
+*   `__instancecheck__`方法：用于重写`isinstance(instance, cls)`的行为。它会检查是否定义了`__subclasscheck__`方法，如果是，则调用`__subclasscheck__`方法；否则，调用父类的`__instancecheck__`方法。
+    
+*   `__subclasscheck__`方法：用于重写`issubclass(subclass, cls)`的行为。它会首先检查类是否有抽象方法，如果有，则检查子类是否实现了所有的抽象方法；如果子类实现了所有抽象方法，则调用父类的`__subclasscheck__`方法。这样，就可以通过`issubclass`函数来判断一个类是否是抽象类的子类。
+    
+
+通过以上的源码解析，我们了解了抽象类的实现原理。抽象类通过元类`ABCMeta`和装饰器`abstractmethod`实现了定义接口和规范子类必须实现的功能。
+
+本文介绍了 Python 抽象类的使用方法，并对其源码进行了详细解析。通过使用抽象类，我们可以定义规范子类必须实现的方法，提高代码的可读性和可维护性。深入理解抽象类的实现机制有助于更好地应用和扩展抽象类的功能。
