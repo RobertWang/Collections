@@ -1,0 +1,84 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [tigerbeetle.com](https://tigerbeetle.com/blog/2023-09-19-64-bit-bank-balances-ought-to-be-enough-for-anybody/)
+
+> Recently at TigerBeetle, we’ve decided to use 128-bit integers to store a......
+
+Recently at TigerBeetle, [we’ve decided](https://github.com/tigerbeetle/tigerbeetle/pull/1157) to use 128-bit integers to store all financial amounts and balances, retiring our previous use of 64-bit integers. While some may argue that a 64-bit integer, which can store integers ranging from zero to 264, is enough to count the [grains of sand on Earth](https://www.npr.org/sections/krulwich/2012/09/17/161096233/which-is-greater-the-number-of-sand-grains-on-earth-or-stars-in-the-sky), we realized we need to go beyond this limit if we want to be able to store all kinds of transactions adequately. Let’s find out why.
+
+How do we represent money?
+--------------------------
+
+To represent numbers (and to be able to do math with them), computers need to encode this number in a binary system which, depending on the range and the [kind](https://en.wikipedia.org/wiki/Number#Classification) of number, requires a certain amount of bits (each bit can be either 0 or 1). For example, integers (whole numbers) ranging from -128 to 127 can be represented with only 8 bits, but if we don’t need negative numbers, we can use the same bits to represent any integer from 0 to 255, and that’s a byte! Larger numbers require more bits, for example, 16-bit, 32-bit, and 64-bit numbers are the most common.
+
+You may have noticed that we are talking about money as whole numbers and not as decimal numbers or cents. Things get more complicated with fractional numbers, which can be encoded using [floating point](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) numbers. While binary floating point may be fine for other calculations, they [cannot accurately express decimal numbers](https://en.wikipedia.org/wiki/Floating-point_error_mitigation). This is the same kind of problem that we humans have when we try to represent ⅓ in decimal as 0.33333…, computers have to represent ¹⁄₁₀ in binary!
+
+> `>>> 1.0 / 10  
+> 0.10000000000000001  
+> `
+
+As “fractions of a penny” add up over time to a lot, floating point is a [disaster for finance](https://www.youtube.com/watch?v=yZjCQ3T5yXo)!  
+
+Therefore, in TigerBeetle, we don’t use fractional or decimal numbers, every [ledger](https://docs.tigerbeetle.com/reference/accounts#ledger) is expressed as multiples of a minimal [integer factor](https://docs.tigerbeetle.com/recipes/fractional-amounts) defined by the user. For example, you can represent Dollars as a multiple of cents, and then a $1.00 transaction can be described as 100 cents. Even [non-decimal currency systems](https://en.wikipedia.org/wiki/Non-decimal_currency) can be [better represented](https://www.royalmintmuseum.org.uk/learning/learning-zone/going-decimal/old-money/) as a multiple of a common factor.
+
+Surprisingly, we also don’t use negative numbers (you may have encountered software ledgers that store only a single positive/negative balance). Instead, we keep two separate strictly positive integer amounts: [one for debits and another for credits](https://docs.tigerbeetle.com/design/data-modeling#debits-vs-credits). This not only avoids the burden of dealing with negative numbers (such as the myriad of language-specific wraparound consequences of overflow… or underflow), but most of all preserves information by showing the volume of transactions with respect to ever-increasing balances for both the debit and credit sides. When you need to take the net balance, the two balances can be subtracted accordingly and the net displayed as a single positive or negative number.
+
+So, why do we need 128-bit integers?
+------------------------------------
+
+Back to the example of representing $1.00 as 100 cents. In this case, 64-bit integers can count to something close to 184.5 quadrillion dollars. While it may not be an issue for many people, the upper limit of a 64-bit integer becomes restrictive when there is a need to represent values smaller than a cent. Adding more decimal places [dramatically reduces](https://github.com/tigerbeetle/tigerbeetle/issues/986) this range.
+
+For the same reason, [digital currencies](https://en.wikipedia.org/wiki/Digital_currency) are another use case for 128-bit balances, where again, the smallest quantity of money can be represented on the order of micro-cents (10-6)… or [even smaller](https://en.wikipedia.org/wiki/Ethereum#Ether). Although it’s a compelling use case for TigerBeetle to support, we found a variety of other applications that also benefit from 128-bit balances.
+
+Let’s think some more about scenarios where $0.01 is too big to represent the value of something.
+
+For example, in many countries, the price of a gallon/liter of gasoline requires three digits after the decimal point, and stock markets [already require](https://www.sec.gov/divisions/marketreg/subpenny612faq.htm) pricing increments of hundredths of cents like 0.0001.
+
+Or, in an economy of high-frequency [micropayments](https://www.ecb.europa.eu/pub/pdf/other/ecb.micropaymentsimpactonnpaymentsecosystem202308~bb92cda8ce.en.pdf), greater precision and scale are also required. Sticking with 64-bit values would impose artificial limits on real-world demands, or force applications to handle different scales of the same currency in separate ledgers, by painstakingly splitting amounts across multiple “Dollar” and “Micro-Dollar” accounts, only because a single 64-bit balance isn’t enough to cover the entire range of precision and scale required for many micropayments to represent a multi-billion Dollar deal.
+
+The value of a database that can count well (and at scale) is also not limited to money. TigerBeetle is designed to count not only money, but anything that can be modeled using double-entry accounting. For instance, to count inventory items, the frequency of API calls, or even kilowatts of electricity. And none of those things need to behave like money or be constrained to the same limits.
+
+Future-proof accounting.
+------------------------
+
+Another thing about the upper limits of amounts and balances, is that, while it may seem unlikely for a single transaction amount to exceed the order of magnitude of trillions or quadrillions, account balances accumulate over time. For long-running systems, it’s likely that an account could transact such volume over the years, and so then a single transfer must also be able to move this entire balance from one account to another. This was a gotcha we ran into, as we considered whether to move to 128-bit transaction amounts and/or only 128-bit account balances.
+
+Finally, even the most unexpected events such as [hyperinflation](https://en.wikipedia.org/wiki/Hyperinflation) can push a currency toward the upper limits of a 64-bit integer, requiring it to abandon the cents and cut the zeros that have no practical use.
+
+![](https://tigerbeetle.com/assets/zim-dollar.jpg) Can your database schema survive this?
+
+We may not be able to intuit how big a 128-bit integer is. Not merely twice the 64-bit; it’s actually 264 times bigger! To put this in perspective, a 64-bit integer is not enough to handle that One Hundred Trillion Dollar bill if we encode our ledger at a micro-cent scale. However, using 128-bit integers we should be able to perform 1 million transfers per second of the same value for a thousand years and still not hit the account balance limit.
+
+>  `1.000e20  // one hundred trillion at micro-cent scale  
+> x 1.000e6   // 1 million transfers per second  
+> x 3.154e7   // the number of seconds in a year  
+> x 1.000e3   // a thousand years  
+> ------------  
+> = 3.154e36  // less than 2^128 ≈ 3.4e38`
+
+Let’s do some [napkin math](https://sirupsen.com/napkin)!
+
+With BigInteger comes big responsibility.
+-----------------------------------------
+
+Modern processor architectures such as x86-64 and ARM64 can handle arithmetic operations involving 64-bit values, but, if we understand correctly, they don’t always have a specific instruction set for native 128-bit calculations. When dealing with 128-bit operands, the task may have to be segmented into 64-bit portions that the CPU can execute. Consequently, we considered whether 128-bit arithmetic may be more demanding compared to the single-instruction execution possible with 64-bit integers.
+
+The table below compares the x86_64 [machine code generated](https://godbolt.org/z/oosed6j81) for 64-bit and 128-bit operands. Don’t worry, you don’t need to be an assembly expert to get the point! Just note that the compiler can optimize most operations into a sequence of trivial CPU instructions, such as [carry sum](https://www.felixcloutier.com/x86/adc) and [borrowing subtraction](https://www.felixcloutier.com/x86/sbb). This means that the cost overhead of using 128-bit amounts is not material for TigerBeetle.
+
+<table><tbody><tr><td><strong>Operation</strong></td><td><strong>64-bit operands</strong></td><td><strong>128-bit operands</strong></td></tr><tr><td><code>a + b</code></td><td><code>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdi<br>add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdx<br>ret<br></code></td><td><code>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdi<br>add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdx<br>adc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsi, rcx<br>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdx, rsi<br>ret<br></code></td></tr><tr><td><code>a - b</code></td><td><code>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdi<br>sub&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rsi<br>ret<br></code></td><td><code>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdi<br>sub&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdx<br>sbb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsi, rcx<br>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdx, rsi<br>ret<br></code></td></tr><tr><td><code>a * b</code></td><td><code>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdi<br>imul&nbsp;&nbsp;&nbsp;&nbsp;rax, rsi<br>ret<br></code></td><td><code>mulx&nbsp;&nbsp;&nbsp;&nbsp;r8, rax, rdi<br>imul&nbsp;&nbsp;&nbsp;&nbsp;rsi, rdx<br>imul&nbsp;&nbsp;&nbsp;&nbsp;rcx, rdi<br>add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rcx, rsi<br>add&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r8, rcx<br>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdx, r8<br>ret<br></code></td></tr><tr><td><code>a / b</code></td><td><code>mov&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rax, rdi<br>xor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edx, edx<br>div&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsi<br>ret<br></code></td><td><code>push&nbsp;&nbsp;&nbsp;&nbsp;rax<br>call&nbsp;&nbsp;&nbsp;&nbsp;__udivti3@PLT<br>pop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rcx<br>ret<br></code></td></tr><tr><td><code>a == b</code></td><td><code>cmp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdi, rsi<br>sete&nbsp;&nbsp;&nbsp;&nbsp;al<br>ret<br></code></td><td><code>xor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsi, rcx<br>xor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdi, rdx<br>or&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdi, rsi<br>sete&nbsp;&nbsp;&nbsp;&nbsp;al<br>ret<br></code></td></tr></tbody></table>
+
+1. For simplicity, this assembly code omits the checked arithmetic bounds checks and panics that we [always enable for TigerBeetle](https://www.youtube.com/watch?v=w3WYdYyjek4).  
+2. 128-bit division cannot be expressed as a sequence of 64-bit instructions and needs to be implemented [by software](https://github.com/llvm-mirror/compiler-rt/blob/master/lib/builtins/udivmodti4.c).  
+
+Something else we had to consider as part of this change were all our clients, since TigerBeetle needs to expose its API to many different programming languages that don’t always support 128-bit integers. The mainstream languages [we provide clients for](https://github.com/tigerbeetle/tigerbeetle#clients), currently need to use arbitrary-precision integers (aka [BigInteger](https://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic)) to do math with 128-bit integers. The sole exception is .Net which recently [added support for Int128 and UInt128 data types](https://github.com/dotnet/runtime/issues/67151) in .Net 7.0 (kudos to the DotNet team!).
+
+Utilizing BigIntegers comes with additional overhead because they are not handled as fixed-size 128-bit values but are instead heap-allocated as variable-length byte arrays. Also, arithmetic operations are emulated by software during runtime, which means they can’t take much advantage of the optimizations that would be possible if the compiler knew the kind of number it’s dealing with. Hey, [Java](https://openjdk.org/projects/valhalla/), [Go](https://github.com/golang/go/issues/9455), and even [C#](https://devblogs.microsoft.com/dotnet/dotnet-7-generic-math/#types-without-language-support), I’m looking at you.
+
+To mitigate this cost on the client side (and, of course, to stay true to our [TigerStyle](https://github.com/tigerbeetle/tigerbeetle/blob/main/docs/DESIGN.md#performance)), we store and expose all 128-bit values (e.g. IDs, amounts, etc.) as just a pair of stack-allocated 64-bit integers (except for JavaScript, since it does not support 64-bit numbers either). Although the programming language has no knowledge of this raw type and can’t perform arithmetic operations on them, we offer a set of helper functions for converting between idiomatic alternatives existing in each ecosystem (e.g., BigInteger, byte array, UUID).
+
+Our API is designed to be non-intrusive, giving each application the freedom to choose between using BigIntegers or handling 128-bit values through any third-party numerical library that makes the most sense. We want to provide excellent high-performance low-level primitives, as far as possible, with a minimum of “sugar”, without taking away from the freedom of the user at a higher layer.
+
+Conclusion
+----------
+
+TigerBeetle is designed for a new era where financial transactions are more precise and more frequent. A new era that has already begun and is full of everyday-life examples that 64-bit balances ‘ought to be enough!’ for not much longer. To 128-bit… and beyond!
+
+> — TigerBeetle (@TigerBeetleDB) [September 19, 2023](https://twitter.com/TigerBeetleDB/status/1704101331403780386?ref_src=twsrc%5Etfw)
