@@ -1,0 +1,239 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [how-did-i-get-here.net](https://how-did-i-get-here.net/?utm_source=hackernewsletter&utm_medium=email&utm_term=show_hn)
+
+> A cool-as-shit dynamic traceroute powered by custom software, married with an informative article abo......一个由定制软件提供支持的酷如狗屎的动态跟踪路线，与一篇内容丰富的文章相结合......
+
+My server is still chugging kinda hard right now with the huge influx of traffic from Hacker News, so you may have to be a little patient with the above traceroute.  
+由于来自 Hacker News 的大量流量涌入，我的服务器现在仍然有点困难，所以你可能需要对上面的跟踪路由有点耐心。
+
+- Lexi, Dec 5, 5:44 PM EST  
+- Lexi，美国东部时间 12 月 5 日下午 5：44
+
+The above text dump is a traceroute. This particular one depicts your journey — or at least your packets’ journey — traversing the networks of the Internet to reach the server hosting this website. The preceeding traceroute and all future green-glowing text was generated on the fly, specially for you, during the loading of this website.  
+上面的文本转储是一个 traceroute。这个特别的描述了你的旅程——或者至少是你的数据包的旅程——穿越互联网网络到达托管本网站的服务器。前面的 traceroute 和所有未来的绿色发光文本都是在加载本网站期间专门为您动态生成的。
+
+This journey began with your computer talking to your router. That router, your entrypoint to your ISP’s network, is the first item you’ll see in the traceroute and is associated with your public IP: 218.103.205.66.  
+此旅程始于计算机与路由器的通信。该路由器是 ISP 网络的入口点，是您将在 traceroute 中看到的第一个项目，并与您的公共 IP 相关联：218.103.205.66。
+
+After that router, you took a trip through a device in an unidentified network, probably internal to whatever network your computer is connected to.  
+在该路由器之后，您浏览了未识别网络中的设备，该网络可能是计算机连接到的任何网络的内部设备。
+
+By the way, see that “(no response)”? There will often be a couple of those in the traceroute — not every server will consistently respond to us and the Internet is unreliable! It’s a shame, but we can still get a pretty good idea of what’s going on from the servers that do respond.  
+顺便问一下，看到“（没有回应）”了吗？在traceroute中经常会有几个 - 不是每个服务器都会始终如一地响应我们，而且互联网是不可靠的！很遗憾，但我们仍然可以很好地了解确实有响应的服务器发生了什么。
+
+You took an intermediate jump through PCCW Global. They're a network service provider, a company that sells Internet access to other companies.  
+您在PCCW Global进行了一次中级跳跃。他们是一家网络服务提供商，一家向其他公司出售互联网接入的公司。
+
+Eventually, you needed to leave the realm of PCCW Global to reach my server. You went through Akamai’s network (AS20940) — they’re a large CDN with many points of presence on the Internet, so it makes sense that you might get routed through them. That said, Akamai also bought Linode (my server provider) a couple of years back, so it makes sense that they would set themselves up as a good path to Linode’s network.  
+最终，您需要离开PCCW Global的领域才能到达我的服务器。您浏览了 Akamai 的网络 （AS20940） — 它们是一个大型 CDN，在 Internet 上具有许多接入点，因此您可能会通过它们进行路由。也就是说，Akamai 几年前还收购了 Linode（我的服务器提供商），因此他们将自己设置为通往 Linode 网络的良好途径是有道理的。
+
+After Akamai, you ended up at lo0-0.gw2.rin1.us.linode.com, your entrypoint to Linode’s network. From there, you were bounced around Linode’s internal network a bit before finally reaching my server.  
+在 Akamai 之后，您最终来到了 lo0-0.gw2.rin1.us.linode.com，这是您进入 Linode 网络的入口点。从那里，你在Linode的内部网络上跳了一会儿，然后终于到达了我的服务器。
+
+(By the way, that lo0-0.gw2.rin1.us.linode.com thing is the result of a reverse DNS lookup I did by asking my DNS server if there’s any name associated with the IP, 45.79.12.102. Since there was, I used the “pretty” human-readable name instead of the numbers. Reverse DNS names are usually just designed to make debugging easier, and often don’t even map back to the original IP.)  
+（顺便说一句，lo0-0.gw2.rin1.us.linode.com 事情是我通过询问我的DNS服务器是否有任何与IP关联的名称45.79.12.102进行的反向DNS查找的结果。既然有，我就用了“漂亮”的人类可读的名字，而不是数字。反向 DNS 名称通常只是为了简化调试而设计的，通常甚至不会映射回原始 IP。
+
+![](https://how-did-i-get-here.net/divider.svg)
+
+Behind the Scenes 幕后花絮
+----------------------
+
+To reach this website, your computer sent some packets across the Internet. If we’re curious what that path was, we can run a tool to generate a _traceroute_ — a rough list of every server your packets touched to reach their destination. To build this website ([source code on GitHub](https://github.com/hackclub/how-did-i-get-here)), I wrote my own traceroute program called ktr ([also open source](https://github.com/kognise/ktr)) that can stream results in real time while concurrently looking up interesting information about each hop.  
+为了访问此网站，您的计算机通过 Internet 发送了一些数据包。如果我们好奇那条路径是什么，我们可以运行一个工具来生成一个 traceroute——一个粗略的列表，列出了你的数据包为到达目的地而接触的每个服务器。为了构建这个网站（GitHub 上的源代码），我编写了自己的 traceroute 程序，称为 ktr（也是开源的），它可以实时流式传输结果，同时查找有关每个跃点的有趣信息。
+
+How does ktr work? Let’s start with a simplified explanation of Internet routing.  
+ktr 是如何工作的？让我们从互联网路由的简化解释开始。
+
+Starting with the source device, each computer that handles a packet has to choose the best device to forward it to — I will explain how these routing decisions are made in a bit. Assuming everything works correctly, the packet will eventually reach a router that knows how to send it directly to its destination.  
+从源设备开始，处理数据包的每台计算机都必须选择将数据包转发到的最佳设备 - 我稍后将解释这些路由决策是如何做出的。假设一切正常，数据包最终将到达知道如何将其直接发送到目的地的路由器。
+
+My traceroute implementation uses a protocol called [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol). ICMP was designed specifically for sending diagnostic information around the Internet, and, helpfully, almost every Internet-connected device speaks it. Interestingly, ICMP packets have a “TTL” (time to live) field. This isn’t actually a “time” as implied by a name — it’s a countdown! Every time a router forwards an ICMP packet along, it’s supposed to decrement the TTL number. When the TTL hits zero, the router should stop forwarding it along and instead send an error message to the packet’s source IP saying that the packet has reached its maximum number of hops.  
+我的 traceroute 实现使用称为 ICMP 的协议。ICMP 是专门为在 Internet 上发送诊断信息而设计的，而且，几乎每个连接 Internet 的设备都会读取它。有趣的是，ICMP 数据包有一个“TTL”（生存时间）字段。这实际上并不是名字所暗示的“时间”——这是一个倒计时！每次路由器转发ICMP数据包时，它都应该递减TTL编号。当TTL达到零时，路由器应停止转发它，而是向数据包的源IP发送一条错误消息，指出数据包已达到其最大跃点数。
+
+We can take advantage of this TTL feature! To do a traceroute, we can send a bunch of ICMP packets with increasingly large TTLs. The first packet with a TTL of 1 will error on the first device it reaches, and so on, until we hopefully get an error back from every routing device that touched the packet. These error packets include diagnostic information like the IP address of the device that sent the error, allowing us to trace your packets’ rough path across the Internet.  
+我们可以利用这个TTL功能！为了执行跟踪路由，我们可以发送一堆 TTL 越来越大的 ICMP 数据包。TTL 为 1 的第一个数据包将在它到达的第一个设备上出错，依此类推，直到我们希望从接触该数据包的每个路由设备返回错误。这些错误数据包包括诊断信息，例如发送错误的设备的 IP 地址，使我们能够跟踪数据包在 Internet 上的粗略路径。
+
+### Frontend Fun 前端乐趣
+
+This page will work perfectly fine with JavaScript disabled. From the browser’s perspective, this website just loaded slowly. From your perspective, a traceroute magically loaded in.  
+此页面在禁用 JavaScript 的情况下可以正常工作。从浏览器的角度来看，这个网站只是加载缓慢。从你的角度来看，一个跟踪路由神奇地加载了进来。
+
+When you loaded this website, my program received a HTTP request coming from your IP address. It immediately started running a traceroute to your IP. Then, the server started responding to the HTTP request: it sent the beginning of this web page, and then it left the connection open. As ktr, my traceroute program, gave the server updates on your traceroute, it rendered the relevant HTML and sent it to your computer. When the traceroute finished, the server generated all the text and sent the rest of the website along the line before closing out the connection.  
+当您加载此网站时，我的程序收到了来自您的 IP 地址的 HTTP 请求。它立即开始运行对您的 IP 的跟踪路由。然后，服务器开始响应 HTTP 请求：它发送了此网页的开头，然后保持连接打开状态。当 ktr（我的 traceroute 程序）为您的 traceroute 提供服务器更新时，它呈现了相关的 HTML 并将其发送到您的计算机。当跟踪路由完成后，服务器会生成所有文本，并在关闭连接之前沿该行发送网站的其余部分。
+
+You may have noticed that the traceroute progressively loads in lines above the bottom line. Web pages can only load forward. Since I didn’t want to use any JavaScript, I did the hackiest thing possible: every time I update the traceroute display, I embed a CSS block that hides the previous iteration! Since browsers render CSS as the page is loading, this made it look like the traceroute was being edited over time.  
+您可能已经注意到，traceroute 在高于底线的行中逐步加载。网页只能向前加载。由于我不想使用任何 JavaScript，所以我做了一件最骇人听闻的事情：每次更新 traceroute 显示时，我都会嵌入一个隐藏上一次迭代的 CSS 块！由于浏览器在页面加载时呈现 CSS，这使得 traceroute 看起来像是随着时间的推移被编辑的。
+
+### Front to Back, Back to Front  
+从前到后，从后到前
+
+My claim that this website’s traceroute was the path your packets took to reach my server was a bit of a white lie. To calculate that, I would’ve had to be able to run a traceroute to my server _from your computer._ Instead, I ran the traceroute from my server to your computer and just reversed it. That’s also why the traceroute at the top seemingly loads in reverse order.  
+我声称这个网站的跟踪路由是你的数据包到达我的服务器所采取的路径，这有点白白的谎言。为了计算这一点，我必须能够从您的计算机运行到我的服务器的跟踪路由。取而代之的是，我将 traceroute 从我的服务器运行到您的计算机，然后将其反转。这也是为什么顶部的 traceroute 似乎以相反的顺序加载的原因。
+
+Does running a “reverse traceroute” sacrifice accuracy? A little, actually.  
+运行“反向跟踪路由”会牺牲准确性吗？实际上有一点。
+
+As I said when describing Internet routing, each device a packet traverses makes a decision about where to send the packet next until it reaches its final destination. If you send a packet in the other direction, the devices might make different routing decisions… and if one device makes one different decision, the rest of the path will certainly be different.  
+正如我在描述互联网路由时所说，数据包遍历的每个设备都会决定下一步将数据包发送到哪里，直到它到达最终目的地。如果向另一个方向发送数据包，设备可能会做出不同的路由决策...如果一个设备做出一个不同的决定，那么其余的路径肯定会有所不同。
+
+This reverse traceroute is still helpful. The paths will be roughly the same, likely differing only in terms of which specific routers see your packet.  
+此反向跟踪路由仍然有用。路径大致相同，可能仅在哪些特定路由器看到您的数据包方面有所不同。
+
+### So, What Are All Those Networks?  
+那么，这些网络是什么？
+
+This site began with talk about the “networks” you traversed to reach my server. What, concretely, are these networks?  
+这个网站首先谈到了你为到达我的服务器而遍历的“网络”。具体来说，这些网络是什么？
+
+Each network, also called an autonomous system (AS), is a collection of routers and servers that are privately connected to each other and generally owned by the same company. The owners of these autonomous systems decide the shape of the Internet by choosing which other autonomous systems to connect to. Internet traffic travels across autonomous systems that have “peering arrangements” with each other.  
+每个网络，也称为自治系统 （AS），是路由器和服务器的集合，这些路由器和服务器彼此私密连接，通常由同一家公司拥有。这些自治系统的所有者通过选择要连接到的其他自治系统来决定互联网的形状。互联网流量在彼此具有“对等排列”的自治系统中传输。
+
+The Internet is often described as an open, almost anarchistic network connecting computers, some owned by people like you and me, and some owned by companies. In reality, the Internet is a network of corporation-owned networks, access and control to which is governed by financial transactions and dripping with bureaucracy.  
+互联网通常被描述为一个开放的、几乎是无政府主义的网络，连接着计算机，有些由像你我这样的人拥有，有些则由公司拥有。实际上，互联网是一个由公司拥有的网络组成的网络，其访问和控制由金融交易管理，并充斥着官僚主义。
+
+If you want your own autonomous system, you can apply for an autonomous system number (ASN) with one of the five [regional Internet registries (RIRs)](https://en.wikipedia.org/wiki/Regional_Internet_registry) that govern the Internet’s numbers. Be warned, they probably won’t listen to you if you aren’t backed by a company or you don’t have enough points of presence on the Internet. Just like we use IP addresses to identify—  
+如果您想要自己的自治系统，可以向管理互联网号码的五个地区互联网注册管理机构 （RIR） 之一申请自治系统编号 （ASN）。请注意，如果您没有得到公司的支持，或者您在互联网上没有足够的存在点，他们可能不会听您的。就像我们使用 IP 地址来识别——
+
+_Wait, what exactly do IP addresses identify? Uh… let’s say they represent devices with Internet access.  
+等等，IP地址到底标识了什么？呃。。。假设它们表示可以访问 Internet 的设备。_
+
+… Just like we use [IP addresses](https://en.wikipedia.org/wiki/IP_address) to identify devices with Internet access, we use ASNs to identify the networks of the Internet. Those are the numbers like “AS4760” in the traceroute from the start.  
+...就像我们使用 IP 地址来识别可以访问 Internet 的设备一样，我们使用 ASN 来识别 Internet 的网络。这些是从一开始就在跟踪路由中像“AS4760”这样的数字。
+
+### Notes on WHOIS 关于WHOIS的说明
+
+One of the reasons I wrote a cool traceroute program myself is so I could pull information on which autonomous systems own the IPs along your traceroute. A couple of organizations try to keep track of which ASes contain which IP addresses. Many of them let you perform ASN lookups using the [WHOIS protocol](https://en.wikipedia.org/wiki/WHOIS), so I wrote a small client to parse the responses from some servers I arbitrarily selected.  
+我自己编写了一个很酷的 traceroute 程序的原因之一是，这样我就可以提取有关哪些自治系统拥有跟踪路由沿线 IP 的信息。一些组织试图跟踪哪些 AS 包含哪些 IP 地址。其中许多允许您使用 WHOIS 协议执行 ASN 查找，因此我编写了一个小客户端来解析来自我任意选择的一些服务器的响应。
+
+I then used this cool database called [PeeringDB](https://www.peeringdb.com/) to figure out the companies behind the ASNs; PeeringDB has information on about 1/3rd of all autonomous systems. I used all of this information, alongside a couple hundred lines of if statements, to generate the text about network traversal for you.  
+然后，我使用这个名为 PeeringDB 的很酷的数据库来找出 ASN 背后的公司;PeeringDB 拥有大约 1/3 的自治系统的信息。我使用了所有这些信息，以及几百行 if 语句，为您生成了有关网络遍历的文本。
+
+WHOIS is actually an... interesting protocol to make a parser for. It turns out that the [WHOIS protocol specification](https://datatracker.ietf.org/doc/html/rfc3912/) doesn't actually specify much. It specifies that you should make a TCP connection to the WHOIS server, send whatever you want to look up, and the server will send back some info and then terminate the connection. That’s all.  
+WHOIS实际上是一个...有趣的协议来制作解析器。事实证明，WHOIS协议规范实际上并没有规定太多。它指定您应该与WHOIS服务器建立TCP连接，发送您想要查找的任何内容，服务器将发回一些信息，然后终止连接。就这样。
+
+And yet, a lot of WHOIS servers will respond with structured-seeming information:  
+然而，许多WHOIS服务器会以看似结构化的信息进行响应：
+
+![](https://how-did-i-get-here.net/whois-screenshot.png)
+
+It turns out this structure is made up by the WHOIS server administrator and there just happen to be some shared conventions between servers. Even with the level of structure, the fields you want often show up with different names (origin? originas?) or even under multiple places at once.  
+事实证明，这种结构是由WHOIS服务器管理员组成的，服务器之间恰好有一些共享约定。即使具有结构级别，您想要的字段通常也会以不同的名称显示（origin？originas？），甚至同时出现在多个位置下。
+
+My “parser” ended up as less of a parser and more as a lightweight simulator of how I, a human, might read through WHOIS results to find the ASN I need.  
+我的“解析器”最终不再是一个解析器，而更像是一个轻量级的模拟器，它展示了我作为一个人类如何阅读WHOIS结果以找到我需要的ASN。
+
+BGP
+---
+
+When you send a packet across the Internet, routers sitting at the borders where these networks connect decide which network to send your packet to next, until it reaches the network that contains the destination device.  
+当您通过 Internet 发送数据包时，位于这些网络连接边界的路由器将决定接下来将数据包发送到哪个网络，直到它到达包含目标设备的网络。
+
+These border routers talk to each other about which networks they’re able to connect to using a protocol called Border Gateway Protocol (BGP).  
+这些边界路由器使用称为边界网关协议 （BGP） 的协议相互讨论它们能够连接到哪些网络。
+
+BGP is the protocol that gives the Internet its shape, and you [can’t directly speak it yourself](https://jvns.ca/blog/2021/10/05/tools-to-look-at-bgp-routes/).  
+BGP 是赋予 Internet 形状的协议，您自己无法直接说出它。
+
+### History Time 历史时间
+
+In 1969, the same year Neil Armstrong landed on the moon, a message was (partially) sent on a prototype of the ARPANET. Over the next 20 years, this “network of interconnected computers” thing got pretty popular and everyone wanted on the train. Various universities, government agencies, and a couple random companies started making networks of their computers left and right.  
+1969年，也就是尼尔·阿姆斯特朗（Neil Armstrong）登上月球的同一年，在阿帕网的原型上（部分）发送了一条信息。在接下来的 20 年里，这种“互联计算机网络”变得非常流行，每个人都想上火车。各种大学、政府机构和几家随机公司开始左右制作他们的计算机网络。
+
+A couple of these organizations started connecting their networks together so they could share data more easily. The Internet as we know it didn’t exist yet, but these network interconnections were getting out of hand and there wasn’t a great standard for coordinating them. In 1989, engineers at Cisco and IBM published [RFC 1105](https://datatracker.ietf.org/doc/html/rfc1105/), describing the first ever version of BGP.  
+其中一些组织开始将他们的网络连接在一起，以便他们可以更轻松地共享数据。我们所知道的互联网还不存在，但这些网络互连已经失控，没有一个很好的标准来协调它们。1989 年，Cisco 和 IBM 的工程师发布了 RFC 1105，描述了 BGP 的第一个版本。
+
+Over the next couple of years, interconnected-network people got really busy as “the Internet” rapidly became a thing. Just one year after the BGP v1 RFC, Cisco went public and brought a lot of money into the networking industry, the term “IANA” was first used to refer to the [random guy](https://en.wikipedia.org/wiki/Jon_Postel) and his college department that were keeping track of numbers on the Internet, ARPANET shut down for good, and [BGP v2](https://datatracker.ietf.org/doc/html/rfc1163) was released.  
+在接下来的几年里，随着“互联网”迅速成为一种东西，互联网络的人们变得非常忙碌。在 BGP v1 RFC 发布仅一年后，思科上市并为网络行业带来了大量资金，“IANA”一词最初被用来指代在互联网上跟踪数字的随机家伙和他的大学部门，ARPANET 永久关闭，BGP v2 发布。
+
+In 1994, as the Internet-is-a-thing-now whirlwind was just beginning to calm, the final major version of BGP, v4, was specified in [RFC 1654](https://datatracker.ietf.org/doc/html/rfc1654). It was revised twice (in [1995](https://datatracker.ietf.org/doc/html/rfc1771) and [2006](https://datatracker.ietf.org/doc/html/rfc4271)) and got some patches, but BGP v4 is still the protocol we use for choosing routes across the interconnected networks that make up the modern Internet.  
+1994 年，当互联网的旋风刚刚开始平静时，RFC 1654 中指定了 BGP 的最终主要版本 v4。它经过了两次修订（1995 年和 2006 年）并获得了一些补丁，但 BGP v4 仍然是我们用来在构成现代互联网的互连网络中选择路由的协议。
+
+### How Does This BGP Thing Work?  
+这个BGP是如何工作的？
+
+Routers at the borders between autonomous systems (“border gateways”) keep a list of every _BGP route_ they know about, called a _routing table_. Each BGP route specifies the path of ASNs that could be followed to reach an autonomous system that controls a certain collection of IP addresses.  
+自治系统之间边界的路由器（“边界网关”）保留它们知道的每个 BGP 路由的列表，称为路由表。每个 BGP 路由指定 ASN 的路径，可以遵循这些路径到达控制特定 IP 地址集合的自治系统。
+
+These routes across the Internet are formed by _peering relationships_ between autonomous systems. When the border gateways of two autonomous systems _peer_, they are typically agreeing to:  
+互联网上的这些路由是由自治系统之间的对等关系形成的。当两个自治系统的边界网关对等时，它们通常同意：
+
+1.  Allow traffic to travel between the two routers, meaning BGP routes can go directly between the two ASNs.  
+    允许流量在两个路由器之间传输，这意味着 BGP 路由可以直接在两个 ASN 之间传输。
+    
+2.  Keep each other up to date about the BGP routes they know about.  
+    让彼此了解他们所知道的 BGP 路由的最新信息。
+    
+
+Example time! Router A of AS0001 is physically connected with Router B of AS0002 and they want to peer with each other. They send BGP messages to each other to establish a _BGP session_. Router A now knows that it should go through Router B for any BGP route that starts with AS0002, and vice versa.  
+示例时间！AS0001 的路由器 A 与 AS0002 的路由器 B 物理连接，它们希望相互对等。它们相互发送 BGP 消息以建立 BGP 会话。路由器 A 现在知道它应通过路由器 B 处理任何以 AS0002 开头的 BGP 路由，反之亦然。
+
+![](https://how-did-i-get-here.net/networks-example.svg)
+
+BGP peers share the routes they know about with each other in a process called _route advertisement_. In our above example, when Router A connects to Router B, it would tell Router B “hey, here are all the routes I know about, you can go through my ASN (and by extension, me) to reach all of them.” Router B adds all of those routes through Router A — so, starting with AS0001 — to its routing table. Whenever another one of Router A’s peers advertises a new route, Router A will advertise those forward to Router B.  
+BGP 对等体在称为路由通告的进程中相互共享他们知道的路由。在上面的示例中，当路由器 A 连接到路由器 B 时，它会告诉路由器 B“嘿，这是我所知道的所有路由，您可以通过我的 ASN（以及我）到达所有这些路由。路由器 B 通过路由器 A 将所有这些路由（因此，从 AS0001 开始）添加到其路由表中。每当路由器 A 的另一个对等方通告新路由时，路由器 A 就会将这些路由转发给路由器 B。
+
+AS0001 probably directly controls some IP addresses itself. Router A would advertise those to Router B as well. Router B would then, in turn, advertise those direct routes forward, telling _its_ peers that AS0002 → AS0001 is a valid route to reach those IPs. Through this process of forwarding route advertisements to peers, BGP routes are propagated across the entire network of autonomous systems such that any border gateway hopefully knows one or multiple AS paths to reach any IP on the Internet.  
+AS0001 本身可能直接控制某些 IP 地址。路由器 A 也会向路由器 B 通告这些内容。然后，路由器 B 将反过来通告这些直接路由，告诉其对等方 AS0002 → AS0001 是到达这些 IP 的有效路由。通过这种将路由通告转发到对等体的过程，BGP 路由将传播到整个自治系统网络中，以便任何边界网关都希望知道一条或多条 AS 路径以到达 Internet 上的任何 IP。
+
+To route a packet to a certain IP, a border gateway first searches its routing table for every route that would bring it to an AS that controls that IP. The router then picks the “best” route by [various heuristics](https://en.wikipedia.org/wiki/Border_Gateway_Protocol#Route_selection_process) that include looking for the shortest path and weighing hardcoded preferences for or against certain autonomous systems. Finally, it routes the packet to the first AS in that path by sending it to that AS’s gateway router which it is peered with. That router, in turn, looks at its own routing table and makes its own decision about where to send the packet next.  
+要将数据包路由到某个 IP，边界网关首先在其路由表中搜索将数据包带到控制该 IP 的 AS 的每个路由。然后，路由器通过各种启发式方法选择“最佳”路由，包括寻找最短路径和权衡某些自治系统的硬编码偏好。最后，它将数据包发送到与该 AS 对等的网关路由器，从而将数据包路由到该路径中的第一个 AS。反过来，该路由器会查看自己的路由表，并自行决定下一步将数据包发送到何处。
+
+### Traceroute Retrospective Traceroute 回顾
+
+In the traceroute at the start, the AS path your packets ended up taking was AS4760 → AS3491 → AS20940 → AS63949. That means, for example, that at some point your packet reached one of AS4760’s routers that was peered with one of AS3491’s routers, the router looked at its routing table and saw that the destination IP was reachable via some route starting with AS3491, and sent your packet onward to that connected router.  
+在开始时的跟踪路由中，数据包最终采用的 AS 路径是 AS4760 → AS3491 → AS20940 → AS63949。这意味着，例如，在某个时候，您的数据包到达了与 AS3491 的路由器之一对等的 AS4760 路由器之一，路由器查看其路由表，发现目标 IP 可以通过从 AS3491 开始的路由到达，并将您的数据包发送到该连接的路由器。
+
+There were a couple of hops within the same ASN; look at all six going through Linode AS63949. Traceroutes do show us _every_ router your packet goes between, not just the ones bordering autonomous systems. If routers know an efficient path through their internal network, they’ll often override the external BGP route with that. Those internal paths might be learned through an internal version of BGP, another internal routing protocol, or just hardcoded.  
+同一 ASN 中有几个跃点;看看所有六个通过 Linode AS63949。Traceroutes确实向我们显示了您的数据包之间的每个路由器，而不仅仅是与自治系统接壤的路由器。如果路由器知道通过其内部网络的有效路径，它们通常会用该路径覆盖外部 BGP 路由。这些内部路径可以通过 BGP 的内部版本、另一个内部路由协议或仅硬编码来学习。
+
+Those internal hops are not very important to understanding how the Internet works. Only the peering arrangements between different autonomous systems decide reachability.  
+这些内部跃点对于理解 Internet 的工作原理并不是很重要。只有不同自治系统之间的对等排列决定了可访问性。
+
+Recap 回顾
+--------
+
+*   When you loaded this website, it used my custom traceroute program to run a traceroute to your public IP (218.103.205.66), stream that over HTTP, and then render a textual explanation of the traceroute.  
+    当您加载此网站时，它使用我的自定义 traceroute 程序将 traceroute 运行到您的公共 IP （218.103.205.66），通过 HTTP 流式传输，然后呈现 traceroute 的文本说明。
+    
+*   A traceroute depicts the path of routers traversed between two devices on the Internet. My particular implementation works by sending ICMP packets with increasing TTL fields.  
+    traceroute 描述了 Internet 上两个设备之间遍历的路由器的路径。我的特殊实现通过发送带有增加 TTL 字段的 ICMP 数据包来工作。
+    
+*   These routers are in networks called autonomous systems. Routers on the edges of these ASes peer with each other using BGP. Border routers use BGP to share their routing tables with each other, and then use this knowledge to make routing decisions.  
+    这些路由器位于称为自治系统的网络中。这些 AS 边缘的路由器使用 BGP 相互对等。边界路由器使用 BGP 相互共享其路由表，然后使用此知识做出路由决策。
+    
+*   BGP peering sessions are created according to (often private) arrangements between the owners of autonomous systems. Since traffic can only pass between peered networks, these arrangements are the sole governor of reachability on the Internet.  
+    BGP 对等会话是根据自治系统所有者之间的（通常是私有的）安排创建的。由于流量只能在对等网络之间传递，因此这些安排是 Internet 上可访问性的唯一调控器。
+    
+
+Epilogue 结语
+-----------
+
+I was frustrated with the state of understanding on the structure of the Internet and sought to write a comprehensive, interactive article covering its history and politics through the lens of protocols. However, I got caught up in a lot of complexity in life and, facing tight deadlines, didn't have the time to reach the lofty goals I had set for myself.  
+我对互联网结构的理解状况感到沮丧，并试图写一篇全面的互动文章，通过协议的视角来介绍它的历史和政治。然而，我陷入了生活中的很多复杂性，面对紧迫的最后期限，我没有时间实现我为自己设定的崇高目标。
+
+Thanks to the encouragement of my friends at Hack Club, I made the best out of what I had. “Better to ship a tiny raft than never ship that cruise yacht!” If nothing else, I got to make use of the sick ass traceroute program that powers the shiniest part of this site :)  
+多亏了我在Hack Club的朋友们的鼓励，我充分利用了我所拥有的。“装一个小木筏总比永远不装那艘游轮游艇好！”如果不出意外，我必须利用为这个网站最闪亮的部分提供动力的病态屁股跟踪路由程序:)
+
+I hope this serves as another fun, informative, and well-crafted thing on the web that can last, be shared around, and inspire people.  
+我希望这能成为网络上另一个有趣、信息丰富且精心制作的东西，可以持续存在、分享并激励人们。
+
+With love, 充满爱  
+Lexi 莱西
+
+### Other Stuff 其他东西
+
+Some things to check out:  
+需要检查的一些事项：
+
+*   [Writing I've done in the past  
+    我过去做过的写作](https://kognise.dev/writing)
+*   [Hack Club, the best community if you're a young person  
+    Hack Club，如果你是年轻人，最好的社区](https://hackclub.com/)
+
+Proudly open source: 自豪地开源：
+
+*   [This website’s source code  
+    本网站源代码](https://github.com/hackclub/how-did-i-get-here)
+*   [My traceroute program’s source code  
+    我的 traceroute 程序的源代码](https://github.com/kognise/ktr)
+*   [Public Figma of all art on this website  
+    本网站上所有艺术作品的公共 Figma](https://www.figma.com/community/file/1260699047973407903/article-diagrams)
