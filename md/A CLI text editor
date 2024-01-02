@@ -1,0 +1,113 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [blogsystem5.substack.com](https://blogsystem5.substack.com/p/a-cli-text-editor-in-my-windows)
+
+> It’s more likely than you think!
+
+In a surprising twist of events, Microsoft is [exploring the addition of a command-line (CLI) text editor to Windows](https://twitter.com/plante_msft/status/1732857615997132834). If you ask me, _not_ having a CLI text editor on Windows is mind-boggling: you can access a Windows machine via SSH these days, so not having an editor that works in the console is a big handicap for remote system administration. So, should Windows bundle a CLI text editor? Of course it should.
+
+[![](https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F041a53b6-9889-4b86-a065-3e18ab8d12be_1455x1090.png)](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F041a53b6-9889-4b86-a065-3e18ab8d12be_1455x1090.png)Windows 95 running an MS-DOS Prompt with the `EDIT.COM` that shipped with it.
+
+But… wait as second. Didn’t Windows use to ship with a CLI text editor? The one inherited from MS-DOS? Yes it did. So what happened? How was the editor lost? Let’s take a peek at the history and let’s see if you agree with me that Microsoft should revive the old editor instead of bundling modern-yet-alien Vim or Emacs.
+
+**In the beginning, there was Edlin**
+
+
+=======================================
+
+Early versions of DOS (1980) all the way through MS-DOS 5.0 (1990) included a “line editor” called [Edlin](https://en.wikipedia.org/wiki/Edlin) and nothing else. You may have never heard of or used a line editor, so let me show you how they look like and work. Here is a sample session with Edlin:
+
+```
+C:\>EDLIN TEST.TXT
+New file
+*I
+     1:*second line
+     2:*delete me
+     3:*[Ctrl+Z followed by Enter]
+*L
+     1: second line
+     2: delete me
+*1I
+     1:*first line
+     2:*[Ctrl+Z followed by Enter]
+*L
+     1: first line
+     2:*second line
+     3: delete me
+*3D
+*W
+*E
+C:\>TYPE TEST.TXT
+first line
+second line
+C:\>
+C:\>EDLIN TEST.TXT
+New file
+*I
+     1:*second line
+     2:*delete me
+     3:*[Ctrl+Z followed by Enter]
+*L
+     1: second line
+     2: delete me
+*1I
+     1:*first line
+     2:*[Ctrl+Z followed by Enter]
+*L
+     1: first line
+     2:*second line
+     3: delete me
+*3D
+*W
+*E
+C:\>TYPE TEST.TXT
+first line
+second line
+C:\>
+
+```
+
+As you can see from the above, a line editor does not have a full-screen UI. Instead, the editor works by letting you issue textual commands that affect the contents of a file. You can insert new lines, delete existing ones, modify their content, and list what the file has in it—much like how you enter programs in a line-oriented BASIC interpreter or how you interact with the files on your machine via the shell.
+
+Needless to say, and while line editors work and are truly amenable to scripting, they are not particularly intuitive nor user-friendly. I have to wonder why MS-DOS shipped with _just_ Edlin until 1990. After all, by the time Edlin was created in 1980, full-screen editors like `vi(1)` had already existed for 4 years so it’s not like they were impossible to create. However, it’s plausible that the limitations of DOS and the machines that DOS ran on made it much more difficult to recreate an editor like `vi(1)`, which was made for Unix systems that ran on more powerful hardware.
+
+As an aside: `ed(1)` and `ex(1)` are similar to Edlin and you have both _today_ on pretty much any Unix or Linux system you access. And the `vi(1)` that you like is “just” a facade over `ex(1)`. When you use the `:` command to get to the `vi(1)` prompt to type a command, what you are typing are `ex(1)` commands. Keep that in mind if you ever face a situation where the terminal doesn’t work and all you can use are the line editors: previous `vi(1)` knowledge could come in handy.
+
+**And Microsoft said, “Let there be EDIT.COM”**
+
+
+=================================================
+
+In 1990, Microsoft launched MS-DOS 5.0 and, with it, a full-screen text editor called [MS-DOS Editor](https://en.wikipedia.org/wiki/MS-DOS_Editor), or `EDIT.COM` for short. This editor was built on QBasic and it featured a full-screen interactive UI. The latest version of the editor, which was included with Windows 9x (MS-DOS 7.x), looked like this:
+
+[![](https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3d53ff2b-5dd5-4ea0-90d5-3a9f9a80d028_1280x800.png)](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3d53ff2b-5dd5-4ea0-90d5-3a9f9a80d028_1280x800.png)The original `EDIT.COM` from Windows 9x running in DOSBox.
+
+This new version of the editor was obviously much more usable and welcoming than Edlin. As you can see from the picture, `EDIT.COM` featured a full-screen windowed textual interface with support for multiple files (in its Windows 9x versions), drop down menus, and even mouse integration. These interfaces were extremely common back in the day in DOS: almost every program you ran launched a full-screen UI with textual windows and menus.
+
+Interestingly, interfaces like these were never a thing on Unix systems and I must confess I was shocked when I first moved from DOS to Linux. I was used to Borland Turbo C++ and WordPerfect 5.1, so when I faced `vi(1)` on Linux for the first time, I couldn’t believe my eyes: what was this barren interface with its awkward commands? I eventually learned the `vi(1)` and Emacs ways, but it’s a pity that those interfaces have been lost. They were really intuitive and powerful, and they would be wonderful to have in these days of cloud computing where we access remote computers over SSH all the time.
+
+**But then… darkness settled in**
+
+
+===================================
+
+Unfortunately, both Edlin and `EDIT.COM` were 16-bit DOS applications and they were never ported to 32-bit Windows. They were able to stay bundled with all 32-bit x86 Windows editions up to Windows 10 because Windows could run such ancient binaries via [NT’s Virtual DOS Machines](https://en.wikipedia.org/wiki/Virtual_DOS_machine)… but the two editors were scraped in the x64 editions. Yes, this means that all 64-bit Windows editions have been devoid of a CLI text editor from the beginning.
+
+You could say that this is not a big deal because Windows still includes Notepad and Notepad is similar to `EDIT.COM` in its feature set. And yes, they are similar… but with a critical and obvious difference: Notepad cannot be used on a remote machine via SSH. For someone that has grown up routinely accessing other machines to do work on them via SSH, this sounded like a ridiculous move and further perpetuated the feeling that administering a Windows machine from the shell was a joke—even with all effort that the PowerShell developers have put to make this possible.
+
+**And in the end, there may be light**
+
+
+========================================
+
+But hey, it seems like Microsoft may be correcting course here thanks to, and this is the big surprise, the Windows Terminal team. In discussion [#16440](https://github.com/microsoft/terminal/discussions/16440), the team is exploring (re)adding a CLI text editor to Windows. As the discussion says: _“A CLI editor is a core tool for system admins, developers, and power users.”_ Well, yes, no kidding. I’m just surprised it took this long to reach this conclusion.
+
+Now, what would _you_ pick as the default text editor for the Windows textual console?
+
+Personally, and while I’d quickly say “just bundle Vim” like many others have… I acknowledge it would feel out of place. Vim, Emacs, or even Nano are _not_ Windows applications. Yes, they work on Windows, but they don’t embody the traditional way things have worked on this platform. I feel that integrating any of these editors into Windows would further perpetuate the impression that Windows is just trying to copy Linux without actually being Linux.
+
+So, if you ask me, I’d vote for the re-addition of `EDIT.COM`. Obviously not a verbatim copy of what it was because it’d be nice to have one or two extra features added to it: I’d personally welcome making the editor respect indentation when inserting lines and maybe having some sort of syntax highlighting (without going all the way with LSP support). The key would be to preserve the simple, full-screen UI.
+
+[![](https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F967cfd0f-8478-4fc9-af5e-bcac321cf6bd_1355x748.png)](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F967cfd0f-8478-4fc9-af5e-bcac321cf6bd_1355x748.png)YEdit running in a Yori Windows Terminal session on Windows 11.
+
+And as it turns out, the foundations for this already exist in [YEdit](http://www.malsmith.net/edit/), a modern free reimplementation of the old editor for Windows. It has even been brought up in the discussion, so it seems I’m not the only one thinking this way.
+
+In any case, I encourage you to leave your thoughts in the comments section below or, even better, join the official discussion at [microsoft/terminal#16440](https://github.com/microsoft/terminal/discussions/16440).
