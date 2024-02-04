@@ -1,0 +1,347 @@
+> 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 [onfold.sh](https://onfold.sh/blog/is-it-time-to-ditch-mysql-and-postgresql-for-sqlite)
+
+> SQLite is getting all the hype lately, but can it really compete with MySQL and PostgreSQL for produc......SQLite最近得到了所有的炒作，但它真的能与MySQL和PostgreSQL竞争生产吗......
+
+_SQLite is getting all the hype lately, but can it really compete with MySQL and PostgreSQL for production web applications?  
+SQLite最近得到了所有的炒作，但它真的能与MySQL和PostgreSQL竞争生产Web应用程序吗？_
+
+![](https://onfold.sh/img/blog/is-it-time-to-ditch-mysql-and-postgresql-for-sqlite/is-it-time-to-ditch-mysql-and-postgresql-for-sqlite.webp)
+
+Alright, I hear you, "SQLite is a toy database", "SQLite is too slow", "SQLite is not scalable", yada yada yada.  
+好吧，我听到你说，“SQLite是一个玩具数据库”，“SQLite太慢了”，“SQLite不可扩展”，yada yada yada。
+
+Well, we're in 2024 now, and things have changed. SQLite is all the rage, with [Kent C. Dodds](https://www.epicweb.dev/why-you-should-probably-be-using-sqlite) and [DHH](https://twitter.com/dhh/status/1746248449555878243) pushing it, [native support added to Bun](https://twitter.com/jarredsumner/status/1746892626618671322), and if you've been following hacker news, you [probably](https://news.ycombinator.com/item?id=26816954) [noticed](https://news.ycombinator.com/item?id=34812527) an [increase](https://news.ycombinator.com/item?id=31318708) in SQLite praising posts in the past few years.  
+好吧，我们现在是 2024 年，情况发生了变化。SQLite 风靡一时，Kent C. Dodds 和 DHH 推动了它，Bun 增加了原生支持，如果你一直在关注黑客新闻，你可能会注意到过去几年 SQLite 赞美帖子的增加。
+
+It's not news, SQLite has been around for more than 20 years, and is the most deployed database engine, but got ignored for web application in favor of client-server databases that perform better on write-intensive applications.  
+这不是新闻，SQLite 已经存在了 20 多年，并且是部署最多的数据库引擎，但在 Web 应用程序中被忽略了，取而代之的是客户端-服务器数据库，这些数据库在写入密集型应用程序上表现更好。
+
+Should you follow the hype and start using SQLite in production? And if so, how to do it properly? Let's find out together.  
+你应该跟随炒作，开始在生产中使用SQLite吗？如果是这样，如何正确地做到这一点？让我们一起来了解一下。
+
+* * *
+
+Why choose SQLite over MySQL or PostgreSQL?  
+为什么选择SQLite而不是MySQL或PostgreSQL？
+-----------------------------------------------------------------------------
+
+DevOps fatigue is real, developers are expected to know more and more about infrastructure, CI / CD, Docker, networking, Kubernetes, clustering, sharding, and the list goes on. But the reality of the trade is that most projects don't need half of these things. There's a pushback against the complexity of modern web development, engraved with a comeback of the Monolith and a steady growth on simpler frontends frameworks like Alpine.js and htmx.  
+DevOps 疲劳是真实存在的，开发人员应该对基础设施、CI/CD、Docker、网络、Kubernetes、集群、分片等了解得越来越多，不胜枚举。但交易的现实是，大多数项目不需要这些东西的一半。现代 Web 开发的复杂性受到抵制，随着 Monolith 的卷土重来，以及 Alpine.js 和 htmx 等更简单的前端框架的稳步增长。
+
+SQLite fits in this logic by providing a simpler alternative to the traditional client-server model of MySQL and PostgreSQL, not without its own set of tradeoffs that can make your project a disaster if not carefully considered.  
+SQLite通过为MySQL和PostgreSQL的传统客户端-服务器模型提供了更简单的替代方案，从而符合这一逻辑，如果不仔细考虑，这些权衡可能会使您的项目成为灾难。
+
+So why would you choose SQLite over MySQL or PostgreSQL? Here are some of the main reasons:  
+那么，为什么选择SQLite而不是MySQL或PostgreSQL？以下是一些主要原因：
+
+### SQLite is simple SQLite很简单
+
+SQLite is already bundled with the default [PHP](https://www.php.net/manual/en/extensions.membership.php) and [Python](https://docs.python.org/3/library/sqlite3.html) installation, and if you use another backend language, chances are that there's good support for it.  
+SQLite已经与默认的PHP和Python安装捆绑在一起，如果你使用其他后端语言，很可能有很好的支持。
+
+By the nature of its design as an embedded C library, you do not need to manage a process, a server, or a socket. You can see it as a language extension that writes/read a `.sqlite` file when you ask it to and that's it.  
+由于其设计为嵌入式 C 库，因此您不需要管理进程、服务器或套接字。您可以将其视为一种语言扩展，当您要求它时，它会写入/读取 `.sqlite` 文件，仅此而已。
+
+Because it's already bundled with the languages that we love, it greatly simplifies the release process. No need to worry about installing and maintaining a database server on all developer's local environment, you get simpler CI/CD pipelines, if you have PHP/Python installed, you have a working database.  
+因为它已经与我们喜欢的语言捆绑在一起，所以它大大简化了发布过程。无需担心在所有开发人员的本地环境中安装和维护数据库服务器，您可以获得更简单的 CI/CD 管道，如果您安装了 PHP/Python，您就拥有了一个有效的数据库。
+
+In comparison, MySQL and PostgreSQL will require you to install it, usually from a package manager, handle user access, add it as a dependency to your CI/CD pipelines, and finally do it all again in a new production server that you will need to manage and secure, you get the picture.  
+相比之下，MySQL 和 PostgreSQL 将要求您安装它，通常是从包管理器安装它，处理用户访问，将其作为依赖项添加到您的 CI/CD 管道中，最后在您需要管理和保护的新生产服务器中再次完成这一切，您明白了。
+
+### SQLite is portable SQLite是可移植的
+
+It runs pretty much anywhere, and it's painless to move around as everything just sits in a single file.  
+它几乎可以在任何地方运行，而且移动起来很轻松，因为所有内容都位于一个文件中。
+
+One of your colleagues needs your local database to check something? Send them the file. Need to make a backup? Copy the file. Need to reset the database? Delete the file.  
+您的一位同事需要您的本地数据库来检查某些内容？将文件发送给他们。需要备份吗？复制文件。需要重置数据库？删除文件。
+
+```
+# Simple to move around
+$ rsync database.sqlite user@server:/path/to/database.sqlite
+
+# Simple to backup
+$ cp database.sqlite database.backup.sqlite
+
+# Simple to delete
+$ rm database.sqlite
+
+
+```
+
+You can even commit it to your git repository, and have a single source of truth for your database schema and data, or even get a pre-seeded database that is ready to use for your future colleagues.  
+您甚至可以将其提交到您的 git 存储库，并为您的数据库架构和数据提供单一事实来源，甚至可以获得一个预先设定的数据库，供您未来的同事使用。
+
+Move it from Windows to macOS, to a Linux CI/CD pipelines on Docker, to a Raspberry Pi, to a VPS, to a serverless function, it will work without any change.  
+将其从 Windows 移动到 macOS，移动到 Docker 上的 Linux CI/CD 管道，移动到 Raspberry Pi，移动到 VPS，移动到无服务器功能，它将在没有任何更改的情况下工作。
+
+> Fun fact: The creators of SQLite described it as a [serverless database](https://www.sqlite.org/serverless.html) in 2007 which was 7 years before the release of AWS Lambda.  
+> 有趣的事实：SQLite 的创建者在 2007 年将其描述为无服务器数据库，比 AWS Lambda 发布早 7 年。
+
+### SQLite is fast SQLite速度很快
+
+Yes, benchmarks should always be taken with a grain of salt, but the takeaway is that SQLite is fast enough for most small-to-medium web applications. In fact, in the right conditions it can even be [faster than MySQL or PostgreSQL](https://www.golang.dk/articles/benchmarking-sqlite-performance-in-go).  
+是的，应该始终对基准测试持保留态度，但要点是 SQLite 对于大多数中小型 Web 应用程序来说已经足够快了。事实上，在适当的条件下，它甚至可以比MySQL或PostgreSQL更快。
+
+I made a **simplistic** benchmark performed on a base Laravel application, with a default local MySQL database, and a slightly tuned SQLite database with the following tests:  
+我在基本的 Laravel 应用程序上进行了一个简单的基准测试，使用默认的本地 MySQL 数据库和略微调整的 SQLite 数据库，并进行了以下测试：
+
+*   Single write: insert 5 000 rows one by one  
+    单次写入：逐个插入 5 000 行
+*   Bulk write: insert 200 times 5 000 rows at once  
+    批量写入：一次插入 200 次 5 000 行
+*   Single read: read 5 000 rows one by one  
+    单次读取：逐个读取 5 000 行
+*   Bulk read: read 5 000 times 5 000 rows at once  
+    批量读取：一次读取 5 000 次 5 000 行
+
+The benchmark is performed on a 5-column table with the following structure:  
+基准测试在具有以下结构的 5 列表上执行：
+
+*   Auto increment ID 自动递增 ID
+*   Random text column with index  
+    带索引的随机文本列
+*   Random text column 随机文本列
+*   Random integer column 随机整数列
+*   Random float column 随机浮点列
+
+I performed this benchmark on my laptop, a ThinkPad extreme gen 3 with an Intel i7-10850H CPU and 32Gb of ram. But you can try it for yourself using the code in this [GitHub repository](https://github.com/onfold/sqlite-benchmark).  
+我在我的笔记本电脑上执行了这个基准测试，这是一款配备 Intel i7-10850H CPU 和 32Gb 内存的 ThinkPad extreme gen 3。但是，您可以使用此 GitHub 存储库中的代码亲自尝试一下。
+
+![](https://onfold.sh/img/blog/is-it-time-to-ditch-mysql-and-postgresql-for-sqlite/mysql-sqlite-benchmark.svg)
+
+As you can see, SQLite is faster than MySQL except for bulk writes. This is a simplistic approach with a small amount of data. The point is that in most cases, SQLite is fast enough, and we just scratched the surface of what can be done to optimize it.  
+如您所见，SQLite比MySQL更快，除了批量写入。这是一种使用少量数据的简单方法。关键是，在大多数情况下，SQLite足够快，我们只是触及了可以做些什么来优化它的表面。
+
+### SQLite is reliable SQLite是可靠的
+
+High reliability is one of the main selling points of SQLite, you probably have hundreds of SQLite databases on your Laptop and your phone, they are also used [in aircraft](https://www.sqlite.org/famous.html).  
+高可靠性是SQLite的主要卖点之一，您的笔记本电脑和手机上可能有数百个SQLite数据库，它们也用于飞机。
+
+More importantly, SQLite is [thoroughly tested](https://www.sqlite.org/testing.html), with an impressive 100% of Modified Condition/Decision Coverage (MC/DC), and more than 2M tests with a ratio of 590 test lines for each line of code.  
+更重要的是，SQLite 经过了全面测试，具有令人印象深刻的 100% 修改条件/决策覆盖率 （MC/DC），以及超过 2M 的测试，每行代码的比例为 590 行测试行。
+
+> SQLite's developers created their own version control system called [Fossil](https://www.fossil-scm.org/) to manage the development of SQLite itself.  
+> SQLite的开发人员创建了自己的版本控制系统，称为Fossil，以管理SQLite本身的开发。
+
+### SQLite is cost-effective  
+SQLite具有成本效益
+
+As previously mentioned, SQLite is already bundled with common backend languages, so you don't need to pay for a separate database server. You can also do that by installing MySQL or PostgreSQL on the server that hosts your code, but that's not how they shine.  
+如前所述，SQLite已经与常见的后端语言捆绑在一起，因此您无需为单独的数据库服务器付费。您也可以通过在托管代码的服务器上安装 MySQL 或 PostgreSQL 来做到这一点，但这不是它们的亮点。
+
+Due to its simplicity, you will also need less DevOps time to manage / secure / scale it = less money spent on DevOps.  
+由于其简单性，您还需要更少的DevOps时间来管理/保护/扩展它=在DevOps上花费的钱更少。
+
+### SQLite is straightforward to secure  
+SQLite 易于保护
+
+SQLite doesn't have a network interface, so it should not be exposed to the outside world making the biggest attack vector of traditional databases a non-issue. It also doesn't have a user management system, so you don't need to worry about managing database credentials.  
+SQLite没有网络接口，因此它不应该暴露在外界，这使得传统数据库的最大攻击媒介成为不成问题。它也没有用户管理系统，因此您无需担心管理数据库凭据。
+
+You already need to spend time and effort to secure your application serve, and in most cases, that's enough to also secure SQLite. Quick win.  
+您已经需要花费时间和精力来保护您的应用程序服务，在大多数情况下，这足以保护 SQLite。速赢。
+
+* * *
+
+Can it be a good fit for your project's production database?  
+它是否适合您项目的生产数据库？
+------------------------------------------------------------------------------
+
+Now that you are pumped and ready to start your next project with SQLite as the main database, I'm going to crush your dreams of simplicity.  
+现在你已经振作起来，准备开始你的下一个项目，用SQLite作为主数据库，我将粉碎你对简单的梦想。
+
+Choosing a database is a big decision that will impact your project in the long run, and SQLite is far from a perfect solution for web applications, unless carefully considered.  
+从长远来看，选择数据库是一个重大决定，将影响您的项目，除非仔细考虑，否则SQLite远非Web应用程序的完美解决方案。
+
+The whole point of this article is to help you make an informed decision, so let's talk about the drawbacks.  
+本文的重点是帮助您做出明智的决定，因此让我们谈谈缺点。
+
+### It will take some trial and error to use it properly  
+正确使用它需要一些反复试验
+
+This first point is not specific to SQLite, but a friendly reminder about making the switch to any new technology. There will come a time when you are stuck and need to figure out how to do or fix something. Even if it's pretty close to MySQL and PostgreSQL, there are some behavior differences, mainly around transactions and migrations, that you'll need to remember every time that you do something to avoid killing your app.  
+第一点并非特定于 SQLite，而是关于切换到任何新技术的友好提醒。总有一天你会被卡住，需要弄清楚如何做或修复某事。即使它与 MySQL 和 PostgreSQL 非常接近，也存在一些行为差异，主要是在事务和迁移方面，每次做一些事情以避免杀死你的应用程序时，你都需要记住这些差异。
+
+> If you are proficient with a client-server database, with CI/CD pipelines, backups and infrastructure already figured out, you will get little benefits from SQLite.  
+> 如果您精通客户端-服务器数据库，并且已经弄清楚了 CI/CD 管道、备份和基础架构，那么您将从 SQLite 中获得很少的好处。
+
+### Not made to scale horizontally  
+不适合水平扩展
+
+The strength of SQLite is also its weakness, it stores everything in a single file, so you can't **by default** scale your application horizontally. A good amount of web application will never need to scale horizontally anyway, considering how easy it is today to get performant hardware.  
+SQLite的优势也是它的弱点，它将所有内容存储在一个文件中，因此默认情况下您无法水平扩展应用程序。无论如何，大量的 Web 应用程序永远不需要水平扩展，考虑到今天获得高性能硬件是多么容易。
+
+An SQLite database can grow up to 281 TB of data, but [as advised in the documentation](https://www.sqlite.org/whentouse.html) if you plan on growing your database in the realm of Terabytes, you will be better off with a centralized client-server database.  
+SQLite 数据库可以增长到 281 TB 的数据，但正如文档中建议的那样，如果您计划在 TB 级范围内扩展数据库，那么使用集中式客户端-服务器数据库会更好。
+
+Vertical scaling has its own trade-off, and if you're a follower of the [Twelve-Factor App](https://12factor.net/) dogma, or need to deploy multiple instance for geographic optimization, it's still possible to create read-replicas of your SQLite database across a cluster of machines thanks to the [LiteFS](https://github.com/superfly/litefs).  
+垂直扩展有其自身的权衡，如果您是 Twelve-Factor App 教条的追随者，或者需要部署多个实例进行地理优化，那么借助 LiteFS，仍然可以跨计算机集群创建 SQLite 数据库的只读副本。
+
+LiteFS use a [FUSE](https://en.wikipedia.org/wiki/Filesystem_in_Userspace) file system to intercept the SQLite queries sent by your application. It then replicates the changes between your instances through an HTTP server.  
+LiteFS 使用 FUSE 文件系统来拦截应用程序发送的 SQLite 查询。然后，它通过 HTTP 服务器在实例之间复制更改。
+
+You can get a deeper overview of how LiteFS works on [the project's architecture documentation](https://github.com/superfly/litefs/blob/main/docs/ARCHITECTURE.md).  
+您可以在项目的架构文档中更深入地了解 LiteFS 的工作原理。
+
+While this works fine and allows incredible performance on read intensive app, it also removes many advantages of using SQLite. You need to take care of the LiteFS process on your servers and secure the ports it uses to communicate between replicas. Using FUSE also means that write transactions are limited to ~100 per second which might be a deal-breaker for write-heavy applications.  
+虽然这工作正常，并且允许在读取密集型应用程序上提供令人难以置信的性能，但它也消除了使用 SQLite 的许多优势。您需要处理服务器上的 LiteFS 进程，并保护它用于在副本之间通信的端口。使用 FUSE 还意味着写入事务限制为每秒 ~100 个，这对于写入密集型应用程序来说可能是一个破坏者。
+
+![](https://onfold.sh/img/blog/is-it-time-to-ditch-mysql-and-postgresql-for-sqlite/litefs.webp)
+
+Another limitation of LiteFS is that writes queries should occur on your primary instance. You could use a proxy to route write queries to the primary instance, but that's again more complexity to handle.  
+LiteFS 的另一个限制是写入查询应在主实例上发生。您可以使用代理将写入查询路由到主实例，但这又会更加复杂。
+
+> LiteFS is stable and used in production, notably on [Fly.io](https://fly.io/docs/litefs/), but still in Beta. So you might encounter bugs or breaking API changes.  
+> LiteFS 很稳定，可以在生产中使用，尤其是在 Fly.io 上，但仍处于测试阶段。因此，您可能会遇到错误或中断性的 API 更改。
+
+### Concurrency is limited 并发性是有限的
+
+It's a recurring belief among developers that SQLite is not suitable for web applications because it can only handle one write at a time and data cannot be read while a writing operation occurs.  
+开发人员反复认为 SQLite 不适合 Web 应用程序，因为它一次只能处理一次写入，并且在发生写入操作时无法读取数据。
+
+While this is true by default, it's not as big of a limitation as you think thanks to the [Write-Ahead Logging (WAL)](https://www.sqlite.org/wal.html) journal mode.  
+虽然默认情况下这是正确的，但由于预写日志记录 （WAL） 日志模式，它并不像您想象的那么大。
+
+What is a journal mode I hear you ask? Well, fear not as I will explain this to you in plain English.  
+我听到你问什么是日记模式？好吧，不要害怕，因为我会用简单的英语向你解释这一点。
+
+SQLite stores data in a single file that is internally split into pages. By default, when you execute a query that changes data, SQLite will copy the page that is about to be modified. This copy is called a journal file.  
+SQLite 将数据存储在内部拆分为页面的单个文件中。默认情况下，当您执行更改数据的查询时，SQLite 将复制即将修改的页面。此副本称为日志文件。
+
+This is done to ensure that if something goes wrong during the write operation, the database can be restored to its previous state, enforcing the [ACID](https://www.sqlite.org/transactional.html) properties of the SQLite.  
+这样做是为了确保如果在写入操作期间出现问题，数据库可以恢复到其以前的状态，从而强制执行 SQLite 的 ACID 属性。
+
+When your write query is fully executed, SQLite will delete the previously created journal file.  
+当您的写入查询完全执行时，SQLite 将删除之前创建的日志文件。
+
+![](https://onfold.sh/img/blog/is-it-time-to-ditch-mysql-and-postgresql-for-sqlite/sqlite-journal-mode-delete.webp)
+
+> The full process is a bit more complex with [3 incremental locking mechanism](https://www.sqlite.org/lockingv3.html), but that's the gist of it.  
+> 整个过程有点复杂，有 3 个增量锁定机制，但这就是它的要点。
+
+The issue with this default mode, called `DELETE`, is that it will prevent any read operation on the table that is being modified until the end of the transaction, which can considerably slow down your application.  
+这种默认模式（称为 `DELETE` ）的问题在于，它将阻止在事务结束之前对正在修改的表执行任何读取操作，这可能会大大降低应用程序的速度。
+
+Enter the Write-Ahead Logging (WAL) journal mode. In this mode, SQLite does the reverse operation by writing the requested change into the journal file first, avoiding any lock on the table. That way, concurrent read queries can still be performed on the main data while our write transaction is being executed. A reconciliation task is then performed to merge the data in the journal file with the main database, this is done automatically by SQLite.  
+进入预写日志记录 （WAL） 日志模式。在此模式下，SQLite 执行相反操作，首先将请求的更改写入日志文件，从而避免对表进行任何锁定。这样，在执行写入事务时，仍然可以对主数据执行并发读取查询。然后执行对账任务，将日志文件中的数据与主数据库合并，这由 SQLite 自动完成。
+
+![](https://onfold.sh/img/blog/is-it-time-to-ditch-mysql-and-postgresql-for-sqlite/sqlite-journal-mode-wal.webp)
+
+> The WAL mode is not without its own set of tradeoffs, but it's a better default choice for most web applications.  
+> WAL 模式并非没有自己的一套权衡，但对于大多数 Web 应用程序来说，它是更好的默认选择。
+
+The journal mode can be enabled by a single `PRAGMA` instruction and will persist once set on a database:  
+日志模式可以通过单个 `PRAGMA` 指令启用，并且在数据库上设置后将持续存在：
+
+```
+$ sqlite3 mydb.sqlite "PRAGMA journal_mode = wal"
+
+
+```
+
+### Limited migration support  
+有限的迁移支持
+
+Modifying your application schema is painful in SQLite, there are only four commands that can alter a table:  
+在SQLite中，修改应用程序模式是很痛苦的，只有四个命令可以更改表：
+
+*   rename table 重命名表
+*   rename column 重命名列
+*   add column 添加列
+*   drop column 下拉列
+
+If you need to do anything more than that, like changing a column type, or adding a foreign key in an existing table, you will need to get creative.  
+如果您需要执行更多操作，例如更改列类型或在现有表中添加外键，则需要发挥创意。
+
+Of course, the open source community comes to the rescue. The most popular frameworks have abstracted this process to perform the most common modifications but read the documentation carefully, as SQLite support has usually a few caveats.  
+当然，开源社区也来救援。最流行的框架已经抽象了这个过程来执行最常见的修改，但请仔细阅读文档，因为SQLite支持通常有一些警告。
+
+There are also standalone tools like [sqlite-utils](https://github.com/simonw/sqlite-utils) or [golang-migrate](https://github.com/golang-migrate/migrate) that help create smooth migration scripts.  
+还有一些独立的工具，如 sqlite-utils 或 golang-migrate，有助于创建平滑的迁移脚本。
+
+### Limited data types 有限的数据类型
+
+No need to go check the documentation every time you need to create a column, there are [only five data types](https://www.sqlite.org/datatype3.html) to remember:  
+无需每次需要创建列时都检查文档，只需记住五种数据类型：
+
+*   NULL 零
+*   INTEGER and REAL for numeric values  
+    INTEGER 和 REAL 表示数值
+*   TEXT and BLOB for everything else  
+    TEXT 和 BLOB 用于其他所有内容
+
+Compared to most client-server databases, it's a very limited set of data types. Even more when you consider the latest generation of databases that can allow for more than 40 types with support for Vectors, Geospatial data, geographical data, or even IP addresses.  
+与大多数客户端-服务器数据库相比，它是一组非常有限的数据类型。当您考虑最新一代的数据库时，甚至更多，这些数据库可以支持 40 多种类型，并支持矢量、地理空间数据、地理数据甚至 IP 地址。
+
+This is enough to store anything, for example, if you need to store a date, you can put it in ISO 8601 format in a TEXT column, or as a timestamp in an INTEGER column.  
+这足以存储任何内容，例如，如果您需要存储日期，您可以将其以 ISO 8601 格式放在 TEXT 列中，或作为时间戳放在 INTEGER 列中。
+
+SQLite provides a good set of functions that you can use to handle most common types like [date and time](https://www.sqlite.org/lang_datefunc.html) or [JSON](https://www.sqlite.org/json1.html).  
+SQLite 提供了一组很好的函数，可用于处理最常见的类型，如日期和时间或 JSON。
+
+```
+sqlite> CREATE TABLE test(id INT, datetime TEXT);
+sqlite> INSERT INTO test(id, datetime) VALUES(1, '2024-01-01 01:01:01');
+sqlite> SELECT date(datetime) FROM test;
+2024-01-01
+
+
+```
+
+Using an ORM with type casting should abstract this problem away, but it can get painful quickly if you need to enforce type casting in multiple backend / languages. Or you can ignore type casting if you're that kind of person that likes to live dangerously.  
+使用带有类型转换的 ORM 应该可以抽象出这个问题，但如果您需要在多个后端/语言中强制执行类型转换，它很快就会变得很痛苦。或者，如果你是那种喜欢危险生活的人，你可以忽略类型转换。
+
+* * *
+
+Production SQLite in the real world  
+生产 SQLite 在现实世界中
+------------------------------------------------------
+
+SQLite is used on billions of devices, but isn't as popular for web applications for the reasons mentioned above. There's a few notable large companies that run their main database with it, like [Expensify](https://use.expensify.com/blog/scaling-sqlite-to-4m-qps-on-a-single-server) and more recently [Tailscale](https://tailscale.com/blog/database-for-2022).  
+SQLite 在数十亿台设备上使用，但由于上述原因，它在 Web 应用程序中并不那么受欢迎。有一些著名的大公司用它来运行他们的主要数据库，比如 Expensify 和最近的 Tailscale。
+
+I won't list all small-to-medium web apps that run on SQLite, but a great example is Pieter Levels' [Nomadlist](https://nomadlist.com/) and [Remoteok](https://remoteok.com/) that are both running with SQLite on a VPS that handle 50M+ requests per month for only $40. So if you think your application won't scale vertically, think again.  
+我不会列出所有在 SQLite 上运行的中小型 Web 应用程序，但一个很好的例子是 Pieter Levels 的 Nomadlist 和 Remoteok，它们都在 VPS 上与 SQLite 一起运行，每月只需 40 美元即可处理 50M+ 请求。因此，如果您认为您的应用程序无法垂直扩展，请再想一想。
+
+* * *
+
+Conclusion 结论
+-------------
+
+Like with every decision in software development, there's no one-size-fits-all solution, and you will have to carefully evaluate the pros and cons of SQLite for your specific needs. Most developers tend to over-estimate how many resources a project needs to run, and underestimate the performance and benefits of simple"less shiny" solutions like SQLite.  
+就像软件开发中的每个决定一样，没有一个放之四海而皆准的解决方案，您必须仔细评估 SQLite 的优缺点，以满足您的特定需求。大多数开发人员倾向于高估项目需要运行多少资源，而低估了SQLite等简单“不那么闪亮”的解决方案的性能和优势。
+
+A lot of web applications would benefit from using an embedded database, and if you do not plan on scaling horizontally, or have more than 1TB of data, it's a no-brainer to go with SQLite.  
+许多 Web 应用程序都会从使用嵌入式数据库中受益，如果您不打算水平扩展，或者拥有超过 1TB 的数据，那么使用 SQLite 是轻而易举的。
+
+And if the need arises, migrating from SQLite to MySQL or PostgreSQL is not too painful.  
+如果需要，从SQLite迁移到MySQL或PostgreSQL并不太痛苦。
+
+* * *
+
+References 引用
+-------------
+
+If you would like to explore SQLite further, here are some well-written resources that inspired this article:  
+如果您想进一步探索 SQLite，这里有一些精心编写的资源，这些资源启发了本文：
+
+*   [Consider SQLite 考虑 SQLite](https://blog.wesleyac.com/posts/consider-sqlite)
+*   [SQLite: Small. Fast. Reliable. Choose any three.  
+    SQLite：小。快。可靠。选择任意三个。](https://charlesleifer.com/blog/sqlite-small-fast-reliable-choose-any-three-/)
+*   [SQLite the only database you will ever need in most cases  
+    SQLite 在大多数情况下您唯一需要的数据库](https://unixsheikh.com/articles/sqlite-the-only-database-you-will-ever-need-in-most-cases.html)
+
+As well as some read worthy documentation pages:  
+以及一些值得阅读的文档页面：
+
+*   [How SQLite Is Tested  
+    如何测试 SQLite](https://sqlite.org/testing.html)
+*   [Appropriate Uses For SQLite  
+    SQLite的适当用途](https://www.sqlite.org/whentouse.html)
+*   [35% Faster Than The Filesystem  
+    比文件系统快 35%](https://www.sqlite.org/fasterthanfs.html)
+*   [SQLite As An Application File Format  
+    SQLite 作为应用程序文件格式](https://www.sqlite.org/appfileformat.html)
+*   [SQLite on Wikipedia  
+    维基百科上的SQLite](https://en.wikipedia.org/wiki/SQLite)
